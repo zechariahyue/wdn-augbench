@@ -1,0 +1,317 @@
+{
+  "disturbance_types": [
+    "leak",
+    "pipe_closure",
+    "pump_outage"
+  ],
+  "per_augmenter": {
+    "baseline": {
+      "augmented_train_rows": 142990,
+      "augmenter": "baseline",
+      "heuristic_per_network": {
+        "d_town": {
+          "accuracy": 0.5667643869724107,
+          "auprc": 0.48170978925809466,
+          "auroc": 0.48927630998707633,
+          "balanced_accuracy": 0.5,
+          "f1": 0.0,
+          "fn": 21576,
+          "fp": 0,
+          "network_id": "d_town",
+          "positive_rows": 21576,
+          "precision": 0.0,
+          "recall": 0.0,
+          "rows": 49802,
+          "specificity": 1.0,
+          "support": 49802,
+          "tn": 28226,
+          "tp": 0
+        }
+      },
+      "heuristic_weighted_auprc": 0.4817097892580947,
+      "per_network": {
+        "d_town": {
+          "accuracy": 0.43323561302758923,
+          "auprc": 0.5914467885882796,
+          "auroc": 0.6162029223917834,
+          "balanced_accuracy": 0.5,
+          "f1": 0.6045560256661716,
+          "fn": 0,
+          "fp": 28226,
+          "network_id": "d_town",
+          "positive_rows": 21576,
+          "precision": 0.43323561302758923,
+          "recall": 1.0,
+          "rows": 49802,
+          "specificity": 0.0,
+          "support": 49802,
+          "tn": 0,
+          "tp": 21576
+        }
+      },
+      "triage_per_network": {
+        "d_town": {
+          "accuracy": 0.43323561302758923,
+          "auprc": 0.5805272636181886,
+          "auroc": 0.5816893651317097,
+          "balanced_accuracy": 0.5,
+          "f1": 0.6045560256661716,
+          "fn": 0,
+          "fp": 28226,
+          "network_id": "d_town",
+          "positive_rows": 21576,
+          "precision": 0.43323561302758923,
+          "recall": 1.0,
+          "rows": 49802,
+          "specificity": 0.0,
+          "support": 49802,
+          "tn": 0,
+          "tp": 21576
+        }
+      },
+      "triage_weighted_auprc": 0.5805272636181886,
+      "weighted_auprc": 0.5914467885882796
+    },
+    "gmm": {
+      "augmented_train_rows": 200296,
+      "augmenter": "gmm",
+      "heuristic_per_network": {
+        "d_town": {
+          "accuracy": 0.5667643869724107,
+          "auprc": 0.4180856130178642,
+          "auroc": 0.4495482162342348,
+          "balanced_accuracy": 0.5,
+          "f1": 0.0,
+          "fn": 21576,
+          "fp": 0,
+          "network_id": "d_town",
+          "positive_rows": 21576,
+          "precision": 0.0,
+          "recall": 0.0,
+          "rows": 49802,
+          "specificity": 1.0,
+          "support": 49802,
+          "tn": 28226,
+          "tp": 0
+        }
+      },
+      "heuristic_weighted_auprc": 0.4180856130178642,
+      "per_network": {
+        "d_town": {
+          "accuracy": 0.43323561302758923,
+          "auprc": 0.4501564847069778,
+          "auroc": 0.47194721288742036,
+          "balanced_accuracy": 0.5,
+          "f1": 0.6045560256661716,
+          "fn": 0,
+          "fp": 28226,
+          "network_id": "d_town",
+          "positive_rows": 21576,
+          "precision": 0.43323561302758923,
+          "recall": 1.0,
+          "rows": 49802,
+          "specificity": 0.0,
+          "support": 49802,
+          "tn": 0,
+          "tp": 21576
+        }
+      },
+      "triage_per_network": {
+        "d_town": {
+          "accuracy": 0.3801453756877234,
+          "auprc": 0.42324350410810513,
+          "auroc": 0.4394935979880703,
+          "balanced_accuracy": 0.43872821653689287,
+          "f1": 0.5508772950795823,
+          "fn": 2644,
+          "fp": 28226,
+          "network_id": "d_town",
+          "positive_rows": 21576,
+          "precision": 0.40145892531489885,
+          "recall": 0.8774564330737857,
+          "rows": 49802,
+          "specificity": 0.0,
+          "support": 49802,
+          "tn": 0,
+          "tp": 18932
+        }
+      },
+      "triage_weighted_auprc": 0.42324350410810513,
+      "weighted_auprc": 0.4501564847069778
+    },
+    "gnn_baseline": {
+      "augmented_train_rows": 142990,
+      "augmenter": "gnn_baseline",
+      "detector": "GNNDetector",
+      "per_network": {
+        "d_town": {
+          "accuracy": 0.525762017589655,
+          "auprc": 0.4610230188634732,
+          "auroc": 0.5482890506484803,
+          "balanced_accuracy": 0.5331553621399141,
+          "f1": 0.5181376749500143,
+          "fn": 8878,
+          "fp": 14740,
+          "network_id": "d_town",
+          "positive_rows": 21576,
+          "precision": 0.4627888330053211,
+          "recall": 0.5885242862439748,
+          "rows": 49802,
+          "specificity": 0.47778643803585347,
+          "support": 49802,
+          "tn": 13486,
+          "tp": 12698
+        }
+      },
+      "weighted_auprc": 0.4610230188634732
+    },
+    "noise": {
+      "augmented_train_rows": 200296,
+      "augmenter": "noise",
+      "heuristic_per_network": {
+        "d_town": {
+          "accuracy": 0.5667643869724107,
+          "auprc": 0.4816759030096106,
+          "auroc": 0.4857114575844879,
+          "balanced_accuracy": 0.5,
+          "f1": 0.0,
+          "fn": 21576,
+          "fp": 0,
+          "network_id": "d_town",
+          "positive_rows": 21576,
+          "precision": 0.0,
+          "recall": 0.0,
+          "rows": 49802,
+          "specificity": 1.0,
+          "support": 49802,
+          "tn": 28226,
+          "tp": 0
+        }
+      },
+      "heuristic_weighted_auprc": 0.4816759030096106,
+      "per_network": {
+        "d_town": {
+          "accuracy": 0.43323561302758923,
+          "auprc": 0.5374619192935385,
+          "auroc": 0.5847645476572233,
+          "balanced_accuracy": 0.5,
+          "f1": 0.6045560256661716,
+          "fn": 0,
+          "fp": 28226,
+          "network_id": "d_town",
+          "positive_rows": 21576,
+          "precision": 0.43323561302758923,
+          "recall": 1.0,
+          "rows": 49802,
+          "specificity": 0.0,
+          "support": 49802,
+          "tn": 0,
+          "tp": 21576
+        }
+      },
+      "triage_per_network": {
+        "d_town": {
+          "accuracy": 0.43323561302758923,
+          "auprc": 0.5908368883759612,
+          "auroc": 0.5922383519091008,
+          "balanced_accuracy": 0.5,
+          "f1": 0.6045560256661716,
+          "fn": 0,
+          "fp": 28226,
+          "network_id": "d_town",
+          "positive_rows": 21576,
+          "precision": 0.43323561302758923,
+          "recall": 1.0,
+          "rows": 49802,
+          "specificity": 0.0,
+          "support": 49802,
+          "tn": 0,
+          "tp": 21576
+        }
+      },
+      "triage_weighted_auprc": 0.5908368883759612,
+      "weighted_auprc": 0.5374619192935385
+    },
+    "smote": {
+      "augmented_train_rows": 200296,
+      "augmenter": "smote",
+      "heuristic_per_network": {
+        "d_town": {
+          "accuracy": 0.5667643869724107,
+          "auprc": 0.37802458411126927,
+          "auroc": 0.4140504021765526,
+          "balanced_accuracy": 0.5,
+          "f1": 0.0,
+          "fn": 21576,
+          "fp": 0,
+          "network_id": "d_town",
+          "positive_rows": 21576,
+          "precision": 0.0,
+          "recall": 0.0,
+          "rows": 49802,
+          "specificity": 1.0,
+          "support": 49802,
+          "tn": 28226,
+          "tp": 0
+        }
+      },
+      "heuristic_weighted_auprc": 0.37802458411126927,
+      "per_network": {
+        "d_town": {
+          "accuracy": 0.43323561302758923,
+          "auprc": 0.3792417360472562,
+          "auroc": 0.4056202128571283,
+          "balanced_accuracy": 0.5,
+          "f1": 0.6045560256661716,
+          "fn": 0,
+          "fp": 28226,
+          "network_id": "d_town",
+          "positive_rows": 21576,
+          "precision": 0.43323561302758923,
+          "recall": 1.0,
+          "rows": 49802,
+          "specificity": 0.0,
+          "support": 49802,
+          "tn": 0,
+          "tp": 21576
+        }
+      },
+      "triage_per_network": {
+        "d_town": {
+          "accuracy": 0.43323561302758923,
+          "auprc": 0.5306138042512368,
+          "auroc": 0.5123698470336926,
+          "balanced_accuracy": 0.5,
+          "f1": 0.6045560256661716,
+          "fn": 0,
+          "fp": 28226,
+          "network_id": "d_town",
+          "positive_rows": 21576,
+          "precision": 0.43323561302758923,
+          "recall": 1.0,
+          "rows": 49802,
+          "specificity": 0.0,
+          "support": 49802,
+          "tn": 0,
+          "tp": 21576
+        }
+      },
+      "triage_weighted_auprc": 0.5306138042512368,
+      "weighted_auprc": 0.3792417360472562
+    }
+  },
+  "protocol": "LOLO",
+  "seed": 46,
+  "sensor_coverage_levels": [
+    0.25,
+    0.5
+  ],
+  "test_networks": [
+    "d_town"
+  ],
+  "train_networks": [
+    "net3",
+    "l_town"
+  ],
+  "train_rows": 142990
+}

@@ -1,0 +1,941 @@
+{
+  "no_filter": {
+    "variant": "no_filter",
+    "per_seed": [
+      {
+        "per_network": {
+          "net3": {
+            "precision": 0.4388888888888889,
+            "recall": 1.0,
+            "f1": 0.61003861003861,
+            "accuracy": 0.4388888888888889,
+            "specificity": 0.0,
+            "balanced_accuracy": 0.5,
+            "tp": 790,
+            "fp": 1010,
+            "tn": 0,
+            "fn": 0,
+            "support": 1800,
+            "auroc": 0.5681181852362451,
+            "auprc": 0.5714973630760537,
+            "network_id": "net3",
+            "rows": 1800,
+            "positive_rows": 790
+          },
+          "d_town": {
+            "network_id": "d_town",
+            "auprc": null
+          },
+          "l_town": {
+            "precision": 0.40028330618315744,
+            "recall": 1.0,
+            "f1": 0.5717176008821179,
+            "accuracy": 0.40028330618315744,
+            "specificity": 0.0,
+            "balanced_accuracy": 0.5,
+            "tp": 56516,
+            "fp": 84674,
+            "tn": 0,
+            "fn": 0,
+            "support": 141190,
+            "auroc": 0.6002094441645943,
+            "auprc": 0.5253185183839328,
+            "network_id": "l_town",
+            "rows": 141190,
+            "positive_rows": 56516
+          }
+        },
+        "macro_auprc": 0.5484079407299933,
+        "n_generated": 890,
+        "n_kept_after_filter": 890,
+        "filter_rejection_rate": 0.0,
+        "seed": 42
+      },
+      {
+        "per_network": {
+          "net3": {
+            "precision": 0.4388888888888889,
+            "recall": 1.0,
+            "f1": 0.61003861003861,
+            "accuracy": 0.4388888888888889,
+            "specificity": 0.0,
+            "balanced_accuracy": 0.5,
+            "tp": 790,
+            "fp": 1010,
+            "tn": 0,
+            "fn": 0,
+            "support": 1800,
+            "auroc": 0.5264958014788821,
+            "auprc": 0.5893644094700701,
+            "network_id": "net3",
+            "rows": 1800,
+            "positive_rows": 790
+          },
+          "d_town": {
+            "network_id": "d_town",
+            "auprc": null
+          },
+          "l_town": {
+            "precision": 0.40028330618315744,
+            "recall": 1.0,
+            "f1": 0.5717176008821179,
+            "accuracy": 0.40028330618315744,
+            "specificity": 0.0,
+            "balanced_accuracy": 0.5,
+            "tp": 56516,
+            "fp": 84674,
+            "tn": 0,
+            "fn": 0,
+            "support": 141190,
+            "auroc": 0.6189304151573587,
+            "auprc": 0.5321917788235565,
+            "network_id": "l_town",
+            "rows": 141190,
+            "positive_rows": 56516
+          }
+        },
+        "macro_auprc": 0.5607780941468132,
+        "n_generated": 890,
+        "n_kept_after_filter": 890,
+        "filter_rejection_rate": 0.0,
+        "seed": 43
+      },
+      {
+        "per_network": {
+          "net3": {
+            "precision": 0.4388888888888889,
+            "recall": 1.0,
+            "f1": 0.61003861003861,
+            "accuracy": 0.4388888888888889,
+            "specificity": 0.0,
+            "balanced_accuracy": 0.5,
+            "tp": 790,
+            "fp": 1010,
+            "tn": 0,
+            "fn": 0,
+            "support": 1800,
+            "auroc": 0.6022822408823161,
+            "auprc": 0.6251168127166725,
+            "network_id": "net3",
+            "rows": 1800,
+            "positive_rows": 790
+          },
+          "d_town": {
+            "network_id": "d_town",
+            "auprc": null
+          },
+          "l_town": {
+            "precision": 0.40028330618315744,
+            "recall": 1.0,
+            "f1": 0.5717176008821179,
+            "accuracy": 0.40028330618315744,
+            "specificity": 0.0,
+            "balanced_accuracy": 0.5,
+            "tp": 56516,
+            "fp": 84674,
+            "tn": 0,
+            "fn": 0,
+            "support": 141190,
+            "auroc": 0.6189352622603284,
+            "auprc": 0.5322567929382149,
+            "network_id": "l_town",
+            "rows": 141190,
+            "positive_rows": 56516
+          }
+        },
+        "macro_auprc": 0.5786868028274437,
+        "n_generated": 890,
+        "n_kept_after_filter": 890,
+        "filter_rejection_rate": 0.0,
+        "seed": 44
+      },
+      {
+        "per_network": {
+          "net3": {
+            "precision": 0.4388888888888889,
+            "recall": 1.0,
+            "f1": 0.61003861003861,
+            "accuracy": 0.4388888888888889,
+            "specificity": 0.0,
+            "balanced_accuracy": 0.5,
+            "tp": 790,
+            "fp": 1010,
+            "tn": 0,
+            "fn": 0,
+            "support": 1800,
+            "auroc": 0.652917658854493,
+            "auprc": 0.6561222459311018,
+            "network_id": "net3",
+            "rows": 1800,
+            "positive_rows": 790
+          },
+          "d_town": {
+            "network_id": "d_town",
+            "auprc": null
+          },
+          "l_town": {
+            "precision": 0.40028330618315744,
+            "recall": 1.0,
+            "f1": 0.5717176008821179,
+            "accuracy": 0.40028330618315744,
+            "specificity": 0.0,
+            "balanced_accuracy": 0.5,
+            "tp": 56516,
+            "fp": 84674,
+            "tn": 0,
+            "fn": 0,
+            "support": 141190,
+            "auroc": 0.6232419554080887,
+            "auprc": 0.5651786572794547,
+            "network_id": "l_town",
+            "rows": 141190,
+            "positive_rows": 56516
+          }
+        },
+        "macro_auprc": 0.6106504516052782,
+        "n_generated": 890,
+        "n_kept_after_filter": 890,
+        "filter_rejection_rate": 0.0,
+        "seed": 45
+      },
+      {
+        "per_network": {
+          "net3": {
+            "precision": 0.4388888888888889,
+            "recall": 1.0,
+            "f1": 0.61003861003861,
+            "accuracy": 0.4388888888888889,
+            "specificity": 0.0,
+            "balanced_accuracy": 0.5,
+            "tp": 790,
+            "fp": 1010,
+            "tn": 0,
+            "fn": 0,
+            "support": 1800,
+            "auroc": 0.6280912395036972,
+            "auprc": 0.6030205169768132,
+            "network_id": "net3",
+            "rows": 1800,
+            "positive_rows": 790
+          },
+          "d_town": {
+            "network_id": "d_town",
+            "auprc": null
+          },
+          "l_town": {
+            "precision": 0.40028330618315744,
+            "recall": 1.0,
+            "f1": 0.5717176008821179,
+            "accuracy": 0.40028330618315744,
+            "specificity": 0.0,
+            "balanced_accuracy": 0.5,
+            "tp": 56516,
+            "fp": 84674,
+            "tn": 0,
+            "fn": 0,
+            "support": 141190,
+            "auroc": 0.5917115597846667,
+            "auprc": 0.5285725261419024,
+            "network_id": "l_town",
+            "rows": 141190,
+            "positive_rows": 56516
+          }
+        },
+        "macro_auprc": 0.5657965215593579,
+        "n_generated": 890,
+        "n_kept_after_filter": 890,
+        "filter_rejection_rate": 0.0,
+        "seed": 46
+      }
+    ],
+    "aggregated": {
+      "net3": {
+        "mean": 0.6090242696341421,
+        "std": 0.029353068587774,
+        "n": 5,
+        "values": [
+          0.5714973630760537,
+          0.5893644094700701,
+          0.6251168127166725,
+          0.6561222459311018,
+          0.6030205169768132
+        ]
+      },
+      "d_town": {
+        "mean": null,
+        "std": null,
+        "n": 0
+      },
+      "l_town": {
+        "mean": 0.5367036547134123,
+        "std": 0.014468544888250185,
+        "n": 5,
+        "values": [
+          0.5253185183839328,
+          0.5321917788235565,
+          0.5322567929382149,
+          0.5651786572794547,
+          0.5285725261419024
+        ]
+      },
+      "macro": {
+        "mean": 0.5728639621737773,
+        "std": 0.02124070697739262,
+        "n": 5,
+        "values": [
+          0.5484079407299933,
+          0.5607780941468132,
+          0.5786868028274437,
+          0.6106504516052782,
+          0.5657965215593579
+        ]
+      },
+      "n_kept": {
+        "mean": 890.0,
+        "values": [
+          890,
+          890,
+          890,
+          890,
+          890
+        ]
+      },
+      "n_generated": {
+        "mean": 890.0,
+        "values": [
+          890,
+          890,
+          890,
+          890,
+          890
+        ]
+      }
+    }
+  },
+  "relaxed": {
+    "variant": "relaxed",
+    "per_seed": [
+      {
+        "per_network": {
+          "net3": {
+            "precision": 0.4388888888888889,
+            "recall": 1.0,
+            "f1": 0.61003861003861,
+            "accuracy": 0.4388888888888889,
+            "specificity": 0.0,
+            "balanced_accuracy": 0.5,
+            "tp": 790,
+            "fp": 1010,
+            "tn": 0,
+            "fn": 0,
+            "support": 1800,
+            "auroc": 0.7760320842210804,
+            "auprc": 0.6718204225408859,
+            "network_id": "net3",
+            "rows": 1800,
+            "positive_rows": 790
+          },
+          "d_town": {
+            "network_id": "d_town",
+            "auprc": null
+          },
+          "l_town": {
+            "precision": 0.40028330618315744,
+            "recall": 1.0,
+            "f1": 0.5717176008821179,
+            "accuracy": 0.40028330618315744,
+            "specificity": 0.0,
+            "balanced_accuracy": 0.5,
+            "tp": 56516,
+            "fp": 84674,
+            "tn": 0,
+            "fn": 0,
+            "support": 141190,
+            "auroc": 0.6554697095690878,
+            "auprc": 0.5616264164538582,
+            "network_id": "l_town",
+            "rows": 141190,
+            "positive_rows": 56516
+          }
+        },
+        "macro_auprc": 0.6167234194973721,
+        "n_generated": 890,
+        "n_kept_after_filter": 0,
+        "filter_rejection_rate": 1.0,
+        "seed": 42
+      },
+      {
+        "per_network": {
+          "net3": {
+            "precision": 0.4388888888888889,
+            "recall": 1.0,
+            "f1": 0.61003861003861,
+            "accuracy": 0.4388888888888889,
+            "specificity": 0.0,
+            "balanced_accuracy": 0.5,
+            "tp": 790,
+            "fp": 1010,
+            "tn": 0,
+            "fn": 0,
+            "support": 1800,
+            "auroc": 0.501270835944354,
+            "auprc": 0.5341414700783215,
+            "network_id": "net3",
+            "rows": 1800,
+            "positive_rows": 790
+          },
+          "d_town": {
+            "network_id": "d_town",
+            "auprc": null
+          },
+          "l_town": {
+            "precision": 0.40028330618315744,
+            "recall": 1.0,
+            "f1": 0.5717176008821179,
+            "accuracy": 0.40028330618315744,
+            "specificity": 0.0,
+            "balanced_accuracy": 0.5,
+            "tp": 56516,
+            "fp": 84674,
+            "tn": 0,
+            "fn": 0,
+            "support": 141190,
+            "auroc": 0.6002045970616247,
+            "auprc": 0.5252535042692744,
+            "network_id": "l_town",
+            "rows": 141190,
+            "positive_rows": 56516
+          }
+        },
+        "macro_auprc": 0.5296974871737979,
+        "n_generated": 890,
+        "n_kept_after_filter": 0,
+        "filter_rejection_rate": 1.0,
+        "seed": 43
+      },
+      {
+        "per_network": {
+          "net3": {
+            "precision": 0.4388888888888889,
+            "recall": 1.0,
+            "f1": 0.61003861003861,
+            "accuracy": 0.4388888888888889,
+            "specificity": 0.0,
+            "balanced_accuracy": 0.5,
+            "tp": 790,
+            "fp": 1010,
+            "tn": 0,
+            "fn": 0,
+            "support": 1800,
+            "auroc": 0.6816637423235994,
+            "auprc": 0.5806178168521724,
+            "network_id": "net3",
+            "rows": 1800,
+            "positive_rows": 790
+          },
+          "d_town": {
+            "network_id": "d_town",
+            "auprc": null
+          },
+          "l_town": {
+            "precision": 0.40028330618315744,
+            "recall": 1.0,
+            "f1": 0.5717176008821179,
+            "accuracy": 0.40028330618315744,
+            "specificity": 0.0,
+            "balanced_accuracy": 0.5,
+            "tp": 56516,
+            "fp": 84674,
+            "tn": 0,
+            "fn": 0,
+            "support": 141190,
+            "auroc": 0.5927894614080145,
+            "auprc": 0.5054021592914255,
+            "network_id": "l_town",
+            "rows": 141190,
+            "positive_rows": 56516
+          }
+        },
+        "macro_auprc": 0.5430099880717989,
+        "n_generated": 890,
+        "n_kept_after_filter": 0,
+        "filter_rejection_rate": 1.0,
+        "seed": 44
+      },
+      {
+        "per_network": {
+          "net3": {
+            "precision": 0.4388888888888889,
+            "recall": 1.0,
+            "f1": 0.61003861003861,
+            "accuracy": 0.4388888888888889,
+            "specificity": 0.0,
+            "balanced_accuracy": 0.5,
+            "tp": 790,
+            "fp": 1010,
+            "tn": 0,
+            "fn": 0,
+            "support": 1800,
+            "auroc": 0.735353427747838,
+            "auprc": 0.6302252721220098,
+            "network_id": "net3",
+            "rows": 1800,
+            "positive_rows": 790
+          },
+          "d_town": {
+            "network_id": "d_town",
+            "auprc": null
+          },
+          "l_town": {
+            "precision": 0.40028330618315744,
+            "recall": 1.0,
+            "f1": 0.5717176008821179,
+            "accuracy": 0.40028330618315744,
+            "specificity": 0.0,
+            "balanced_accuracy": 0.5,
+            "tp": 56516,
+            "fp": 84674,
+            "tn": 0,
+            "fn": 0,
+            "support": 141190,
+            "auroc": 0.6679718647960025,
+            "auprc": 0.5738672379508555,
+            "network_id": "l_town",
+            "rows": 141190,
+            "positive_rows": 56516
+          }
+        },
+        "macro_auprc": 0.6020462550364327,
+        "n_generated": 890,
+        "n_kept_after_filter": 0,
+        "filter_rejection_rate": 1.0,
+        "seed": 45
+      },
+      {
+        "per_network": {
+          "net3": {
+            "precision": 0.4388888888888889,
+            "recall": 1.0,
+            "f1": 0.61003861003861,
+            "accuracy": 0.4388888888888889,
+            "specificity": 0.0,
+            "balanced_accuracy": 0.5,
+            "tp": 790,
+            "fp": 1010,
+            "tn": 0,
+            "fn": 0,
+            "support": 1800,
+            "auroc": 0.47665308935956885,
+            "auprc": 0.5295117542017336,
+            "network_id": "net3",
+            "rows": 1800,
+            "positive_rows": 790
+          },
+          "d_town": {
+            "network_id": "d_town",
+            "auprc": null
+          },
+          "l_town": {
+            "precision": 0.40028330618315744,
+            "recall": 1.0,
+            "f1": 0.5717176008821179,
+            "accuracy": 0.40028330618315744,
+            "specificity": 0.0,
+            "balanced_accuracy": 0.5,
+            "tp": 56516,
+            "fp": 84674,
+            "tn": 0,
+            "fn": 0,
+            "support": 141190,
+            "auroc": 0.6189352622603284,
+            "auprc": 0.5322567929382149,
+            "network_id": "l_town",
+            "rows": 141190,
+            "positive_rows": 56516
+          }
+        },
+        "macro_auprc": 0.5308842735699743,
+        "n_generated": 890,
+        "n_kept_after_filter": 0,
+        "filter_rejection_rate": 1.0,
+        "seed": 46
+      }
+    ],
+    "aggregated": {
+      "net3": {
+        "mean": 0.5892633471590246,
+        "std": 0.05509440875515446,
+        "n": 5,
+        "values": [
+          0.6718204225408859,
+          0.5341414700783215,
+          0.5806178168521724,
+          0.6302252721220098,
+          0.5295117542017336
+        ]
+      },
+      "d_town": {
+        "mean": null,
+        "std": null,
+        "n": 0
+      },
+      "l_town": {
+        "mean": 0.5396812221807257,
+        "std": 0.024854016062597007,
+        "n": 5,
+        "values": [
+          0.5616264164538582,
+          0.5252535042692744,
+          0.5054021592914255,
+          0.5738672379508555,
+          0.5322567929382149
+        ]
+      },
+      "macro": {
+        "mean": 0.5644722846698752,
+        "std": 0.037256021112492,
+        "n": 5,
+        "values": [
+          0.6167234194973721,
+          0.5296974871737979,
+          0.5430099880717989,
+          0.6020462550364327,
+          0.5308842735699743
+        ]
+      },
+      "n_kept": {
+        "mean": 0.0,
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "n_generated": {
+        "mean": 890.0,
+        "values": [
+          890,
+          890,
+          890,
+          890,
+          890
+        ]
+      }
+    }
+  },
+  "strict": {
+    "variant": "strict",
+    "per_seed": [
+      {
+        "per_network": {
+          "net3": {
+            "precision": 0.4388888888888889,
+            "recall": 1.0,
+            "f1": 0.61003861003861,
+            "accuracy": 0.4388888888888889,
+            "specificity": 0.0,
+            "balanced_accuracy": 0.5,
+            "tp": 790,
+            "fp": 1010,
+            "tn": 0,
+            "fn": 0,
+            "support": 1800,
+            "auroc": 0.7760320842210804,
+            "auprc": 0.6718204225408859,
+            "network_id": "net3",
+            "rows": 1800,
+            "positive_rows": 790
+          },
+          "d_town": {
+            "network_id": "d_town",
+            "auprc": null
+          },
+          "l_town": {
+            "precision": 0.40028330618315744,
+            "recall": 1.0,
+            "f1": 0.5717176008821179,
+            "accuracy": 0.40028330618315744,
+            "specificity": 0.0,
+            "balanced_accuracy": 0.5,
+            "tp": 56516,
+            "fp": 84674,
+            "tn": 0,
+            "fn": 0,
+            "support": 141190,
+            "auroc": 0.6554697095690878,
+            "auprc": 0.5616264164538582,
+            "network_id": "l_town",
+            "rows": 141190,
+            "positive_rows": 56516
+          }
+        },
+        "macro_auprc": 0.6167234194973721,
+        "n_generated": 890,
+        "n_kept_after_filter": 0,
+        "filter_rejection_rate": 1.0,
+        "seed": 42
+      },
+      {
+        "per_network": {
+          "net3": {
+            "precision": 0.4388888888888889,
+            "recall": 1.0,
+            "f1": 0.61003861003861,
+            "accuracy": 0.4388888888888889,
+            "specificity": 0.0,
+            "balanced_accuracy": 0.5,
+            "tp": 790,
+            "fp": 1010,
+            "tn": 0,
+            "fn": 0,
+            "support": 1800,
+            "auroc": 0.501270835944354,
+            "auprc": 0.5341414700783215,
+            "network_id": "net3",
+            "rows": 1800,
+            "positive_rows": 790
+          },
+          "d_town": {
+            "network_id": "d_town",
+            "auprc": null
+          },
+          "l_town": {
+            "precision": 0.40028330618315744,
+            "recall": 1.0,
+            "f1": 0.5717176008821179,
+            "accuracy": 0.40028330618315744,
+            "specificity": 0.0,
+            "balanced_accuracy": 0.5,
+            "tp": 56516,
+            "fp": 84674,
+            "tn": 0,
+            "fn": 0,
+            "support": 141190,
+            "auroc": 0.6002045970616247,
+            "auprc": 0.5252535042692744,
+            "network_id": "l_town",
+            "rows": 141190,
+            "positive_rows": 56516
+          }
+        },
+        "macro_auprc": 0.5296974871737979,
+        "n_generated": 890,
+        "n_kept_after_filter": 0,
+        "filter_rejection_rate": 1.0,
+        "seed": 43
+      },
+      {
+        "per_network": {
+          "net3": {
+            "precision": 0.4388888888888889,
+            "recall": 1.0,
+            "f1": 0.61003861003861,
+            "accuracy": 0.4388888888888889,
+            "specificity": 0.0,
+            "balanced_accuracy": 0.5,
+            "tp": 790,
+            "fp": 1010,
+            "tn": 0,
+            "fn": 0,
+            "support": 1800,
+            "auroc": 0.6816637423235994,
+            "auprc": 0.5806178168521724,
+            "network_id": "net3",
+            "rows": 1800,
+            "positive_rows": 790
+          },
+          "d_town": {
+            "network_id": "d_town",
+            "auprc": null
+          },
+          "l_town": {
+            "precision": 0.40028330618315744,
+            "recall": 1.0,
+            "f1": 0.5717176008821179,
+            "accuracy": 0.40028330618315744,
+            "specificity": 0.0,
+            "balanced_accuracy": 0.5,
+            "tp": 56516,
+            "fp": 84674,
+            "tn": 0,
+            "fn": 0,
+            "support": 141190,
+            "auroc": 0.5927894614080145,
+            "auprc": 0.5054021592914255,
+            "network_id": "l_town",
+            "rows": 141190,
+            "positive_rows": 56516
+          }
+        },
+        "macro_auprc": 0.5430099880717989,
+        "n_generated": 890,
+        "n_kept_after_filter": 0,
+        "filter_rejection_rate": 1.0,
+        "seed": 44
+      },
+      {
+        "per_network": {
+          "net3": {
+            "precision": 0.4388888888888889,
+            "recall": 1.0,
+            "f1": 0.61003861003861,
+            "accuracy": 0.4388888888888889,
+            "specificity": 0.0,
+            "balanced_accuracy": 0.5,
+            "tp": 790,
+            "fp": 1010,
+            "tn": 0,
+            "fn": 0,
+            "support": 1800,
+            "auroc": 0.735353427747838,
+            "auprc": 0.6302252721220098,
+            "network_id": "net3",
+            "rows": 1800,
+            "positive_rows": 790
+          },
+          "d_town": {
+            "network_id": "d_town",
+            "auprc": null
+          },
+          "l_town": {
+            "precision": 0.40028330618315744,
+            "recall": 1.0,
+            "f1": 0.5717176008821179,
+            "accuracy": 0.40028330618315744,
+            "specificity": 0.0,
+            "balanced_accuracy": 0.5,
+            "tp": 56516,
+            "fp": 84674,
+            "tn": 0,
+            "fn": 0,
+            "support": 141190,
+            "auroc": 0.6679718647960025,
+            "auprc": 0.5738672379508555,
+            "network_id": "l_town",
+            "rows": 141190,
+            "positive_rows": 56516
+          }
+        },
+        "macro_auprc": 0.6020462550364327,
+        "n_generated": 890,
+        "n_kept_after_filter": 0,
+        "filter_rejection_rate": 1.0,
+        "seed": 45
+      },
+      {
+        "per_network": {
+          "net3": {
+            "precision": 0.4388888888888889,
+            "recall": 1.0,
+            "f1": 0.61003861003861,
+            "accuracy": 0.4388888888888889,
+            "specificity": 0.0,
+            "balanced_accuracy": 0.5,
+            "tp": 790,
+            "fp": 1010,
+            "tn": 0,
+            "fn": 0,
+            "support": 1800,
+            "auroc": 0.47665308935956885,
+            "auprc": 0.5295117542017336,
+            "network_id": "net3",
+            "rows": 1800,
+            "positive_rows": 790
+          },
+          "d_town": {
+            "network_id": "d_town",
+            "auprc": null
+          },
+          "l_town": {
+            "precision": 0.40028330618315744,
+            "recall": 1.0,
+            "f1": 0.5717176008821179,
+            "accuracy": 0.40028330618315744,
+            "specificity": 0.0,
+            "balanced_accuracy": 0.5,
+            "tp": 56516,
+            "fp": 84674,
+            "tn": 0,
+            "fn": 0,
+            "support": 141190,
+            "auroc": 0.6189352622603284,
+            "auprc": 0.5322567929382149,
+            "network_id": "l_town",
+            "rows": 141190,
+            "positive_rows": 56516
+          }
+        },
+        "macro_auprc": 0.5308842735699743,
+        "n_generated": 890,
+        "n_kept_after_filter": 0,
+        "filter_rejection_rate": 1.0,
+        "seed": 46
+      }
+    ],
+    "aggregated": {
+      "net3": {
+        "mean": 0.5892633471590246,
+        "std": 0.05509440875515446,
+        "n": 5,
+        "values": [
+          0.6718204225408859,
+          0.5341414700783215,
+          0.5806178168521724,
+          0.6302252721220098,
+          0.5295117542017336
+        ]
+      },
+      "d_town": {
+        "mean": null,
+        "std": null,
+        "n": 0
+      },
+      "l_town": {
+        "mean": 0.5396812221807257,
+        "std": 0.024854016062597007,
+        "n": 5,
+        "values": [
+          0.5616264164538582,
+          0.5252535042692744,
+          0.5054021592914255,
+          0.5738672379508555,
+          0.5322567929382149
+        ]
+      },
+      "macro": {
+        "mean": 0.5644722846698752,
+        "std": 0.037256021112492,
+        "n": 5,
+        "values": [
+          0.6167234194973721,
+          0.5296974871737979,
+          0.5430099880717989,
+          0.6020462550364327,
+          0.5308842735699743
+        ]
+      },
+      "n_kept": {
+        "mean": 0.0,
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "n_generated": {
+        "mean": 890.0,
+        "values": [
+          890,
+          890,
+          890,
+          890,
+          890
+        ]
+      }
+    }
+  }
+}

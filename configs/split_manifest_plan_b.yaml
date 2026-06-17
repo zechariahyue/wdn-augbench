@@ -1,0 +1,28 @@
+split_manifest_name: plan_b_compact_holdout
+split_manifest_version: 1
+source_manifest: dev/active/configs/benchmark_manifest.yaml
+strategy: compact_network_holdout
+
+description: >
+  Plan B compact split for faster turnaround. Uses two smaller benchmarks for
+  fitting, one medium network for validation, and one large realistic network
+  for final holdout testing.
+
+partitions:
+  train:
+    benchmark_ids: [anytown, hanoi]
+    role: model_fitting
+  validation:
+    benchmark_ids: [net3]
+    role: model_selection
+  test:
+    benchmark_ids: [l_town]
+    role: final_holdout
+
+settings:
+  low_label_fractions: [0.1, 0.2, 0.5]
+  sensor_coverage_levels: [0.25, 0.5, 0.75, 1.0]
+  enforce_disjoint_ids: true
+
+generated_artifacts:
+  resolved_split_manifest: dev/active/artifacts/plan_b/splits/resolved_split_manifest.json

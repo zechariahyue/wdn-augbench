@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.ipynb_checkpoints/
+
+# Large regenerated artifacts (see README "Data and artifacts")
+# Only summary/aggregated/results JSON are tracked; everything below regenerates.
+artifacts/**/*.csv
+artifacts/**/*.npz
+artifacts/**/*.pt
+artifacts/**/*.log
+*.inp
+*.bin
+*.rpt
+
+# OS
+.DS_Store
+Thumbs.db

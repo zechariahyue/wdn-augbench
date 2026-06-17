@@ -1,0 +1,389 @@
+{
+  "augmentation": {
+    "filter_mode": "quantile_filter",
+    "gmm_generated_rows": 100,
+    "synthetic_generated_rows": 117,
+    "synthetic_rejected_rows": 1,
+    "synthetic_retained_rows": 116
+  },
+  "dataset_path": "C:\\Users\\Zachy\\OneDrive\\Desktop\\LLM water\\dev\\active\\artifacts\\suite\\plan_a_dense_only\\smoke\\smoke_dataset.csv",
+  "experiments": {
+    "logreg_augmented": {
+      "algorithm": "logreg",
+      "feature_columns": [
+        "pressure_mean",
+        "pressure_min",
+        "pressure_max",
+        "pressure_std",
+        "demand_mean",
+        "demand_sum",
+        "demand_std",
+        "flow_mean",
+        "flow_abs_mean",
+        "flow_std",
+        "tank_head_mean",
+        "tank_head_std",
+        "sensor_coverage",
+        "observed_junction_count",
+        "observed_link_count",
+        "leak_area"
+      ],
+      "rows": 535,
+      "splits": {
+        "train": {
+          "accuracy": 0.7527777777777778,
+          "auprc": 0.8720154547220571,
+          "auroc": 0.8046027508364029,
+          "balanced_accuracy": 0.7319962150653916,
+          "by_sensor_coverage": {
+            "1.0": {
+              "accuracy": 0.7527777777777778,
+              "auprc": 0.8720154547220571,
+              "auroc": 0.8046027508364029,
+              "balanced_accuracy": 0.7319962150653916,
+              "f1": 0.8077753779697624,
+              "fn": 46,
+              "fp": 43,
+              "precision": 0.8130434782608695,
+              "recall": 0.8025751072961373,
+              "rows": 360,
+              "specificity": 0.6614173228346457,
+              "support": 360,
+              "tn": 84,
+              "tp": 187
+            }
+          },
+          "f1": 0.8077753779697624,
+          "fn": 46,
+          "fp": 43,
+          "positive_rows": 233,
+          "precision": 0.8130434782608695,
+          "recall": 0.8025751072961373,
+          "rows": 360,
+          "specificity": 0.6614173228346457,
+          "support": 360,
+          "tn": 84,
+          "tp": 187
+        },
+        "validation": {
+          "accuracy": 0.37714285714285717,
+          "auprc": 0.5836452964610261,
+          "auroc": 0.472302064280115,
+          "balanced_accuracy": 0.38372093023255816,
+          "by_sensor_coverage": {
+            "1.0": {
+              "accuracy": 0.37714285714285717,
+              "auprc": 0.5836452964610261,
+              "auroc": 0.472302064280115,
+              "balanced_accuracy": 0.38372093023255816,
+              "f1": 0.5477178423236514,
+              "fn": 20,
+              "fp": 89,
+              "precision": 0.4258064516129032,
+              "recall": 0.7674418604651163,
+              "rows": 175,
+              "specificity": 0.0,
+              "support": 175,
+              "tn": 0,
+              "tp": 66
+            }
+          },
+          "f1": 0.5477178423236514,
+          "fn": 20,
+          "fp": 89,
+          "positive_rows": 86,
+          "precision": 0.4258064516129032,
+          "recall": 0.7674418604651163,
+          "rows": 175,
+          "specificity": 0.0,
+          "support": 175,
+          "tn": 0,
+          "tp": 66
+        }
+      }
+    },
+    "logreg_baseline": {
+      "algorithm": "logreg",
+      "feature_columns": [
+        "pressure_mean",
+        "pressure_min",
+        "pressure_max",
+        "pressure_std",
+        "demand_mean",
+        "demand_sum",
+        "demand_std",
+        "flow_mean",
+        "flow_abs_mean",
+        "flow_std",
+        "tank_head_mean",
+        "tank_head_std",
+        "sensor_coverage",
+        "observed_junction_count",
+        "observed_link_count",
+        "leak_area"
+      ],
+      "rows": 419,
+      "splits": {
+        "train": {
+          "accuracy": 0.7049180327868853,
+          "auprc": 0.7607533456402557,
+          "auroc": 0.7803351504138906,
+          "balanced_accuracy": 0.706777037485699,
+          "by_sensor_coverage": {
+            "1.0": {
+              "accuracy": 0.7049180327868853,
+              "auprc": 0.7607533456402557,
+              "auroc": 0.7803351504138906,
+              "balanced_accuracy": 0.706777037485699,
+              "f1": 0.7096774193548386,
+              "fn": 29,
+              "fp": 43,
+              "precision": 0.6717557251908397,
+              "recall": 0.7521367521367521,
+              "rows": 244,
+              "specificity": 0.6614173228346457,
+              "support": 244,
+              "tn": 84,
+              "tp": 88
+            }
+          },
+          "f1": 0.7096774193548386,
+          "fn": 29,
+          "fp": 43,
+          "positive_rows": 117,
+          "precision": 0.6717557251908397,
+          "recall": 0.7521367521367521,
+          "rows": 244,
+          "specificity": 0.6614173228346457,
+          "support": 244,
+          "tn": 84,
+          "tp": 88
+        },
+        "validation": {
+          "accuracy": 0.37714285714285717,
+          "auprc": 0.5715275757907039,
+          "auroc": 0.471387509798798,
+          "balanced_accuracy": 0.38372093023255816,
+          "by_sensor_coverage": {
+            "1.0": {
+              "accuracy": 0.37714285714285717,
+              "auprc": 0.5715275757907039,
+              "auroc": 0.471387509798798,
+              "balanced_accuracy": 0.38372093023255816,
+              "f1": 0.5477178423236514,
+              "fn": 20,
+              "fp": 89,
+              "precision": 0.4258064516129032,
+              "recall": 0.7674418604651163,
+              "rows": 175,
+              "specificity": 0.0,
+              "support": 175,
+              "tn": 0,
+              "tp": 66
+            }
+          },
+          "f1": 0.5477178423236514,
+          "fn": 20,
+          "fp": 89,
+          "positive_rows": 86,
+          "precision": 0.4258064516129032,
+          "recall": 0.7674418604651163,
+          "rows": 175,
+          "specificity": 0.0,
+          "support": 175,
+          "tn": 0,
+          "tp": 66
+        }
+      }
+    },
+    "logreg_gmm_augmented": {
+      "algorithm": "logreg",
+      "feature_columns": [
+        "pressure_mean",
+        "pressure_min",
+        "pressure_max",
+        "pressure_std",
+        "demand_mean",
+        "demand_sum",
+        "demand_std",
+        "flow_mean",
+        "flow_abs_mean",
+        "flow_std",
+        "tank_head_mean",
+        "tank_head_std",
+        "sensor_coverage",
+        "observed_junction_count",
+        "observed_link_count",
+        "leak_area"
+      ],
+      "rows": 519,
+      "splits": {
+        "train": {
+          "accuracy": 0.7209302325581395,
+          "auprc": 0.8461687540197113,
+          "auroc": 0.7722522587902318,
+          "balanced_accuracy": 0.7102217061576981,
+          "by_sensor_coverage": {
+            "1.0": {
+              "accuracy": 0.7209302325581395,
+              "auprc": 0.8461687540197113,
+              "auroc": 0.7722522587902318,
+              "balanced_accuracy": 0.7102217061576981,
+              "f1": 0.7725118483412323,
+              "fn": 54,
+              "fp": 42,
+              "precision": 0.7951219512195122,
+              "recall": 0.7511520737327189,
+              "rows": 344,
+              "specificity": 0.6692913385826772,
+              "support": 344,
+              "tn": 85,
+              "tp": 163
+            }
+          },
+          "f1": 0.7725118483412323,
+          "fn": 54,
+          "fp": 42,
+          "positive_rows": 217,
+          "precision": 0.7951219512195122,
+          "recall": 0.7511520737327189,
+          "rows": 344,
+          "specificity": 0.6692913385826772,
+          "support": 344,
+          "tn": 85,
+          "tp": 163
+        },
+        "validation": {
+          "accuracy": 0.37714285714285717,
+          "auprc": 0.5725047532114719,
+          "auroc": 0.4669453880324014,
+          "balanced_accuracy": 0.38372093023255816,
+          "by_sensor_coverage": {
+            "1.0": {
+              "accuracy": 0.37714285714285717,
+              "auprc": 0.5725047532114719,
+              "auroc": 0.4669453880324014,
+              "balanced_accuracy": 0.38372093023255816,
+              "f1": 0.5477178423236514,
+              "fn": 20,
+              "fp": 89,
+              "precision": 0.4258064516129032,
+              "recall": 0.7674418604651163,
+              "rows": 175,
+              "specificity": 0.0,
+              "support": 175,
+              "tn": 0,
+              "tp": 66
+            }
+          },
+          "f1": 0.5477178423236514,
+          "fn": 20,
+          "fp": 89,
+          "positive_rows": 86,
+          "precision": 0.4258064516129032,
+          "recall": 0.7674418604651163,
+          "rows": 175,
+          "specificity": 0.0,
+          "support": 175,
+          "tn": 0,
+          "tp": 66
+        }
+      }
+    },
+    "random_forest_baseline": {
+      "algorithm": "random_forest",
+      "feature_columns": [
+        "pressure_mean",
+        "pressure_min",
+        "pressure_max",
+        "pressure_std",
+        "demand_mean",
+        "demand_sum",
+        "demand_std",
+        "flow_mean",
+        "flow_abs_mean",
+        "flow_std",
+        "tank_head_mean",
+        "tank_head_std",
+        "sensor_coverage",
+        "observed_junction_count",
+        "observed_link_count",
+        "leak_area"
+      ],
+      "rows": 419,
+      "splits": {
+        "train": {
+          "accuracy": 0.8975409836065574,
+          "auprc": 0.9777383113672399,
+          "auroc": 0.9789689750319672,
+          "balanced_accuracy": 0.8992193283531866,
+          "by_sensor_coverage": {
+            "1.0": {
+              "accuracy": 0.8975409836065574,
+              "auprc": 0.9777383113672399,
+              "auroc": 0.9789689750319672,
+              "balanced_accuracy": 0.8992193283531866,
+              "f1": 0.8979591836734694,
+              "fn": 7,
+              "fp": 18,
+              "precision": 0.859375,
+              "recall": 0.9401709401709402,
+              "rows": 244,
+              "specificity": 0.8582677165354331,
+              "support": 244,
+              "tn": 109,
+              "tp": 110
+            }
+          },
+          "f1": 0.8979591836734694,
+          "fn": 7,
+          "fp": 18,
+          "positive_rows": 117,
+          "precision": 0.859375,
+          "recall": 0.9401709401709402,
+          "rows": 244,
+          "specificity": 0.8582677165354331,
+          "support": 244,
+          "tn": 109,
+          "tp": 110
+        },
+        "validation": {
+          "accuracy": 0.49142857142857144,
+          "auprc": 0.7186153277071184,
+          "auroc": 0.6640972040763,
+          "balanced_accuracy": 0.5,
+          "by_sensor_coverage": {
+            "1.0": {
+              "accuracy": 0.49142857142857144,
+              "auprc": 0.7186153277071184,
+              "auroc": 0.6640972040763,
+              "balanced_accuracy": 0.5,
+              "f1": 0.6590038314176245,
+              "fn": 0,
+              "fp": 89,
+              "precision": 0.49142857142857144,
+              "recall": 1.0,
+              "rows": 175,
+              "specificity": 0.0,
+              "support": 175,
+              "tn": 0,
+              "tp": 86
+            }
+          },
+          "f1": 0.6590038314176245,
+          "fn": 0,
+          "fp": 89,
+          "positive_rows": 86,
+          "precision": 0.49142857142857144,
+          "recall": 1.0,
+          "rows": 175,
+          "specificity": 0.0,
+          "support": 175,
+          "tn": 0,
+          "tp": 86
+        }
+      }
+    }
+  },
+  "rows": 419
+}

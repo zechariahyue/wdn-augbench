@@ -1,0 +1,73 @@
+{
+  "oracle": {
+    "gmm": {
+      "feasibility_rate": null,
+      "n_checked": 0,
+      "n_passing": 0,
+      "status": "skipped_no_wntr"
+    },
+    "graph_cvae": {
+      "feasibility_rate": null,
+      "n_checked": 0,
+      "n_passing": 0,
+      "status": "skipped_no_wntr"
+    },
+    "noise": {
+      "feasibility_rate": null,
+      "n_checked": 0,
+      "n_passing": 0,
+      "status": "skipped_no_wntr"
+    },
+    "smote": {
+      "feasibility_rate": null,
+      "n_checked": 0,
+      "n_passing": 0,
+      "status": "skipped_no_wntr"
+    }
+  },
+  "proxy": {
+    "gmm": {
+      "energy_residual_mean": 2.2848077593896856,
+      "mass_residual_mean": 1.3594259357840208,
+      "n_samples": 788.0,
+      "pass_rate": 0.0012690355329949238,
+      "plausibility_score": 0.027727980159169083,
+      "pressure_bound_violation_rate": 0.49111675126903553
+    },
+    "graph_cvae": {
+      "energy_residual_mean": 0.8884104133503959,
+      "mass_residual_mean": 1.2843217969333791,
+      "n_samples": 788.0,
+      "pass_rate": 0.0,
+      "plausibility_score": 0.057737761227536585,
+      "pressure_bound_violation_rate": 0.4365482233502538
+    },
+    "noise": {
+      "energy_residual_mean": 2.6954313156580856,
+      "mass_residual_mean": 1.0873713329702306,
+      "n_samples": 788.0,
+      "pass_rate": 0.0,
+      "plausibility_score": 0.007821648191896038,
+      "pressure_bound_violation_rate": 0.5697969543147208
+    },
+    "smote": {
+      "energy_residual_mean": 2.435212408186401,
+      "mass_residual_mean": 0.8725360173709226,
+      "n_samples": 424.0,
+      "pass_rate": 0.0,
+      "plausibility_score": 0.010593525536620711,
+      "pressure_bound_violation_rate": 0.5707547169811321
+    }
+  },
+  "proxy_vs_utility": {
+    "n": 4,
+    "p_value": 0.2621352126273781,
+    "rho": -0.7378647873726218
+  },
+  "utility_delta_auprc": {
+    "gmm": -0.03500000000000003,
+    "graph_cvae": -0.010000000000000009,
+    "noise": 0.0,
+    "smote": 0.0
+  }
+}

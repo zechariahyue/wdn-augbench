@@ -1,0 +1,41 @@
+{
+  "n_baseline": 30,
+  "test_nets": [
+    "net3"
+  ],
+  "seeds": [
+    42
+  ],
+  "per_seed": {
+    "seed_42": {
+      "baseline__net3": {
+        "row_auprc": 0.3666261986112542,
+        "scen_auprc": 0.93420547706262,
+        "n_scen": 65,
+        "n_pos": 35,
+        "scen_pos_rate": 0.5384615384615384
+      },
+      "noise__net3": {
+        "row_auprc": 0.3925920380860963,
+        "scen_auprc": 0.9342054770626199,
+        "n_scen": 65,
+        "n_pos": 35,
+        "scen_pos_rate": 0.5384615384615384
+      },
+      "gmm__net3": {
+        "row_auprc": 0.2664100284099887,
+        "scen_auprc": 0.9342054770626199,
+        "n_scen": 65,
+        "n_pos": 35,
+        "scen_pos_rate": 0.5384615384615384
+      },
+      "smote__net3": {
+        "row_auprc": 0.3716276446485812,
+        "scen_auprc": 0.93420547706262,
+        "n_scen": 65,
+        "n_pos": 35,
+        "scen_pos_rate": 0.5384615384615384
+      }
+    }
+  }
+}

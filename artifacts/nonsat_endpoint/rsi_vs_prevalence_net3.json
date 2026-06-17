@@ -1,0 +1,53 @@
+{
+  "description": "Net3-only GCN RSI(GCN,RF) vs scenario-level positive rate (prevalence). Extends the nonsat sensitivity sweep into the rare-event band. Net3 is the only test network tractable at every prior (GCN k-NN graph OOMs on D-Town once baseline count pushes rows past ~3e5). No new simulation for nb20/40/80; nb200 is new baseline-only simulation (S18).",
+  "points": [
+    {
+      "tag": "nb20",
+      "net3_pos_rate": 0.636,
+      "rsi_gcn_mean": 0.277,
+      "rsi_gcn_std": 0.095,
+      "rsi_gmm_mean": 0.191,
+      "rsi_gmm_std": 0.102,
+      "rsi_noise_mean": 0.044,
+      "rsi_noise_std": 0.116,
+      "rsi_smote_mean": 0.067,
+      "rsi_smote_std": 0.118
+    },
+    {
+      "tag": "nb40",
+      "net3_pos_rate": 0.467,
+      "rsi_gcn_mean": 0.228,
+      "rsi_gcn_std": 0.178,
+      "rsi_gmm_mean": 0.161,
+      "rsi_gmm_std": 0.129,
+      "rsi_noise_mean": -0.069,
+      "rsi_noise_std": 0.11,
+      "rsi_smote_mean": -0.042,
+      "rsi_smote_std": 0.089
+    },
+    {
+      "tag": "nb80",
+      "net3_pos_rate": 0.304,
+      "rsi_gcn_mean": 0.098,
+      "rsi_gcn_std": 0.186,
+      "rsi_gmm_mean": 0.289,
+      "rsi_gmm_std": 0.246,
+      "rsi_noise_mean": 0.042,
+      "rsi_noise_std": 0.126,
+      "rsi_smote_mean": -0.05,
+      "rsi_smote_std": 0.065
+    },
+    {
+      "tag": "nb200",
+      "net3_pos_rate": 0.149,
+      "rsi_gcn_mean": 0.032,
+      "rsi_gcn_std": 0.206,
+      "rsi_gmm_mean": 0.337,
+      "rsi_gmm_std": 0.207,
+      "rsi_noise_mean": 0.043,
+      "rsi_noise_std": 0.302,
+      "rsi_smote_mean": 0.011,
+      "rsi_smote_std": 0.138
+    }
+  ]
+}

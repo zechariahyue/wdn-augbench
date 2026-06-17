@@ -1,0 +1,43 @@
+=== Per (aug,net): mean+/-std over seeds ===
+aug       net                row           scen  pos_rate
+baseline  net3     0.356+/-0.045  0.864+/-0.150    0.467
+baseline  d_town   0.349+/-0.021  0.891+/-0.086    0.474
+baseline  l_town   0.147+/-0.007  0.372+/-0.037    0.459
+noise     net3     0.363+/-0.027  0.940+/-0.010    0.467
+noise     d_town   0.364+/-0.038  0.882+/-0.102    0.474
+noise     l_town   0.145+/-0.009  0.358+/-0.037    0.459
+gmm       net3     0.284+/-0.044  0.630+/-0.204    0.467
+gmm       d_town   0.369+/-0.010  0.890+/-0.081    0.474
+gmm       l_town   0.189+/-0.000  0.459+/-0.000    0.459
+smote     net3     0.369+/-0.040  0.918+/-0.052    0.467
+smote     d_town   0.376+/-0.031  0.872+/-0.132    0.474
+smote     l_town   0.145+/-0.004  0.347+/-0.014    0.459
+gcn       net3     0.228+/-0.013  0.508+/-0.188    0.467
+gcn       d_town   0.319+/-0.067  0.497+/-0.091    0.474
+gcn       l_town               N/A (OOM/missing)
+
+=== RSI(aug, baseline) per net: mean+/-std over seeds, with row/scen gaps ===
+aug     net       row_gap  scen_gap            RSI
+noise   net3      +0.007   +0.076   -0.069+/-0.110
+noise   d_town    +0.015   -0.009   +0.023+/-0.113
+noise   l_town    -0.002   -0.014   +0.012+/-0.002
+gmm     net3      -0.072   -0.234   +0.161+/-0.129
+gmm     d_town    +0.020   -0.000   +0.021+/-0.120
+gmm     l_town    +0.042   +0.088   -0.045+/-0.032
+smote   net3      +0.013   +0.054   -0.042+/-0.089
+smote   d_town    +0.027   -0.018   +0.045+/-0.158
+smote   l_town    -0.002   -0.025   +0.023+/-0.028
+gcn     net3      -0.128   -0.356   +0.228+/-0.178
+gcn     d_town    -0.030   -0.393   +0.363+/-0.062
+gcn     l_town                             N/A
+
+=== eq-weight macro RSI(aug, baseline) across nets ===
+noise   macro RSI = -0.011
+gmm     macro RSI = +0.046
+smote   macro RSI = +0.009
+gcn     macro RSI = +0.296
+
+=== sanity: scen pos-rate range and saturation check ===
+scen pos_rate min/max: 0.459/0.474  (target: well below 0.97)
+scen AUPRC min/max: 0.321/0.975  (spread => informative, not pinned at prior)
+note: gcn OOMs on l_town (k-NN graph over ~3e5 rows); reported on net3+d_town only.

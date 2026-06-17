@@ -1,0 +1,14 @@
+# Core (all experiments)
+numpy
+pandas>=2.0
+scikit-learn>=1.3
+scipy
+networkx
+matplotlib
+pyyaml
+wntr>=1.4.0           # bundles EPANET for hydraulic simulation
+imbalanced-learn      # SMOTE / ADASYN augmenters
+
+# Graph models only (sample-space GCN, topology-aware GNN, Graph-CVAE)
+torch
+torch-geometric       # provides GATv2Conv

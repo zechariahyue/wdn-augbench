@@ -1,0 +1,317 @@
+{
+  "disturbance_types": [
+    "leak",
+    "pipe_closure",
+    "pump_outage"
+  ],
+  "per_augmenter": {
+    "baseline": {
+      "augmented_train_rows": 190992,
+      "augmenter": "baseline",
+      "heuristic_per_network": {
+        "net3": {
+          "accuracy": 0.5611111111111111,
+          "auprc": 0.7455729461796006,
+          "auroc": 0.8087786690061411,
+          "balanced_accuracy": 0.5,
+          "f1": 0.0,
+          "fn": 790,
+          "fp": 0,
+          "network_id": "net3",
+          "positive_rows": 790,
+          "precision": 0.0,
+          "recall": 0.0,
+          "rows": 1800,
+          "specificity": 1.0,
+          "support": 1800,
+          "tn": 1010,
+          "tp": 0
+        }
+      },
+      "heuristic_weighted_auprc": 0.7455729461796007,
+      "per_network": {
+        "net3": {
+          "accuracy": 0.6722222222222223,
+          "auprc": 0.7371596467427575,
+          "auroc": 0.8365446797844341,
+          "balanced_accuracy": 0.633475372853741,
+          "f1": 0.4587155963302753,
+          "fn": 540,
+          "fp": 50,
+          "network_id": "net3",
+          "positive_rows": 790,
+          "precision": 0.8333333333333334,
+          "recall": 0.31645569620253167,
+          "rows": 1800,
+          "specificity": 0.9504950495049505,
+          "support": 1800,
+          "tn": 960,
+          "tp": 250
+        }
+      },
+      "triage_per_network": {
+        "net3": {
+          "accuracy": 0.6638888888888889,
+          "auprc": 0.7805063194780804,
+          "auroc": 0.8636671262062914,
+          "balanced_accuracy": 0.6239817019676651,
+          "f1": 0.4372093023255814,
+          "fn": 555,
+          "fp": 50,
+          "network_id": "net3",
+          "positive_rows": 790,
+          "precision": 0.8245614035087719,
+          "recall": 0.2974683544303797,
+          "rows": 1800,
+          "specificity": 0.9504950495049505,
+          "support": 1800,
+          "tn": 960,
+          "tp": 235
+        }
+      },
+      "triage_weighted_auprc": 0.7805063194780804,
+      "weighted_auprc": 0.7371596467427575
+    },
+    "gmm": {
+      "augmented_train_rows": 197107,
+      "augmenter": "gmm",
+      "heuristic_per_network": {
+        "net3": {
+          "accuracy": 0.5611111111111111,
+          "auprc": 0.7753285413517135,
+          "auroc": 0.8481921293395163,
+          "balanced_accuracy": 0.5,
+          "f1": 0.0,
+          "fn": 790,
+          "fp": 0,
+          "network_id": "net3",
+          "positive_rows": 790,
+          "precision": 0.0,
+          "recall": 0.0,
+          "rows": 1800,
+          "specificity": 1.0,
+          "support": 1800,
+          "tn": 1010,
+          "tp": 0
+        }
+      },
+      "heuristic_weighted_auprc": 0.7753285413517136,
+      "per_network": {
+        "net3": {
+          "accuracy": 0.7716666666666666,
+          "auprc": 0.7386253298888317,
+          "auroc": 0.835938714124577,
+          "balanced_accuracy": 0.7878493545557088,
+          "f1": 0.7796246648793567,
+          "fn": 63,
+          "fp": 348,
+          "network_id": "net3",
+          "positive_rows": 790,
+          "precision": 0.6762790697674419,
+          "recall": 0.920253164556962,
+          "rows": 1800,
+          "specificity": 0.6554455445544555,
+          "support": 1800,
+          "tn": 662,
+          "tp": 727
+        }
+      },
+      "triage_per_network": {
+        "net3": {
+          "accuracy": 0.6705555555555556,
+          "auprc": 0.7785836751143231,
+          "auroc": 0.8557513472866275,
+          "balanced_accuracy": 0.6315766386765258,
+          "f1": 0.4544618215271389,
+          "fn": 543,
+          "fp": 50,
+          "network_id": "net3",
+          "positive_rows": 790,
+          "precision": 0.8316498316498316,
+          "recall": 0.31265822784810127,
+          "rows": 1800,
+          "specificity": 0.9504950495049505,
+          "support": 1800,
+          "tn": 960,
+          "tp": 247
+        }
+      },
+      "triage_weighted_auprc": 0.7785836751143231,
+      "weighted_auprc": 0.7386253298888317
+    },
+    "gnn_baseline": {
+      "augmented_train_rows": 190992,
+      "augmenter": "gnn_baseline",
+      "detector": "GNNDetector",
+      "per_network": {
+        "net3": {
+          "accuracy": 0.4388888888888889,
+          "auprc": 0.4159621213648419,
+          "auroc": 0.42671199398420856,
+          "balanced_accuracy": 0.5,
+          "f1": 0.61003861003861,
+          "fn": 0,
+          "fp": 1010,
+          "network_id": "net3",
+          "positive_rows": 790,
+          "precision": 0.4388888888888889,
+          "recall": 1.0,
+          "rows": 1800,
+          "specificity": 0.0,
+          "support": 1800,
+          "tn": 0,
+          "tp": 790
+        }
+      },
+      "weighted_auprc": 0.4159621213648419
+    },
+    "noise": {
+      "augmented_train_rows": 266759,
+      "augmenter": "noise",
+      "heuristic_per_network": {
+        "net3": {
+          "accuracy": 0.5611111111111111,
+          "auprc": 0.7695003668951033,
+          "auroc": 0.8336990850983832,
+          "balanced_accuracy": 0.5,
+          "f1": 0.0,
+          "fn": 790,
+          "fp": 0,
+          "network_id": "net3",
+          "positive_rows": 790,
+          "precision": 0.0,
+          "recall": 0.0,
+          "rows": 1800,
+          "specificity": 1.0,
+          "support": 1800,
+          "tn": 1010,
+          "tp": 0
+        }
+      },
+      "heuristic_weighted_auprc": 0.7695003668951034,
+      "per_network": {
+        "net3": {
+          "accuracy": 0.7044444444444444,
+          "auprc": 0.7297058096236908,
+          "auroc": 0.8060270710615366,
+          "balanced_accuracy": 0.698859506203785,
+          "f1": 0.659846547314578,
+          "fn": 274,
+          "fp": 258,
+          "network_id": "net3",
+          "positive_rows": 790,
+          "precision": 0.6666666666666666,
+          "recall": 0.6531645569620254,
+          "rows": 1800,
+          "specificity": 0.7445544554455445,
+          "support": 1800,
+          "tn": 752,
+          "tp": 516
+        }
+      },
+      "triage_per_network": {
+        "net3": {
+          "accuracy": 0.6722222222222223,
+          "auprc": 0.8022661300908882,
+          "auroc": 0.873219701717007,
+          "balanced_accuracy": 0.633475372853741,
+          "f1": 0.4587155963302753,
+          "fn": 540,
+          "fp": 50,
+          "network_id": "net3",
+          "positive_rows": 790,
+          "precision": 0.8333333333333334,
+          "recall": 0.31645569620253167,
+          "rows": 1800,
+          "specificity": 0.9504950495049505,
+          "support": 1800,
+          "tn": 960,
+          "tp": 250
+        }
+      },
+      "triage_weighted_auprc": 0.8022661300908882,
+      "weighted_auprc": 0.7297058096236908
+    },
+    "smote": {
+      "augmented_train_rows": 266759,
+      "augmenter": "smote",
+      "heuristic_per_network": {
+        "net3": {
+          "accuracy": 0.5611111111111111,
+          "auprc": 0.7234753962738537,
+          "auroc": 0.7612301040230603,
+          "balanced_accuracy": 0.5,
+          "f1": 0.0,
+          "fn": 790,
+          "fp": 0,
+          "network_id": "net3",
+          "positive_rows": 790,
+          "precision": 0.0,
+          "recall": 0.0,
+          "rows": 1800,
+          "specificity": 1.0,
+          "support": 1800,
+          "tn": 1010,
+          "tp": 0
+        }
+      },
+      "heuristic_weighted_auprc": 0.7234753962738537,
+      "per_network": {
+        "net3": {
+          "accuracy": 0.52,
+          "auprc": 0.7684740394736757,
+          "auroc": 0.8644322596816643,
+          "balanced_accuracy": 0.5718636420604085,
+          "f1": 0.645611156685808,
+          "fn": 3,
+          "fp": 861,
+          "network_id": "net3",
+          "positive_rows": 790,
+          "precision": 0.47754854368932037,
+          "recall": 0.9962025316455696,
+          "rows": 1800,
+          "specificity": 0.14752475247524752,
+          "support": 1800,
+          "tn": 149,
+          "tp": 787
+        }
+      },
+      "triage_per_network": {
+        "net3": {
+          "accuracy": 0.6722222222222223,
+          "auprc": 0.7485268678973078,
+          "auroc": 0.807845594686051,
+          "balanced_accuracy": 0.633475372853741,
+          "f1": 0.4587155963302753,
+          "fn": 540,
+          "fp": 50,
+          "network_id": "net3",
+          "positive_rows": 790,
+          "precision": 0.8333333333333334,
+          "recall": 0.31645569620253167,
+          "rows": 1800,
+          "specificity": 0.9504950495049505,
+          "support": 1800,
+          "tn": 960,
+          "tp": 250
+        }
+      },
+      "triage_weighted_auprc": 0.7485268678973078,
+      "weighted_auprc": 0.7684740394736755
+    }
+  },
+  "protocol": "LOLO",
+  "seed": 45,
+  "sensor_coverage_levels": [
+    0.25,
+    0.5
+  ],
+  "test_networks": [
+    "net3"
+  ],
+  "train_networks": [
+    "d_town",
+    "l_town"
+  ],
+  "train_rows": 190992
+}

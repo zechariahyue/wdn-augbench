@@ -1,0 +1,174 @@
+suite_name: final_research_suite
+suite_version: 1
+
+runs:
+  - run_id: plan_a_full
+    base_config: dev/active/configs/plan_a.yaml
+    overrides:
+      experiment_name: plan_a_full
+      outputs:
+        artifact_dir: dev/active/artifacts/suite/plan_a_full
+
+  - run_id: plan_a_leak_only
+    base_config: dev/active/configs/plan_a.yaml
+    overrides:
+      experiment_name: plan_a_leak_only
+      outputs:
+        artifact_dir: dev/active/artifacts/suite/plan_a_leak_only
+      simulation:
+        disturbance_types: [leak]
+
+  - run_id: plan_a_dense_only
+    base_config: dev/active/configs/plan_a.yaml
+    overrides:
+      experiment_name: plan_a_dense_only
+      outputs:
+        artifact_dir: dev/active/artifacts/suite/plan_a_dense_only
+      data:
+        sensor_coverage_levels: [1.0]
+
+  - run_id: plan_b_default
+    base_config: dev/active/configs/plan_b.yaml
+    overrides:
+      experiment_name: plan_b_default
+      outputs:
+        artifact_dir: dev/active/artifacts/suite/plan_b_default
+
+  - run_id: plan_b_leak_dense
+    base_config: dev/active/configs/plan_b.yaml
+    overrides:
+      experiment_name: plan_b_leak_dense
+      outputs:
+        artifact_dir: dev/active/artifacts/suite/plan_b_leak_dense
+      data:
+        sensor_coverage_levels: [1.0]
+      simulation:
+        disturbance_types: [leak]
+
+  - run_id: stratified_cross_network
+    base_config: dev/active/configs/plan_stratified.yaml
+    overrides:
+      experiment_name: stratified_cross_network
+      outputs:
+        artifact_dir: dev/active/artifacts/suite/stratified_cross_network
+
+  - run_id: stratified_multi_seed_k5
+    base_config: dev/active/configs/plan_a.yaml
+    overrides:
+      experiment_name: stratified_multi_seed_k5
+      outputs:
+        artifact_dir: dev/active/artifacts/suite/stratified_multi_seed_k5
+      evaluation:
+        n_seeds: 5
+        master_seed: 42
+        compute_ci: true
+
+  # ---- ABLATION LADDER (L0-L5) ----
+  # L0: tabular RF + noise augmentation (existing baseline)
+  - run_id: ablation_L0_rf_noise
+    base_config: dev/active/configs/plan_a.yaml
+    overrides:
+      experiment_name: ablation_L0_rf_noise
+      outputs:
+        artifact_dir: dev/active/artifacts/suite/ablation/L0_rf_noise
+      data:
+        sensor_coverage_levels: [0.25, 0.5, 0.75, 1.0]
+      simulation:
+        disturbance_types: [leak, pipe_closure, pump_outage]
+      ablation:
+        detector: random_forest
+        augmenter: noise
+        level: 0
+
+  # L1: tabular RF + GMM augmentation (existing)
+  - run_id: ablation_L1_rf_gmm
+    base_config: dev/active/configs/plan_a.yaml
+    overrides:
+      experiment_name: ablation_L1_rf_gmm
+      outputs:
+        artifact_dir: dev/active/artifacts/suite/ablation/L1_rf_gmm
+      data:
+        sensor_coverage_levels: [0.25, 0.5, 0.75, 1.0]
+      simulation:
+        disturbance_types: [leak, pipe_closure, pump_outage]
+      ablation:
+        detector: random_forest
+        augmenter: gmm
+        level: 1
+
+  # L2: tabular RF + GMM + quantile filter (existing)
+  - run_id: ablation_L2_rf_gmm_filter
+    base_config: dev/active/configs/plan_a.yaml
+    overrides:
+      experiment_name: ablation_L2_rf_gmm_filter
+      outputs:
+        artifact_dir: dev/active/artifacts/suite/ablation/L2_rf_gmm_filter
+      data:
+        sensor_coverage_levels: [0.25, 0.5, 0.75, 1.0]
+      simulation:
+        disturbance_types: [leak, pipe_closure, pump_outage]
+      ablation:
+        detector: random_forest
+        augmenter: gmm
+        plausibility_filter: quantile
+        level: 2
+
+  # L3: SMOTE augmentation + tabular RF (new sequence-aware augmenter, same detector)
+  - run_id: ablation_L3_rf_smote
+    base_config: dev/active/configs/plan_a.yaml
+    overrides:
+      experiment_name: ablation_L3_rf_smote
+      outputs:
+        artifact_dir: dev/active/artifacts/suite/ablation/L3_rf_smote
+      data:
+        sensor_coverage_levels: [0.25, 0.5, 0.75, 1.0]
+      simulation:
+        disturbance_types: [leak, pipe_closure, pump_outage]
+      ablation:
+        detector: random_forest
+        augmenter: smote
+        level: 3
+
+  # L4: Graph-CVAE augmentation + tabular RF (new graph generator, same detector)
+  - run_id: ablation_L4_rf_graph_cvae
+    base_config: dev/active/configs/plan_a.yaml
+    overrides:
+      experiment_name: ablation_L4_rf_graph_cvae
+      outputs:
+        artifact_dir: dev/active/artifacts/suite/ablation/L4_rf_graph_cvae
+      data:
+        sensor_coverage_levels: [0.25, 0.5, 0.75, 1.0]
+      simulation:
+        disturbance_types: [leak, pipe_closure, pump_outage]
+      ablation:
+        detector: random_forest
+        augmenter: graph_cvae
+        level: 4
+
+  # L5: Graph-CVAE + physics soft constraint + tabular RF (full proposed)
+  - run_id: ablation_L5_rf_graph_cvae_physics
+    base_config: dev/active/configs/plan_a.yaml
+    overrides:
+      experiment_name: ablation_L5_rf_graph_cvae_physics
+      outputs:
+        artifact_dir: dev/active/artifacts/suite/ablation/L5_rf_graph_cvae_physics
+      data:
+        sensor_coverage_levels: [0.25, 0.5, 0.75, 1.0]
+      simulation:
+        disturbance_types: [leak, pipe_closure, pump_outage]
+      ablation:
+        detector: random_forest
+        augmenter: graph_cvae_physics
+        lambda_physics: 0.5
+        level: 5
+
+  # ---- DEMAND NOISE VARIANT ----
+  - run_id: demand_noise_variant
+    base_config: dev/active/configs/plan_a.yaml
+    overrides:
+      experiment_name: demand_noise_variant
+      outputs:
+        artifact_dir: dev/active/artifacts/suite/demand_noise_variant
+      simulation:
+        demand_noise: true
+        demand_noise_fraction: 0.20

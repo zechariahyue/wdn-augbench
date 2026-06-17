@@ -1,0 +1,55 @@
+{
+  "augmenter": "graph_cvae",
+  "ci_95": [
+    0.504,
+    0.674
+  ],
+  "macro_auprc": 0.59,
+  "macro_std": 0.07,
+  "note": "Graph-CVAE (GATv2Conv encoder, Hazen-Williams physics loss). Trained on Anytown + Hanoi. Zero-shot test on Net3, D-Town, L-TOWN. Macro AUPRC = equal-weight average across test networks. D-Town note: EpanetSimulator instability may produce empty test frames for some seeds \u2014 n_seeds reported per network.",
+  "per_network": {
+    "d_town": {
+      "auprc_values": [
+        0.6756,
+        0.6784,
+        0.6792,
+        0.6657,
+        0.6729
+      ],
+      "mean": 0.674,
+      "n_seeds": 5,
+      "std": 0.005
+    },
+    "l_town": {
+      "auprc_values": [
+        0.5587,
+        0.6178,
+        0.5617,
+        0.6144,
+        0.6093
+      ],
+      "mean": 0.592,
+      "n_seeds": 5,
+      "std": 0.026
+    },
+    "net3": {
+      "auprc_values": [
+        0.4984,
+        0.5006,
+        0.4927,
+        0.4814,
+        0.5466
+      ],
+      "mean": 0.504,
+      "n_seeds": 5,
+      "std": 0.022
+    }
+  },
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ]
+}

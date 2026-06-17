@@ -1,0 +1,38 @@
+experiment_name: plan_b_augmented_detection
+seed: 42
+
+data:
+  primary_dataset: compact_epanet_suite
+  benchmark_manifest: dev/active/configs/benchmark_manifest.yaml
+  split_manifest: dev/active/configs/split_manifest_plan_b.yaml
+  benchmark_ids: [anytown, hanoi, net3, l_town]
+  canonical_benchmark_sources:
+    - dataset/EPANET-Benchmarks-master/asce-tf-wdst/Anytown/Anytown.inp
+    - dataset/EPANET-Benchmarks-master/asce-tf-wdst/Hanoi/Hanoi.inp
+    - dataset/EPANET-Benchmarks-master/asce-tf-wdst/Net3/Net3.inp
+    - dataset/EPANET-Benchmarks-master/L-Town/L-TOWN.inp
+  secondary_case_study:
+    - dataset/ACWA_data/ACWA-Data-main/PublicDatasets/ACWA Data - A3 Lab.xlsx
+    - dataset/ACWA_data/ACWA-Data-main/PublicDatasets/ACWA Cyberattacks Data - A3 Lab.xlsx
+  split_strategy: staged_network_holdout
+  low_label_fractions: [0.1, 0.2, 0.5]
+
+models:
+  detector: lstm_baseline
+  generator: timegan_or_cvae
+  physics_filter_enabled: false
+
+evaluation:
+  metrics: [f1, precision, recall, auprc]
+  run_cross_network: false
+  run_sparse_sensing: true
+
+outputs:
+  artifact_dir: dev/active/artifacts/plan_b
+
+simulation:
+  smoke_splits: [train, validation, test]
+  leak_area_values: [0.0001, 0.0003, 0.0005, 0.001, 0.003, 0.005]
+  max_candidates_per_network: 5
+  include_baseline: true
+  disturbance_types: [leak, pipe_closure]

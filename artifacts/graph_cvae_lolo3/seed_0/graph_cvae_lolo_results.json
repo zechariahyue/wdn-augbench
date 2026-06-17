@@ -1,0 +1,75 @@
+{
+  "augmented_rows": 650,
+  "augmenter": "graph_cvae",
+  "augmenter_note": "graph_cvae: GraphCVAEAugmenter with GATv2Conv encoder + Hazen-Williams physics loss. Trained on Anytown+Hanoi, zero-shot evaluation on Net3/D-Town/L-TOWN.",
+  "macro_auprc": 0.5775619170570616,
+  "per_network": {
+    "d_town": {
+      "accuracy": 0.5765230312035661,
+      "auprc": 0.6756359616224165,
+      "auroc": 0.6015670861337441,
+      "balanced_accuracy": 0.5715612520071743,
+      "f1": 0.5113886847905952,
+      "fn": 2404,
+      "fp": 1586,
+      "network_id": "d_town",
+      "positive_rows": 4492,
+      "precision": 0.568317909635275,
+      "recall": 0.46482635796972394,
+      "rows": 9422,
+      "specificity": 0.6782961460446247,
+      "support": 9422,
+      "tn": 3344,
+      "tp": 2088
+    },
+    "l_town": {
+      "accuracy": 0.47637934697924783,
+      "auprc": 0.5586539993084144,
+      "auroc": 0.5817341178190152,
+      "balanced_accuracy": 0.5,
+      "f1": 0.6453346126169345,
+      "fn": 0,
+      "fp": 14786,
+      "network_id": "l_town",
+      "positive_rows": 13452,
+      "precision": 0.47637934697924783,
+      "recall": 1.0,
+      "rows": 28238,
+      "specificity": 0.0,
+      "support": 28238,
+      "tn": 0,
+      "tp": 13452
+    },
+    "net3": {
+      "accuracy": 0.5285714285714286,
+      "auprc": 0.4983957902403539,
+      "auroc": 0.49545989025346227,
+      "balanced_accuracy": 0.5327933106872224,
+      "f1": 0.6189376443418015,
+      "fn": 38,
+      "fp": 127,
+      "network_id": "net3",
+      "positive_rows": 172,
+      "precision": 0.5134099616858238,
+      "recall": 0.7790697674418605,
+      "rows": 350,
+      "specificity": 0.28651685393258425,
+      "support": 350,
+      "tn": 51,
+      "tp": 134
+    }
+  },
+  "protocol": "LOLO-3net",
+  "seed": 0,
+  "synthetic_rows": 0,
+  "test_networks": [
+    "net3",
+    "d_town",
+    "l_town"
+  ],
+  "train_networks": [
+    "anytown",
+    "hanoi"
+  ],
+  "train_rows": 650
+}

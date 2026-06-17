@@ -1,0 +1,48 @@
+experiment_name: stratified_cross_network
+seed: 42
+
+data:
+  primary_dataset: epanet_simulation_suite
+  benchmark_manifest: dev/active/configs/benchmark_manifest.yaml
+  split_manifest: dev/active/configs/split_manifest_stratified.yaml
+  benchmark_ids: [net1, anytown, hanoi, net3, bwsn_network_1, d_town, l_town]
+  canonical_benchmark_sources:
+    - dataset/EPANET-Benchmarks-master/epanet-desktop/Net1/Net1.inp
+    - dataset/EPANET-Benchmarks-master/asce-tf-wdst/Anytown/Anytown.inp
+    - dataset/EPANET-Benchmarks-master/asce-tf-wdst/Hanoi/Hanoi.inp
+    - dataset/EPANET-Benchmarks-master/asce-tf-wdst/Net3/Net3.inp
+    - dataset/EPANET-Benchmarks-master/asce-tf-wdst/Battle of the Water Sensor Networks/BWSN_Network_1.inp
+    - dataset/EPANET-Benchmarks-master/exeter-benchmarks/D-Town Water Distribution Network BWN-II/d-town.inp
+    - dataset/EPANET-Benchmarks-master/L-Town/L-TOWN.inp
+  auxiliary_topology_sources:
+    - dataset/synthetic
+    - dataset/academic_mined/raw_inp_files
+  deferred_sources:
+    - dataset/synthetic_batch2
+    - dataset/github_mined/raw_inp_files
+  secondary_case_study:
+    - dataset/ACWA_data/ACWA-Data-main/PublicDatasets/ACWA Data - A3 Lab.xlsx
+    - dataset/ACWA_data/ACWA-Data-main/PublicDatasets/ACWA Cyberattacks Data - A3 Lab.xlsx
+  split_strategy: network_holdout
+  low_label_fractions: [0.05, 0.1, 0.2, 0.5]
+  sensor_coverage_levels: [0.25, 0.5, 0.75, 1.0]
+
+models:
+  detector: tcn_baseline
+  generator: conditional_cvae
+  physics_filter_enabled: true
+
+evaluation:
+  metrics: [f1, precision, recall, auprc, false_alarm_rate]
+  run_cross_network: true
+  run_sparse_sensing: true
+
+outputs:
+  artifact_dir: dev/active/artifacts/stratified_cross_network
+
+simulation:
+  smoke_splits: [train, validation]
+  leak_area_values: [0.0001, 0.0003, 0.0005, 0.001, 0.003, 0.005]
+  max_candidates_per_network: 5
+  include_baseline: true
+  disturbance_types: [leak, pipe_closure, pump_outage]

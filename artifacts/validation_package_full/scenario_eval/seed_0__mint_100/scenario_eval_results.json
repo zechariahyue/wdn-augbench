@@ -1,0 +1,16 @@
+{
+  "coverages": [
+    0.25,
+    0.5
+  ],
+  "disturbances": [
+    "leak",
+    "pipe_closure",
+    "pump_outage"
+  ],
+  "min_timesteps": 100,
+  "n_test_examples": 28,
+  "n_train_examples": 0,
+  "seed": 0,
+  "status": "empty_split_after_filtering"
+}

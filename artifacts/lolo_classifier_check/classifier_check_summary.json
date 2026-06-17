@@ -1,0 +1,59 @@
+{
+  "description": "5-seed standard LOLO (net3+d_town, node-weighted macro AUPRC). RF vs LR downstream classifier x augmenter family. Tests whether the augmentation negative finding is classifier-specific.",
+  "macro": {
+    "baseline": {
+      "rf": {
+        "mean": 0.6321800123967287,
+        "std": 0.010100013240648242
+      },
+      "lr": {
+        "mean": 0.5624040507005656,
+        "std": 1.817126106103979e-05
+      }
+    },
+    "noise": {
+      "rf": {
+        "mean": 0.6290595685855115,
+        "std": 0.020133793555925327
+      },
+      "lr": {
+        "mean": 0.43434119318594827,
+        "std": 0.0
+      }
+    },
+    "gmm": {
+      "rf": {
+        "mean": 0.5709297719939878,
+        "std": 0.014485535027795364
+      },
+      "lr": {
+        "mean": 0.4680302266031145,
+        "std": 0.027508662271519914
+      }
+    },
+    "smote": {
+      "rf": {
+        "mean": 0.6345054747162494,
+        "std": 0.007060949256812089
+      },
+      "lr": {
+        "mean": 0.43434119318594827,
+        "std": 0.0
+      }
+    }
+  },
+  "baseline_deltas": {
+    "noise": {
+      "rf": -0.003120443811217233,
+      "lr": -0.12806285751461738
+    },
+    "gmm": {
+      "rf": -0.06125024040274096,
+      "lr": -0.09437382409745115
+    },
+    "smote": {
+      "rf": 0.002325462319520688,
+      "lr": -0.12806285751461738
+    }
+  }
+}

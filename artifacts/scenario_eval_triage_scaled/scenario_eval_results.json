@@ -1,0 +1,27 @@
+{
+  "lstm_scenario": {
+    "auprc": 0.8571428571428571,
+    "auroc": 0.5,
+    "ci_lower": 0.6428571428571429,
+    "ci_upper": 0.9285714285714286,
+    "n_examples": 56,
+    "n_positive": 48
+  },
+  "n_test_examples": 56,
+  "rf_scenario": {
+    "auprc": 0.8622893143600757,
+    "auroc": 0.5104166666666667,
+    "ci_lower": 0.5985195360195362,
+    "ci_upper": 0.967032967032967,
+    "n_examples": 56,
+    "n_positive": 48
+  },
+  "triage_scenario": {
+    "auprc": 0.8830899825043742,
+    "auroc": 0.546875,
+    "ci_lower": 0.6075312500000001,
+    "ci_upper": 0.978021978021978,
+    "n_examples": 56,
+    "n_positive": 48
+  }
+}

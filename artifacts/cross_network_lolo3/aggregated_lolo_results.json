@@ -1,0 +1,177 @@
+{
+  "augmenter_relabeling_note": "'ctgan' relabeled as 'gmm_fallback': CTGANAugmenter fell back to GaussianMixtureAugmenter because sdv/ctgan was not installed. Rows were mislabeled 'synthetic_ctgan_positive' in prior artifacts.",
+  "n_seeds": 5,
+  "per_augmenter": {
+    "baseline": {
+      "d_town": {
+        "auprc_mean": 0.6774,
+        "auprc_std": 0.0025,
+        "auprc_values": [
+          0.6756,
+          0.6792
+        ],
+        "n_seeds": 2
+      },
+      "l_town": {
+        "auprc_mean": 0.5924,
+        "auprc_std": 0.0296,
+        "auprc_values": [
+          0.5587,
+          0.6178,
+          0.5617,
+          0.6144,
+          0.6093
+        ],
+        "n_seeds": 5
+      },
+      "macro_auprc_bootstrap_ci95": [
+        0.504,
+        0.6774
+      ],
+      "macro_auprc_mean": 0.5912,
+      "net3": {
+        "auprc_mean": 0.504,
+        "auprc_std": 0.025,
+        "auprc_values": [
+          0.4984,
+          0.5006,
+          0.4927,
+          0.4814,
+          0.5466
+        ],
+        "n_seeds": 5
+      }
+    },
+    "gmm": {
+      "d_town": {
+        "auprc_mean": 0.6991,
+        "auprc_std": 0.006,
+        "auprc_values": [
+          0.6949,
+          0.7034
+        ],
+        "n_seeds": 2
+      },
+      "l_town": {
+        "auprc_mean": 0.4764,
+        "auprc_std": 0.0,
+        "auprc_values": [
+          0.4764,
+          0.4764,
+          0.4764,
+          0.4764,
+          0.4764
+        ],
+        "n_seeds": 5
+      },
+      "macro_auprc_bootstrap_ci95": [
+        0.4249,
+        0.6991
+      ],
+      "macro_auprc_mean": 0.5335,
+      "net3": {
+        "auprc_mean": 0.4249,
+        "auprc_std": 0.0154,
+        "auprc_values": [
+          0.4336,
+          0.4373,
+          0.4002,
+          0.4338,
+          0.4196
+        ],
+        "n_seeds": 5
+      }
+    },
+    "noise": {
+      "d_town": {
+        "auprc_mean": 0.6754,
+        "auprc_std": 0.0058,
+        "auprc_values": [
+          0.6714,
+          0.6795
+        ],
+        "n_seeds": 2
+      },
+      "l_town": {
+        "auprc_mean": 0.5971,
+        "auprc_std": 0.018,
+        "auprc_values": [
+          0.6169,
+          0.5697,
+          0.6019,
+          0.6065,
+          0.5905
+        ],
+        "n_seeds": 5
+      },
+      "macro_auprc_bootstrap_ci95": [
+        0.4823,
+        0.6754
+      ],
+      "macro_auprc_mean": 0.5849,
+      "net3": {
+        "auprc_mean": 0.4823,
+        "auprc_std": 0.0203,
+        "auprc_values": [
+          0.4862,
+          0.4821,
+          0.4577,
+          0.4725,
+          0.5129
+        ],
+        "n_seeds": 5
+      }
+    },
+    "smote": {
+      "d_town": {
+        "auprc_mean": 0.6778,
+        "auprc_std": 0.0046,
+        "auprc_values": [
+          0.6746,
+          0.6811
+        ],
+        "n_seeds": 2
+      },
+      "l_town": {
+        "auprc_mean": 0.5999,
+        "auprc_std": 0.0219,
+        "auprc_values": [
+          0.562,
+          0.612,
+          0.617,
+          0.6021,
+          0.6065
+        ],
+        "n_seeds": 5
+      },
+      "macro_auprc_bootstrap_ci95": [
+        0.4876,
+        0.6778
+      ],
+      "macro_auprc_mean": 0.5884,
+      "net3": {
+        "auprc_mean": 0.4876,
+        "auprc_std": 0.0251,
+        "auprc_values": [
+          0.4835,
+          0.5096,
+          0.5046,
+          0.4464,
+          0.4939
+        ],
+        "n_seeds": 5
+      }
+    }
+  },
+  "physics_filter_note": "Plausibility filter (quantile-based) used as a training-time quality gate on synthetic data. Transfer performance claims are not attributed to physics regularization \u2014 the filter is a diagnostic mechanism only.",
+  "protocol": "LOLO_3net",
+  "test_networks": [
+    "d_town",
+    "l_town",
+    "net3"
+  ],
+  "train_networks": [
+    "anytown",
+    "hanoi"
+  ]
+}

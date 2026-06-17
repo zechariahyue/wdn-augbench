@@ -1,0 +1,72 @@
+manifest_name: epanet_canonical_staged_suite
+manifest_version: 1
+strategy: epanet_simulation_first
+
+primary_dataset:
+  id: epanet_simulation_suite
+  description: Canonical EPANET benchmark suite for supervised rare-event simulation.
+
+canonical_source_families:
+  - dataset/EPANET-Benchmarks-master/epanet-desktop
+  - dataset/EPANET-Benchmarks-master/asce-tf-wdst
+  - dataset/EPANET-Benchmarks-master/exeter-benchmarks
+  - dataset/EPANET-Benchmarks-master/L-Town
+
+staged_benchmarks:
+  small:
+    - id: net1
+      path: dataset/EPANET-Benchmarks-master/epanet-desktop/Net1/Net1.inp
+      role: pipeline_smoke_test
+      notes: Small standard EPANET network for parser and event-injection sanity checks.
+    - id: anytown
+      path: dataset/EPANET-Benchmarks-master/asce-tf-wdst/Anytown/Anytown.inp
+      role: baseline_benchmark
+      notes: Canonical benchmark for first detector and generator comparisons.
+    - id: hanoi
+      path: dataset/EPANET-Benchmarks-master/asce-tf-wdst/Hanoi/Hanoi.inp
+      role: baseline_benchmark
+      notes: Canonical benchmark with strong literature comparability.
+  medium:
+    - id: net3
+      path: dataset/EPANET-Benchmarks-master/asce-tf-wdst/Net3/Net3.inp
+      role: sparse_sensing_and_generalization
+      notes: Medium complexity benchmark for mainline model evaluation.
+    - id: bwsn_network_1
+      path: dataset/EPANET-Benchmarks-master/asce-tf-wdst/Battle of the Water Sensor Networks/BWSN_Network_1.inp
+      role: monitoring_and_sensor_study
+      notes: Monitoring-focused benchmark for sparse-sensing experiments.
+  large:
+    - id: d_town
+      path: dataset/EPANET-Benchmarks-master/exeter-benchmarks/D-Town Water Distribution Network BWN-II/d-town.inp
+      role: scalability_and_transfer
+      notes: Large benchmark for transfer and scalability evaluation.
+    - id: l_town
+      path: dataset/EPANET-Benchmarks-master/L-Town/L-TOWN.inp
+      role: flagship_realistic_benchmark
+      notes: Flagship benchmark for anomaly and leak-oriented studies.
+
+secondary_case_study:
+  id: acwa_public
+  role: transfer_or_ood_check
+  notes: Not primary supervised benchmark because attack labels are limited.
+  paths:
+    - dataset/ACWA_data/ACWA-Data-main/PublicDatasets/ACWA Data - A3 Lab.xlsx
+    - dataset/ACWA_data/ACWA-Data-main/PublicDatasets/ACWA Cyberattacks Data - A3 Lab.xlsx
+    - dataset/ACWA_data/ACWA-Data-main/PublicDatasets/ACWA Simulation Data - A3 Lab.csv
+    - dataset/ACWA_data/ACWA-Data-main/PublicDatasets/ACWA_Simulator_Input_Data.json
+
+auxiliary_topology_sources:
+  immediate:
+    - dataset/synthetic
+    - dataset/academic_mined/raw_inp_files
+  deferred:
+    - dataset/synthetic_batch2
+    - dataset/github_mined/raw_inp_files
+
+source_policy:
+  avoid_as_primary:
+    - dataset/EPANET-Benchmarks-master/collect-epanet-inp
+  reasons:
+    - collect-epanet-inp is duplicate-heavy and blurs provenance.
+    - synthetic_batch2 is mostly redundant with synthetic.
+

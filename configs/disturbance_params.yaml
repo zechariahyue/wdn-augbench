@@ -1,0 +1,88 @@
+disturbance_parameters:
+  leak:
+    location_sampling: "top-k demand nodes by base demand, k=5 per network"
+    magnitude:
+      type: "discrete set"
+      values: [0.0001, 0.0003, 0.0005, 0.001, 0.003, 0.005]  # m² emitter area
+      equivalent_flow_range: "0.1-7 L/s approximately (network-dependent)"
+      rationale: "Covers small background leaks through large pipe bursts"
+    start_time: "uniform random within [duration/6, duration/2]"
+    end_time: "start_time + uniform random within [duration/6, duration/3]"
+
+  pipe_closure:
+    location_sampling: "top-3 pipes by diameter per network"
+    magnitude: "complete closure (status=Closed)"
+
+  pump_outage:
+    location_sampling: "all pumps in network (up to 3)"
+    magnitude: "complete shutdown (status=Closed)"
+
+  demand_surge:
+    location_sampling: "top-3 junctions by base demand"
+    magnitude:
+      type: "discrete set"
+      values: [2.0, 3.0, 5.0]  # demand multiplier
+    duration: "same as leak window"
+
+  partial_valve_closure:
+    location_sampling: "top-2 pipes by diameter"
+    magnitude:
+      type: "discrete set"
+      values: [0.10, 0.30, 0.50]  # fraction of original roughness retained
+
+benchmark_networks:
+  net1:
+    nodes: 11
+    pipes: 13
+    tier: small
+    source: "WNTR example networks repository"
+
+  anytown:
+    nodes: 19
+    pipes: 43
+    tier: small
+    source: "WNTR example networks repository"
+
+  hanoi:
+    nodes: 32
+    pipes: 34
+    tier: small
+    source: "WNTR example networks repository"
+
+  net3:
+    nodes: 97
+    pipes: 119
+    tier: medium
+    source: "WNTR example networks repository"
+
+  bwsn_network_1:
+    nodes: 126
+    pipes: 168
+    tier: medium
+    source: "Battle of the Water Sensor Networks dataset"
+
+  d_town:
+    nodes: 399
+    pipes: 443
+    tier: large
+    source: "D-Town benchmark network (Farmani et al.)"
+
+  l_town:
+    nodes: 782
+    pipes: 905
+    tier: large
+    source: "L-Town benchmark network (BattLeDIM challenge)"
+
+sensor_placement:
+  strategies:
+    random:
+      description: "Uniform random selection from all junctions"
+      implementation: "_select_coverage_columns() with fixed random seed"
+
+    betweenness_centrality:
+      description: "Top-k junctions by betweenness centrality"
+      implementation: "NetworkX betweenness_centrality on pipe graph"
+      rationale: "High-centrality nodes lie on principal flow paths"
+
+  coverage_levels: [0.25, 0.50, 0.75, 1.00]
+  observability_metric: "k-hop coverage (h=2)"

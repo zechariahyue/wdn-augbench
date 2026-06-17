@@ -1,0 +1,38 @@
+{
+  "coverages": [
+    0.25,
+    0.5
+  ],
+  "disturbances": [
+    "leak",
+    "pipe_closure",
+    "pump_outage"
+  ],
+  "lstm_scenario": {
+    "auprc": 0.8571428571428571,
+    "auroc": 0.5,
+    "ci_lower": 0.6428571428571429,
+    "ci_upper": 0.9285714285714286,
+    "n_examples": 28,
+    "n_positive": 24
+  },
+  "min_timesteps": 18,
+  "n_test_examples": 28,
+  "rf_scenario": {
+    "auprc": 0.8585708273208273,
+    "auroc": 0.5104166666666667,
+    "ci_lower": 0.5985195360195362,
+    "ci_upper": 0.967032967032967,
+    "n_examples": 28,
+    "n_positive": 24
+  },
+  "seed": 0,
+  "triage_scenario": {
+    "auprc": 0.8814474876974877,
+    "auroc": 0.5208333333333334,
+    "ci_lower": 0.6075312500000001,
+    "ci_upper": 0.978021978021978,
+    "n_examples": 28,
+    "n_positive": 24
+  }
+}

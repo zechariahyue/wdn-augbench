@@ -1,0 +1,111 @@
+{
+  "cross_network_summary": {
+    "baseline": {
+      "base_weighted_auprc": {
+        "mean": 0.6112195470943588,
+        "n": 5,
+        "std": 0.016058179627410723
+      },
+      "heuristic_weighted_auprc": {
+        "mean": 0.568290981674339,
+        "n": 5,
+        "std": 0.007029708939248015
+      },
+      "triage_weighted_auprc": {
+        "mean": 0.5202126259310313,
+        "n": 5,
+        "std": 0.0028921984526325347
+      }
+    },
+    "gmm": {
+      "base_weighted_auprc": {
+        "mean": 0.5384558240338634,
+        "n": 5,
+        "std": 0.0037211039489521906
+      },
+      "heuristic_weighted_auprc": {
+        "mean": 0.5097652863390766,
+        "n": 5,
+        "std": 0.002916170201581585
+      },
+      "triage_weighted_auprc": {
+        "mean": 0.5175257347929163,
+        "n": 5,
+        "std": 0.004105342176540423
+      }
+    },
+    "noise": {
+      "base_weighted_auprc": {
+        "mean": 0.6130895609212248,
+        "n": 5,
+        "std": 0.008823234113196025
+      },
+      "heuristic_weighted_auprc": {
+        "mean": 0.5583527622561625,
+        "n": 5,
+        "std": 0.011846611198566028
+      },
+      "triage_weighted_auprc": {
+        "mean": 0.521747725467598,
+        "n": 5,
+        "std": 0.003960757974986955
+      }
+    },
+    "smote": {
+      "base_weighted_auprc": {
+        "mean": 0.6154485233844582,
+        "n": 5,
+        "std": 0.013628115892537151
+      },
+      "heuristic_weighted_auprc": {
+        "mean": 0.5781101728854071,
+        "n": 5,
+        "std": 0.00860410312002389
+      },
+      "triage_weighted_auprc": {
+        "mean": 0.5242557833841522,
+        "n": 5,
+        "std": 0.005225884847503887
+      }
+    }
+  },
+  "experiment_name": "hybrid_benchmark_triage_validation",
+  "n_cross_runs": 20,
+  "n_scenario_runs": 10,
+  "scenario_summary": {
+    "24": {
+      "lstm_auprc": {
+        "mean": 0.8571428571428571,
+        "n": 5,
+        "std": 0.0
+      },
+      "rf_auprc": {
+        "mean": 0.8565367965367966,
+        "n": 5,
+        "std": 0.0019426216185183867
+      },
+      "triage_auprc": {
+        "mean": 0.877686826621054,
+        "n": 5,
+        "std": 0.014065948370905764
+      }
+    },
+    "100": {
+      "lstm_auprc": {
+        "mean": null,
+        "n": 0,
+        "std": null
+      },
+      "rf_auprc": {
+        "mean": null,
+        "n": 0,
+        "std": null
+      },
+      "triage_auprc": {
+        "mean": null,
+        "n": 0,
+        "std": null
+      }
+    }
+  }
+}

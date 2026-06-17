@@ -1,0 +1,58 @@
+{
+  "endpoint": "operational early-warning / temporal localization",
+  "source": "lolo_5seed_revised seed_42..46 baseline rows; causal residual+persistence detector",
+  "params": {
+    "warmup": 4,
+    "persist_k": 3,
+    "first_k": 3
+  },
+  "chance_auprc": {
+    "net3": 0.35999999999999993,
+    "d_town": 0.33432392273402667,
+    "l_town": 0.33366385721368363
+  },
+  "table": {
+    "net3": {
+      "wstl_rf": 0.476,
+      "wstl_rf_std": 0.078,
+      "wstl_hyd": 0.289,
+      "row_rf": 0.589,
+      "row_hyd": 0.338,
+      "scen_rf": 0.95,
+      "scen_hyd": 0.986,
+      "rsi_hyd_rf": -0.287,
+      "first3h_rf": 0.069,
+      "first3h_hyd": 0.0,
+      "ttd_median_rf": 16.0,
+      "ttd_median_hyd": 9.0
+    },
+    "d_town": {
+      "wstl_rf": 0.314,
+      "wstl_rf_std": 0.007,
+      "wstl_hyd": 0.33,
+      "row_rf": 0.651,
+      "row_hyd": 0.417,
+      "scen_rf": 0.928,
+      "scen_hyd": 0.972,
+      "rsi_hyd_rf": -0.277,
+      "first3h_rf": 0.0,
+      "first3h_hyd": 0.056,
+      "ttd_median_rf": 112.0,
+      "ttd_median_hyd": 112.0
+    },
+    "l_town": {
+      "wstl_rf": 0.358,
+      "wstl_rf_std": 0.031,
+      "wstl_hyd": 0.476,
+      "row_rf": 0.54,
+      "row_hyd": 0.506,
+      "scen_rf": 0.943,
+      "scen_hyd": 0.982,
+      "rsi_hyd_rf": -0.072,
+      "first3h_rf": 0.068,
+      "first3h_hyd": 0.162,
+      "ttd_median_rf": 112.0,
+      "ttd_median_hyd": 112.0
+    }
+  }
+}

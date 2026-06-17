@@ -1,0 +1,30 @@
+split_manifest_name: stratified_network_holdout
+split_manifest_version: 1
+source_manifest: dev/active/configs/benchmark_manifest.yaml
+strategy: staged_network_holdout
+
+description: >
+  Stratified cross-network split that separates networks by size tier.
+  Small networks (Net1, Anytown, Hanoi) are used exclusively for training.
+  Medium networks (Net3, BWSN_Network_1) are reserved for validation and
+  hyperparameter selection. Large networks (D-Town, L-Town) are held out
+  as the final test set and are never seen during training or tuning.
+
+partitions:
+  train:
+    benchmark_ids: [net1, anytown, hanoi]
+    role: model_fitting
+  validation:
+    benchmark_ids: [net3, bwsn_network_1]
+    role: hyperparameter_selection
+  test:
+    benchmark_ids: [d_town, l_town]
+    role: final_holdout
+
+settings:
+  low_label_fractions: [0.05, 0.1, 0.2, 0.5]
+  sensor_coverage_levels: [0.25, 0.5, 0.75, 1.0]
+  enforce_disjoint_ids: true
+
+generated_artifacts:
+  resolved_split_manifest: dev/active/artifacts/suite/stratified_cross_network/splits/resolved_split_manifest.json
