@@ -56,6 +56,32 @@ def choose_leak_candidates(benchmark_path: Path | str, *, max_candidates: int = 
     return [name for name, _ in ranked[:max_candidates]]
 
 
+DEFAULT_EPS_DURATION_SECONDS = 24 * 3600
+
+
+def effective_duration_seconds(wn: "wntr.network.WaterNetworkModel") -> int:
+    """Horizon the EPS path will actually simulate over.
+
+    Some vetted benchmark networks — notably the Kentucky family (ky2..ky7) —
+    ship as single-period steady-state models with ``duration == 0``.
+    :func:`_ensure_eps_simulation` promotes those to a 24 h EPS horizon at
+    simulation time. Any leak window must therefore be derived from the promoted
+    horizon: deriving it from the raw ``duration == 0`` yields an inverted,
+    empty ``[start, end]`` interval, which silently labels every leak row
+    negative instead of raising.
+    """
+    duration = int(wn.options.time.duration)
+    return duration if duration > 0 else DEFAULT_EPS_DURATION_SECONDS
+
+
+def effective_report_step_seconds(wn: "wntr.network.WaterNetworkModel") -> int:
+    """Reporting step the EPS path will actually use (mirrors _ensure_eps_simulation)."""
+    report_step = int(wn.options.time.report_timestep or 0)
+    if report_step <= 0 or report_step > 3600:
+        report_step = 3600
+    return report_step
+
+
 def default_leak_window(benchmark_path: Path | str, *, rng: np.random.Generator | None = None) -> tuple[int, int]:
     """Return a leak window based on simulation duration.
 
@@ -64,8 +90,8 @@ def default_leak_window(benchmark_path: Path | str, *, rng: np.random.Generator 
     ``[duration/3, 2*duration/3]`` window is returned.
     """
     wn = wntr.network.WaterNetworkModel(str(benchmark_path))
-    duration = int(wn.options.time.duration)
-    report_step = int(wn.options.time.report_timestep or wn.options.time.hydraulic_timestep or 3600)
+    duration = effective_duration_seconds(wn)
+    report_step = effective_report_step_seconds(wn)
 
     if rng is not None:
         earliest_start = report_step
@@ -140,8 +166,8 @@ def build_leak_scenarios(
                     )
                 )
 
-            duration = int(wn.options.time.duration)
-            report_step = int(wn.options.time.report_timestep or wn.options.time.hydraulic_timestep or 3600)
+            duration = effective_duration_seconds(wn)
+            report_step = effective_report_step_seconds(wn)
             start_time = max(report_step, duration // 3)
             end_time = min(duration - report_step, (2 * duration) // 3)
             if end_time <= start_time:
@@ -571,10 +597,9 @@ def _ensure_eps_simulation(wn: "wntr.network.WaterNetworkModel") -> None:
     profiles — essential for learning disturbance ramp signatures.
     Steady-state snapshots destroy the temporal diagnostic signal.
     """
-    duration = int(wn.options.time.duration)
-    if duration <= 0:
-        # Set to 24 hours if not configured
-        wn.options.time.duration = 24 * 3600
+    # Must stay consistent with effective_duration_seconds(), which the scenario
+    # builder uses to place the leak window.
+    wn.options.time.duration = effective_duration_seconds(wn)
 
     report_timestep = int(wn.options.time.report_timestep or 0)
     if report_timestep <= 0 or report_timestep > 3600:
@@ -674,22 +699,47 @@ def simulate_scenario(
         except Exception:
             pass
 
+    import sys as _sys
+
+    requested_duration = effective_duration_seconds(wn)
+    report_step = effective_report_step_seconds(wn)
+
+    def _reached_horizon(res) -> bool:
+        try:
+            index = res.node["pressure"].index
+        except Exception:
+            return False
+        return len(index) > 0 and int(index[-1]) >= requested_duration - report_step
+
+    results = None
     try:
-        simulator = wntr.sim.WNTRSimulator(wn)
-        results = simulator.run_sim()
+        results = wntr.sim.WNTRSimulator(wn).run_sim()
     except Exception as exc:
         err_msg = str(exc).lower()
-        if "pump speed" in err_msg or "pump speeds" in err_msg:
-            # Fall back to EpanetSimulator for networks with variable-speed pumps
-            import sys as _sys
+        if "pump speed" not in err_msg and "pump speeds" not in err_msg:
+            raise
+        # Networks with variable-speed pumps are not supported by WNTRSimulator.
+        print(
+            f"[info] WNTRSimulator failed (pump speed), retrying with EpanetSimulator: {exc}",
+            file=_sys.stderr,
+        )
+
+    # WNTRSimulator can also halt early *without raising*, silently returning a
+    # truncated horizon (the Kentucky networks stop at ~9 h of a 24 h run). A
+    # truncated horizon drops the disturbance window, which labels every leak row
+    # negative rather than failing loudly, so treat a short result as a failure
+    # and re-solve with EPANET. This does not fire for net3/d_town/l_town, which
+    # reach their full horizon under WNTRSimulator.
+    if results is None or not _reached_horizon(results):
+        if results is not None:
+            index = results.node["pressure"].index
+            last = f"{int(index[-1])}s" if len(index) else "no timesteps"
             print(
-                f"[info] WNTRSimulator failed (pump speed), retrying with EpanetSimulator: {exc}",
+                f"[info] WNTRSimulator returned a truncated horizon "
+                f"({last} of {requested_duration}s); re-solving with EpanetSimulator",
                 file=_sys.stderr,
             )
-            simulator = wntr.sim.EpanetSimulator(wn)
-            results = simulator.run_sim()
-        else:
-            raise
+        results = wntr.sim.EpanetSimulator(wn).run_sim()
 
     junctions = wn.junction_name_list
     pressure_df = results.node["pressure"][junctions]

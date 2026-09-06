@@ -44,6 +44,41 @@ staged_benchmarks:
       path: dataset/EPANET-Benchmarks-master/L-Town/L-TOWN.inp
       role: flagship_realistic_benchmark
       notes: Flagship benchmark for anomaly and leak-oriented studies.
+  expansion:
+    # Phase-0 curated held-out additions (S25b screen). Inclusion criteria:
+    # 50-900 junctions; loads in WNTR; baseline+leak sims return finite pressures;
+    # leak signal >= 1 m; not a design variant of an existing benchmark network.
+    # Expands the held-out pool 3 -> 8, moving the Wilcoxon two-sided sign-floor
+    # 0.125 -> 0.0078.
+    #
+    # EXCLUDED: example3 (epanet-example-networks/epanet-tests/examples/example3.inp).
+    # It is byte-for-byte the SAME NETWORK as net3 -- identical junction and pipe
+    # name sets (92 junctions / 117 pipes / 2 pumps / 3 tanks / 2 reservoirs);
+    # EPANET's "Example 3" IS Net3. Phase 0 fingerprint-deduplicated candidates
+    # against each other but not against the pre-existing held-out pool, so this
+    # slipped past the "not a variant of an existing benchmark network" criterion.
+    # Including it would double-count net3 and violate the independence assumption
+    # of the paired Wilcoxon over held-out networks.
+    - id: ky3
+      path: dataset/EPANET-Benchmarks-master/asce-tf-wdst/ky3/ky3.inp
+      role: held_out_transfer_expansion
+      notes: 269 junctions, 5 pumps, 3 tanks; leak signal 4.3 m.
+    - id: ky5
+      path: dataset/EPANET-Benchmarks-master/asce-tf-wdst/ky5/ky5.inp
+      role: held_out_transfer_expansion
+      notes: 420 junctions, 9 pumps, 3 tanks; leak signal 13.5 m.
+    - id: ky7
+      path: dataset/EPANET-Benchmarks-master/asce-tf-wdst/ky7/ky7.inp
+      role: held_out_transfer_expansion
+      notes: 481 junctions, 1 pump, 3 tanks; leak signal 52.5 m.
+    - id: ky6
+      path: dataset/EPANET-Benchmarks-master/asce-tf-wdst/ky6/ky6.inp
+      role: held_out_transfer_expansion
+      notes: 543 junctions, 2 pumps, 3 tanks; leak signal 11.2 m.
+    - id: ky2
+      path: dataset/EPANET-Benchmarks-master/asce-tf-wdst/ky2/ky2.inp
+      role: held_out_transfer_expansion
+      notes: 811 junctions, 1 pump, 3 tanks; leak signal 14.5 m.
 
 secondary_case_study:
   id: acwa_public

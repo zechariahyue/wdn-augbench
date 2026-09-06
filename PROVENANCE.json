@@ -1,0 +1,249 @@
+{
+  "generated_boundary": {
+    "sim_fix": "2026-07-10T22:32:00",
+    "aug_fix": "2026-07-13T15:25:00"
+  },
+  "summary": {
+    "current": 13,
+    "stale": 2,
+    "missing": 0,
+    "total": 18
+  },
+  "records": [
+    {
+      "label": "tab:lolo",
+      "description": "Main 8-network LOLO augmentation benchmark",
+      "scripts": [
+        "run_expanded_lolo.py"
+      ],
+      "artifact": "expanded_lolo/expanded_summary.json",
+      "sha256": "b8b5f3cdfc270ce6d66cc1be2deb2de46693e95b20bc0c7f4318bccdc347f441",
+      "mtime": "2026-07-13T17:42:44",
+      "status": "CURRENT",
+      "augmenter_dependent": true,
+      "note": ""
+    },
+    {
+      "label": "tab:lolo-per-network / fig:lolo_per_network / fig:lolo_macro_forest",
+      "description": "Per-network LOLO AUPRC + forest plot",
+      "scripts": [
+        "run_expanded_lolo.py"
+      ],
+      "artifact": "expanded_lolo/expanded_summary.json",
+      "sha256": "b8b5f3cdfc270ce6d66cc1be2deb2de46693e95b20bc0c7f4318bccdc347f441",
+      "mtime": "2026-07-13T17:42:44",
+      "status": "CURRENT",
+      "augmenter_dependent": true,
+      "note": "same artifact as tab:lolo"
+    },
+    {
+      "label": "tab:augmenter-physics + physics screen",
+      "description": "Per-augmenter plausibility-rejection rates (hydraulic mechanism)",
+      "scripts": [
+        "analyze_augmenter_physics.py"
+      ],
+      "artifact": "augmenter_physics/physics_screen.json",
+      "sha256": "e38f5bf356dadd56d39fe6f81609ddc38b9e5d1eadb69a722f71f1263ab4e37b",
+      "mtime": "2026-07-13T22:55:11",
+      "status": "CURRENT",
+      "augmenter_dependent": true,
+      "note": "cited 37.9/1.6/2.1% come from physics_screen.json (post-fix); the companion augmenter_physics_summary.json (conservation residuals, pre-fix, not cited) would need regenerating if those residuals are ever reported"
+    },
+    {
+      "label": "tab:nonsat-rsi",
+      "description": "Balanced non-saturated RSI (baseline/GCN rows sim-only; augmenter rows aug-dep.)",
+      "scripts": [
+        "run_nonsat_endpoint.py",
+        "compute_nonsat_rsi.py"
+      ],
+      "artifact": "nonsat_endpoint/nonsat_results_full.json",
+      "sha256": "55e1c3e9c26f1df0a553389c662e17a7d6a491f4f6727a8ab91f28353df0fdd6",
+      "mtime": "2026-07-21T18:49:56",
+      "status": "CURRENT",
+      "augmenter_dependent": true,
+      "note": ""
+    },
+    {
+      "label": "tab:nonsat-sensitivity",
+      "description": "Prevalence sweep nb20/nb80/nb200",
+      "scripts": [
+        "run_nonsat_endpoint.py"
+      ],
+      "artifact": "nonsat_endpoint/nonsat_results_nb20.json",
+      "sha256": "79186f937bfc67ce175412fa19000d7b59378c344a70e44a4373f19d8a889198",
+      "mtime": "2026-07-21T20:20:20",
+      "status": "CURRENT",
+      "augmenter_dependent": true,
+      "note": ""
+    },
+    {
+      "label": "tab:meanpool-rsi",
+      "description": "Saturated-label mean-pool RSI cross-check (augmenter rows)",
+      "scripts": [
+        "compute_meanpool_rsi.py"
+      ],
+      "artifact": "lolo_meanpool_rsi/meanpool_rsi_results.json",
+      "sha256": "c5befd9a5c6e1ea9b04df86f70f4cb1f8bb974471dd12cabb13e3117310d042c",
+      "mtime": "2026-07-22T07:22:26",
+      "status": "CURRENT",
+      "augmenter_dependent": true,
+      "note": ""
+    },
+    {
+      "label": "tab:lolo_per_disturbance",
+      "description": "Per-disturbance-type LOLO",
+      "scripts": [
+        "run_per_disturbance_lolo.py"
+      ],
+      "artifact": "per_disturbance_lolo/per_disturbance_results.json",
+      "sha256": "6b9b65dee8f810f114e99379b8fcfb6a467da25c2602db581ee60ded12443f34",
+      "mtime": "2026-07-23T01:14:30",
+      "status": "CURRENT",
+      "augmenter_dependent": true,
+      "note": ""
+    },
+    {
+      "label": "leak-only sweep (S6.8, fig:leak_only_*)",
+      "description": "Leak-only difficulty sweep",
+      "scripts": [
+        "run_leak_only_lolo.py"
+      ],
+      "artifact": "leak_only_lolo/leak_only_results.json",
+      "sha256": "a3a95d792a73b2b17e1263ed953e049210fd9b10e9b195bc36999c9e570ff40e",
+      "mtime": "2026-07-23T01:25:41",
+      "status": "CURRENT",
+      "augmenter_dependent": true,
+      "note": ""
+    },
+    {
+      "label": "tab:classifier-generality",
+      "description": "RF vs LR augmenter deltas",
+      "scripts": [
+        "run_lolo_classifier_check.py"
+      ],
+      "artifact": "lolo_classifier_check/classifier_check_summary.json",
+      "sha256": "3f886218f7985b1c02074c72907af5100d5fdf3e9d43092eeab5f60712fb9f36",
+      "mtime": "2026-07-23T01:27:54",
+      "status": "CURRENT",
+      "augmenter_dependent": true,
+      "note": ""
+    },
+    {
+      "label": "tab:early-warning",
+      "description": "WSTL / TTD / hydraulic-vs-RF RSI (no augmenter; sim-dependent)",
+      "scripts": [
+        "compute_early_warning_endpoint.py"
+      ],
+      "artifact": "early_warning_endpoint/manuscript_summary.json",
+      "sha256": "36f5322ae6573e2bc4ff974a2ca8b987bbdbc55773e8993cc49c55fff33a82d1",
+      "mtime": "2026-07-13T08:49:39",
+      "status": "CURRENT",
+      "augmenter_dependent": false,
+      "note": "derived from lolo_5seed_revised baseline rows"
+    },
+    {
+      "label": "tab:intrascale",
+      "description": "Intra-scale large-to-large fold (baseline col sim-only; noise/gmm/smote cols aug-dep.)",
+      "scripts": [
+        "run_intrascale_lolo.py"
+      ],
+      "artifact": "intrascale_lolo/intrascale_summary.json",
+      "sha256": "a692996fd119e63b3197490097551741e46db40027a6468eece80c340d4727a2",
+      "mtime": "2026-05-26T04:29:18",
+      "status": "STALE",
+      "augmenter_dependent": true,
+      "note": "re-run queue excludes this as a hanoi-bug control, but its augmenter columns are still pre-augmenter-fix"
+    },
+    {
+      "label": "tab:sensitivity / fig:sensitivity",
+      "description": "Emitter-magnitude sensitivity sweep",
+      "scripts": [
+        "run_sensitivity_analysis.py"
+      ],
+      "artifact": "sensitivity/sensitivity_results.json",
+      "sha256": "c64f12f92cbcc3c03faed38aae1c091392fe65ed386ea17720147751791df91b",
+      "mtime": "2026-07-12T17:57:40",
+      "status": "STALE",
+      "augmenter_dependent": true,
+      "note": ""
+    },
+    {
+      "label": "GCN / Graph-CVAE transfer (tab:lolo-per-network GCN row, S:gcn-pump)",
+      "description": "Graph-CVAE 5-seed LOLO",
+      "scripts": [
+        "run_graph_cvae_lolo_5seed.py"
+      ],
+      "artifact": "graph_cvae_lolo_5seed_revised/aggregated_results.json",
+      "sha256": "07f68a44318bb9104798b8a0afda9d5468d4e46c079abfdc959d8cf7727bb2c1",
+      "mtime": "2026-07-28T01:43:03",
+      "status": "CURRENT",
+      "augmenter_dependent": true,
+      "note": ""
+    },
+    {
+      "label": "Graph-CVAE no-filter ablation (S7)",
+      "description": "strict/relaxed/none filter ablation",
+      "scripts": [
+        "run_graph_cvae_filter_ablation.py"
+      ],
+      "artifact": "graph_cvae_filter_ablation/filter_ablation_results.json",
+      "sha256": "aecba45456ca432bc45a7255777c7fe68e78681bdd4acf3a591ef935b6b457d5",
+      "mtime": "2026-07-28T02:01:21",
+      "status": "CURRENT",
+      "augmenter_dependent": true,
+      "note": ""
+    },
+    {
+      "label": "topology-GNN diagnostic (S:topology-gnn)",
+      "description": "topology-aware GNN transfer",
+      "scripts": [
+        "run_topology_gnn_lolo.py"
+      ],
+      "artifact": "topology_gnn_lolo/topology_gnn_results.json",
+      "sha256": "4055ad085f72b85252614ec7567d6ab469f33e342f04a9d7c06d7dd72e353c10",
+      "mtime": "2026-07-28T02:30:31",
+      "status": "CURRENT",
+      "augmenter_dependent": true,
+      "note": ""
+    },
+    {
+      "label": "fig:feat_dist / fig:pressure_scatter / fig:plausibility_box",
+      "description": "Generated-sample visualisations",
+      "scripts": [
+        "visualize_generated_samples.py"
+      ],
+      "artifact": null,
+      "sha256": null,
+      "mtime": null,
+      "status": "N/A",
+      "augmenter_dependent": true,
+      "note": "figures re-rendered from live Anytown+Hanoi sim; no persisted JSON"
+    },
+    {
+      "label": "tab:meta-audit",
+      "description": "Evaluation-unit audit of 17 papers",
+      "scripts": [
+        "(manual literature classification ledger)"
+      ],
+      "artifact": null,
+      "sha256": null,
+      "mtime": null,
+      "status": "N/A",
+      "augmenter_dependent": false,
+      "note": "not computed from simulation; released as the classification ledger"
+    },
+    {
+      "label": "tab:networks",
+      "description": "Network metadata (junctions/pipes/pumps/...)",
+      "scripts": [
+        "(EPANET .inp headers)"
+      ],
+      "artifact": null,
+      "sha256": null,
+      "mtime": null,
+      "status": "N/A",
+      "augmenter_dependent": false,
+      "note": "static metadata"
+    }
+  ]
+}

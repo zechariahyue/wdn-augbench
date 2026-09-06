@@ -289,21 +289,33 @@ def main() -> None:
     print(f"[info] Building network index from {manifest_path}")
     network_index = _build_network_index(manifest_path)
 
+    # Each sweep is ~5-7 h; checkpoint after every sweep so a killed run
+    # resumes instead of restarting (a full run is ~20 h).
+    json_path = OUTPUT_DIR / "sensitivity_results.json"
+    ckpt_path = OUTPUT_DIR / "sensitivity_results.partial.json"
     all_results: dict[str, Any] = {}
+    if ckpt_path.exists():
+        all_results = json.loads(ckpt_path.read_text())
+        print(f"[info] Resuming from checkpoint with sweeps: {sorted(all_results)}")
 
-    print("\n=== Sweep 1: Emitter Magnitude ===")
-    all_results["emitter_magnitude"] = sweep_emitter_magnitude(network_index)
-
-    print("\n=== Sweep 2: Leak Locations ===")
-    all_results["leak_locations"] = sweep_leak_locations(network_index)
-
-    print("\n=== Sweep 3: Sensor Coverage ===")
-    all_results["sensor_coverage"] = sweep_sensor_coverage(network_index)
+    sweeps = [
+        ("emitter_magnitude", "Sweep 1: Emitter Magnitude", sweep_emitter_magnitude),
+        ("leak_locations", "Sweep 2: Leak Locations", sweep_leak_locations),
+        ("sensor_coverage", "Sweep 3: Sensor Coverage", sweep_sensor_coverage),
+    ]
+    for key, title, fn in sweeps:
+        if key in all_results:
+            print(f"\n=== {title} === (checkpointed, skipping)")
+            continue
+        print(f"\n=== {title} ===")
+        all_results[key] = fn(network_index)
+        ckpt_path.write_text(json.dumps(all_results, indent=2, default=str))
+        print(f"[info] Checkpoint saved: {ckpt_path}")
 
     # Save results
-    json_path = OUTPUT_DIR / "sensitivity_results.json"
     with open(json_path, "w") as f:
         json.dump(all_results, f, indent=2, default=str)
+    ckpt_path.unlink(missing_ok=True)
     print(f"\n[info] Results saved: {json_path}")
 
     # Plot

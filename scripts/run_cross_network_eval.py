@@ -78,7 +78,22 @@ NETWORK_NODE_COUNTS: dict[str, int] = {
     "bwsn_network_1": 126,
     "d_town": 399,
     "l_town": 785,
+    # Phase-0 curated held-out additions (junction counts from the S25b screen).
+    "example3": 92,
+    "ky3": 269,
+    "ky5": 420,
+    "ky7": 481,
+    "ky6": 543,
+    "ky2": 811,
 }
+
+# The sample-space GNN detector's k-NN graph used to be built from a dense N x N
+# distance matrix, which OOM'd on large test networks (~82 GB committed, machine
+# thrash on L-TOWN). GNNDetector now builds that graph with a memory-bounded
+# tree-based k-NN (O(N*k)), so the arm no longer OOMs. Set False only to skip the
+# GNN for speed -- it is not required by the per-row records that early-warning
+# and mean-pool consume.
+RUN_GNN_BASELINE = True
 
 # Feature columns — matches run_experiment.py exactly
 FEATURE_COLUMNS = [
@@ -298,9 +313,20 @@ def _apply_augmenter(
         return train_df.copy()
 
     filtered = plausibility_filter.filter(synthetic, FEATURE_COLUMNS)
+    n_gen, n_kept = len(synthetic), len(filtered)
+    print(f"[info]   {augmenter_name}: {n_gen} generated, {n_kept} passed the plausibility "
+          f"screen ({100.0 * (1 - n_kept / max(n_gen, 1)):.1f}% rejected)")
+
     if filtered.empty:
-        print(f"[warn] All synthetic rows filtered by plausibility — using unfiltered", file=sys.stderr)
-        filtered = synthetic.copy()
+        # If the screen rejects everything, the augmenter has produced nothing usable.
+        # Training on the rejects instead -- which this code used to do -- means training
+        # on samples the pipeline's own plausibility check judged physically impossible,
+        # and it silently converts a total generator failure into a large, harmful
+        # "augmentation effect". Collapse to the unaugmented baseline and say so.
+        print(f"[warn] Augmenter '{augmenter_name}': plausibility screen rejected 100% of "
+              f"samples — collapsing to the unaugmented baseline (NOT training on rejects)",
+              file=sys.stderr)
+        return train_df.copy()
 
     augmented = pd.concat(
         [train_df.assign(is_synthetic=0), filtered],
@@ -686,29 +712,33 @@ def run_cross_network_eval(
             print(f"[info]   Heuristic triage weighted AUPRC={heuristic_weighted:.3f}")
 
     # ----- GNN detector baseline (no augmentation) -----
-    print("[info] Evaluating GNN detector baseline (no augmentation)")
-    try:
-        gnn_detector = GNNDetector(random_state=seed)
-        gnn_detector.fit_from_frame(train_split, feature_columns=FEATURE_COLUMNS)
-        gnn_per_network: dict[str, dict[str, Any]] = {}
-        for nid, test_df in test_frames.items():
-            gnn_result = _evaluate_on_network(gnn_detector, test_df, nid)
-            gnn_per_network[nid] = gnn_result
-            auprc = gnn_result.get("auprc")
-            auprc_str = f"{auprc:.3f}" if isinstance(auprc, (int, float)) else str(auprc)
-            print(f"[info]   GNN '{nid}' AUPRC={auprc_str}")
-        gnn_weighted = size_weighted_auprc(gnn_per_network)
-        results["per_augmenter"]["gnn_baseline"] = {
-            "augmenter": "gnn_baseline",
-            "detector": "GNNDetector",
-            "augmented_train_rows": int(len(train_split)),
-            "per_network": gnn_per_network,
-            "weighted_auprc": gnn_weighted,
-        }
-        print(f"[info]   GNN Weighted AUPRC={gnn_weighted:.3f}")
-    except Exception as exc:
-        print(f"[warn] GNN detector failed: {exc}", file=sys.stderr)
-        results["per_augmenter"]["gnn_baseline"] = {"error": str(exc)}
+    if not RUN_GNN_BASELINE:
+        print("[info] GNN detector baseline disabled (RUN_GNN_BASELINE=False) — skipping")
+        results["per_augmenter"]["gnn_baseline"] = {"skipped": "RUN_GNN_BASELINE=False"}
+    else:
+        print("[info] Evaluating GNN detector baseline (no augmentation)")
+        try:
+            gnn_detector = GNNDetector(random_state=seed)
+            gnn_detector.fit_from_frame(train_split, feature_columns=FEATURE_COLUMNS)
+            gnn_per_network: dict[str, dict[str, Any]] = {}
+            for nid, test_df in test_frames.items():
+                gnn_result = _evaluate_on_network(gnn_detector, test_df, nid)
+                gnn_per_network[nid] = gnn_result
+                auprc = gnn_result.get("auprc")
+                auprc_str = f"{auprc:.3f}" if isinstance(auprc, (int, float)) else str(auprc)
+                print(f"[info]   GNN '{nid}' AUPRC={auprc_str}")
+            gnn_weighted = size_weighted_auprc(gnn_per_network)
+            results["per_augmenter"]["gnn_baseline"] = {
+                "augmenter": "gnn_baseline",
+                "detector": "GNNDetector",
+                "augmented_train_rows": int(len(train_split)),
+                "per_network": gnn_per_network,
+                "weighted_auprc": gnn_weighted,
+            }
+            print(f"[info]   GNN Weighted AUPRC={gnn_weighted:.3f}")
+        except Exception as exc:
+            print(f"[warn] GNN detector failed: {exc}", file=sys.stderr)
+            results["per_augmenter"]["gnn_baseline"] = {"error": str(exc)}
 
     json_path = output_dir / "cross_network_results.json"
     _write_json(results, json_path)

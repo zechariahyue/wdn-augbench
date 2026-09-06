@@ -50,18 +50,36 @@ class QuantilePlausibilityFilter:
     upper_quantile: float = 0.99
     margin_scale: float = 0.10
 
+    # Below this q99-q01 spread a feature is treated as constant and not screened on.
+    _DEGENERATE_SPREAD: float = 1e-9
+
     def __post_init__(self) -> None:
         self.bounds_: dict[str, tuple[float, float]] = {}
+        self.degenerate_: list[str] = []
 
     def fit(self, frame: pd.DataFrame, feature_columns: Sequence[str]) -> "QuantilePlausibilityFilter":
         bounds: dict[str, tuple[float, float]] = {}
+        self.degenerate_: list[str] = []
         for name in feature_columns:
             series = pd.to_numeric(frame[name], errors="coerce").dropna()
             if series.empty:
                 continue
             lower = float(series.quantile(self.lower_quantile))
             upper = float(series.quantile(self.upper_quantile))
-            spread = max(upper - lower, 1e-9)
+            spread = upper - lower
+
+            # A feature that is constant across the training data (e.g. tank-head
+            # statistics on networks that have no tanks) yields lower == upper. The
+            # bound is then the single point [x, x], and ANY perturbation of that
+            # feature -- however small, however physically irrelevant -- falls outside
+            # it. Screening on such a feature rejects essentially every synthetic
+            # sample for a reason that has nothing to do with plausibility. Constant
+            # features carry no distributional information, so we do not screen on
+            # them; we record them instead so callers can report the fact.
+            if spread <= self._DEGENERATE_SPREAD:
+                self.degenerate_.append(name)
+                continue
+
             margin = spread * self.margin_scale
             bounds[name] = (lower - margin, upper + margin)
         self.bounds_ = bounds

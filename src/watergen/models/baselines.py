@@ -945,20 +945,38 @@ class GNNDetector:
 
     @staticmethod
     def _knn_edge_index(x: "Any", k: int) -> "Any":
-        """Build symmetric k-NN edge_index from a feature tensor."""
-        # x: (N, F) torch tensor
-        # Compute pairwise squared Euclidean distances
-        dist = _torch.cdist(x, x, p=2)
-        # For each node, find k nearest (excluding self)
-        _, idx = dist.topk(k + 1, largest=False, dim=1)
-        idx = idx[:, 1:]  # drop self
-        n = x.shape[0]
-        src = _torch.arange(n, device=x.device).unsqueeze(1).expand(-1, k).reshape(-1)
+        """Build a symmetric k-NN edge_index from a feature tensor.
+
+        Uses sklearn's tree-based nearest-neighbour search, which is O(N*k) in
+        memory. The previous implementation formed the dense N x N distance
+        matrix via ``torch.cdist(x, x)``; at inference the graph spans training
+        + test rows, so on a large test network (e.g. L-TOWN, ~3e5 rows) that
+        matrix alone needs hundreds of GB and drove the process to ~82 GB of
+        committed memory before the OS thrashed. The k-NN graph produced here is
+        identical (same Euclidean metric, same k nearest excluding self); only
+        the way the neighbours are found changed.
+        """
+        from sklearn.neighbors import NearestNeighbors
+
+        x_np = x.detach().cpu().numpy()
+        n = x_np.shape[0]
+        k_eff = min(k, n - 1)
+        if k_eff <= 0:
+            return _torch.empty((2, 0), dtype=_torch.long, device=x.device)
+
+        nn = NearestNeighbors(n_neighbors=k_eff + 1, algorithm="auto", n_jobs=-1)
+        nn.fit(x_np)
+        idx = nn.kneighbors(x_np, return_distance=False)  # (N, k_eff+1), self first
+        idx = idx[:, 1:]  # drop self column, matching the old topk(k+1)[:, 1:]
+
+        src = np.repeat(np.arange(n), k_eff)
         dst = idx.reshape(-1)
+        src_t = _torch.as_tensor(src, dtype=_torch.long, device=x.device)
+        dst_t = _torch.as_tensor(dst, dtype=_torch.long, device=x.device)
         # Make symmetric
         edge_index = _torch.stack([
-            _torch.cat([src, dst]),
-            _torch.cat([dst, src]),
+            _torch.cat([src_t, dst_t]),
+            _torch.cat([dst_t, src_t]),
         ], dim=0)
         return edge_index
 

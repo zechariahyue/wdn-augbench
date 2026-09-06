@@ -7,7 +7,10 @@ networkx
 matplotlib
 pyyaml
 wntr>=1.4.0           # bundles EPANET for hydraulic simulation
-imbalanced-learn      # SMOTE / ADASYN augmenters
+imbalanced-learn>=0.14.0   # SMOTE / ADASYN. MUST import against the pinned
+                           # scikit-learn: older versions fail on sklearn>=1.7
+                           # (_is_pandas_df removed) and SMOTEAugmenter then falls
+                           # back to Gaussian noise SILENTLY. See tests/test_regressions.py
 
 # Graph models only (sample-space GCN, topology-aware GNN, Graph-CVAE)
 torch
