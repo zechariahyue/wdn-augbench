@@ -106,7 +106,9 @@ ROWS = [
      "re-run queue excludes this as a hanoi-bug control, but its augmenter columns "
      "are still pre-augmenter-fix"),
     ("tab:sensitivity / fig:sensitivity", "Emitter-magnitude sensitivity sweep",
-     ["run_sensitivity_analysis.py"], "sensitivity/sensitivity_results.json", [], True, ""),
+     ["run_sensitivity_analysis.py"], "sensitivity/sensitivity_results.json", [], False,
+     "RF with no augmentation arm (see script docstring), so only the SIM_FIX boundary "
+     "applies; the 2026-07-12 run postdates it"),
     ("GCN / Graph-CVAE transfer (tab:lolo-per-network GCN row, S:gcn-pump)",
      "Graph-CVAE 5-seed LOLO",
      ["run_graph_cvae_lolo_5seed.py"], "graph_cvae_lolo_5seed_revised/aggregated_results.json",

@@ -4,8 +4,8 @@
     "aug_fix": "2026-07-13T15:25:00"
   },
   "summary": {
-    "current": 13,
-    "stale": 2,
+    "current": 14,
+    "stale": 1,
     "missing": 0,
     "total": 18
   },
@@ -163,9 +163,9 @@
       "artifact": "sensitivity/sensitivity_results.json",
       "sha256": "c64f12f92cbcc3c03faed38aae1c091392fe65ed386ea17720147751791df91b",
       "mtime": "2026-07-12T17:57:40",
-      "status": "STALE",
-      "augmenter_dependent": true,
-      "note": ""
+      "status": "CURRENT",
+      "augmenter_dependent": false,
+      "note": "RF with no augmentation arm (see script docstring), so only the SIM_FIX boundary applies; the 2026-07-12 run postdates it"
     },
     {
       "label": "GCN / Graph-CVAE transfer (tab:lolo-per-network GCN row, S:gcn-pump)",
