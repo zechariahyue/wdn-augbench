@@ -11,8 +11,8 @@
       "heuristic_per_network": {
         "l_town": {
           "accuracy": 0.5997166938168426,
-          "auprc": 0.8130314391856619,
-          "auroc": 0.8329913217784388,
+          "auprc": 0.8130314391900368,
+          "auroc": 0.8329913226143084,
           "balanced_accuracy": 0.5,
           "f1": 0.0,
           "fn": 56516,
@@ -28,7 +28,7 @@
           "tp": 0
         }
       },
-      "heuristic_weighted_auprc": 0.8130314391856619,
+      "heuristic_weighted_auprc": 0.813031439190037,
       "per_network": {
         "l_town": {
           "accuracy": 0.6854309795311283,
@@ -52,8 +52,8 @@
       "triage_per_network": {
         "l_town": {
           "accuracy": 0.48968057227849,
-          "auprc": 0.4858064195349836,
-          "auroc": 0.4420444951059028,
+          "auprc": 0.48580641953498355,
+          "auroc": 0.44204449510590277,
           "balanced_accuracy": 0.47285560399027604,
           "f1": 0.37866924217860715,
           "fn": 34560,
@@ -69,7 +69,7 @@
           "tp": 21956
         }
       },
-      "triage_weighted_auprc": 0.4858064195349836,
+      "triage_weighted_auprc": 0.48580641953498355,
       "weighted_auprc": 0.589014583629574
     },
     "gmm": {
@@ -78,8 +78,8 @@
       "heuristic_per_network": {
         "l_town": {
           "accuracy": 0.5997166938168426,
-          "auprc": 0.8008526751250403,
-          "auroc": 0.8165108534240859,
+          "auprc": 0.8008526751224327,
+          "auroc": 0.8165108541554718,
           "balanced_accuracy": 0.5,
           "f1": 0.0,
           "fn": 56516,
@@ -95,7 +95,7 @@
           "tp": 0
         }
       },
-      "heuristic_weighted_auprc": 0.8008526751250403,
+      "heuristic_weighted_auprc": 0.8008526751224327,
       "per_network": {
         "l_town": {
           "accuracy": 0.40028330618315744,
@@ -119,8 +119,8 @@
       "triage_per_network": {
         "l_town": {
           "accuracy": 0.3399815850980948,
-          "auprc": 0.4870736787438307,
-          "auroc": 0.43268794921938086,
+          "auprc": 0.48707366627863236,
+          "auroc": 0.43268794911489716,
           "balanced_accuracy": 0.3786272029933063,
           "f1": 0.40978415079043373,
           "fn": 24166,
@@ -136,7 +136,7 @@
           "tp": 32350
         }
       },
-      "triage_weighted_auprc": 0.4870736787438307,
+      "triage_weighted_auprc": 0.48707366627863236,
       "weighted_auprc": 0.5773164402210356
     },
     "gnn_baseline": {
@@ -146,8 +146,8 @@
       "per_network": {
         "l_town": {
           "accuracy": 0.5997166938168426,
-          "auprc": 0.4521956217833147,
-          "auroc": 0.539215393429256,
+          "auprc": 0.447440299848454,
+          "auroc": 0.5478427773005511,
           "balanced_accuracy": 0.5,
           "f1": 0.0,
           "fn": 56516,
@@ -163,7 +163,7 @@
           "tp": 0
         }
       },
-      "weighted_auprc": 0.4521956217833147
+      "weighted_auprc": 0.447440299848454
     },
     "noise": {
       "augmented_train_rows": 73574,
@@ -171,8 +171,8 @@
       "heuristic_per_network": {
         "l_town": {
           "accuracy": 0.5997166938168426,
-          "auprc": 0.7791220424873504,
-          "auroc": 0.7927573055486643,
+          "auprc": 0.7791220405891565,
+          "auroc": 0.7927573024141535,
           "balanced_accuracy": 0.5,
           "f1": 0.0,
           "fn": 56516,
@@ -188,7 +188,7 @@
           "tp": 0
         }
       },
-      "heuristic_weighted_auprc": 0.7791220424873504,
+      "heuristic_weighted_auprc": 0.7791220405891565,
       "per_network": {
         "l_town": {
           "accuracy": 0.40028330618315744,
@@ -213,7 +213,7 @@
         "l_town": {
           "accuracy": 0.40028330618315744,
           "auprc": 0.47345108684313947,
-          "auroc": 0.39867676960138676,
+          "auroc": 0.39867676960138687,
           "balanced_accuracy": 0.5,
           "f1": 0.5717176008821179,
           "fn": 0,
@@ -233,13 +233,13 @@
       "weighted_auprc": 0.583524388376364
     },
     "smote": {
-      "augmented_train_rows": 73571,
+      "augmented_train_rows": 58340,
       "augmenter": "smote",
       "heuristic_per_network": {
         "l_town": {
           "accuracy": 0.5997166938168426,
-          "auprc": 0.7655898364956549,
-          "auroc": 0.7843070936295736,
+          "auprc": 0.8115377219221036,
+          "auroc": 0.8311407723405781,
           "balanced_accuracy": 0.5,
           "f1": 0.0,
           "fn": 56516,
@@ -255,49 +255,49 @@
           "tp": 0
         }
       },
-      "heuristic_weighted_auprc": 0.7655898364956549,
+      "heuristic_weighted_auprc": 0.8115377219221037,
       "per_network": {
         "l_town": {
-          "accuracy": 0.40028330618315744,
-          "auprc": 0.5622034240463697,
-          "auroc": 0.6393458825065701,
-          "balanced_accuracy": 0.5,
-          "f1": 0.5717176008821179,
-          "fn": 0,
-          "fp": 84674,
+          "accuracy": 0.6854309795311283,
+          "auprc": 0.6023964815063473,
+          "auroc": 0.6816997475772626,
+          "balanced_accuracy": 0.6189352622603284,
+          "f1": 0.42083300732858664,
+          "fn": 40380,
+          "fp": 4034,
           "network_id": "l_town",
           "positive_rows": 56516,
-          "precision": 0.40028330618315744,
-          "recall": 1.0,
+          "precision": 0.8,
+          "recall": 0.28551206737914925,
           "rows": 141190,
-          "specificity": 0.0,
+          "specificity": 0.9523584571415075,
           "support": 141190,
-          "tn": 0,
-          "tp": 56516
+          "tn": 80640,
+          "tp": 16136
         }
       },
       "triage_per_network": {
         "l_town": {
-          "accuracy": 0.40028330618315744,
-          "auprc": 0.46715899669950256,
-          "auroc": 0.3763745448266159,
-          "balanced_accuracy": 0.5,
-          "f1": 0.5717176008821179,
-          "fn": 0,
-          "fp": 84674,
+          "accuracy": 0.5427013244564063,
+          "auprc": 0.49094746809065903,
+          "auroc": 0.4552709594984714,
+          "balanced_accuracy": 0.505986553637557,
+          "f1": 0.36041604754829126,
+          "fn": 38324,
+          "fp": 26242,
           "network_id": "l_town",
           "positive_rows": 56516,
-          "precision": 0.40028330618315744,
-          "recall": 1.0,
+          "precision": 0.40941621281001034,
+          "recall": 0.32189114587019607,
           "rows": 141190,
-          "specificity": 0.0,
+          "specificity": 0.6900819614049177,
           "support": 141190,
-          "tn": 0,
-          "tp": 56516
+          "tn": 58432,
+          "tp": 18192
         }
       },
-      "triage_weighted_auprc": 0.46715899669950256,
-      "weighted_auprc": 0.5622034240463697
+      "triage_weighted_auprc": 0.49094746809065903,
+      "weighted_auprc": 0.6023964815063473
     }
   },
   "protocol": "LOLO",

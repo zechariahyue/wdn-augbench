@@ -11,8 +11,8 @@
       "heuristic_per_network": {
         "l_town": {
           "accuracy": 0.5997166938168426,
-          "auprc": 0.8130070873639053,
-          "auroc": 0.8331448224277331,
+          "auprc": 0.8130070862809702,
+          "auroc": 0.8331448219053147,
           "balanced_accuracy": 0.5,
           "f1": 0.0,
           "fn": 56516,
@@ -28,7 +28,7 @@
           "tp": 0
         }
       },
-      "heuristic_weighted_auprc": 0.8130070873639053,
+      "heuristic_weighted_auprc": 0.8130070862809702,
       "per_network": {
         "l_town": {
           "accuracy": 0.6854309795311283,
@@ -78,8 +78,8 @@
       "heuristic_per_network": {
         "l_town": {
           "accuracy": 0.5997166938168426,
-          "auprc": 0.8007305773005016,
-          "auroc": 0.8165830740149786,
+          "auprc": 0.8007305764617717,
+          "auroc": 0.8165830728656582,
           "balanced_accuracy": 0.5,
           "f1": 0.0,
           "fn": 56516,
@@ -95,7 +95,7 @@
           "tp": 0
         }
       },
-      "heuristic_weighted_auprc": 0.8007305773005015,
+      "heuristic_weighted_auprc": 0.8007305764617717,
       "per_network": {
         "l_town": {
           "accuracy": 0.40028330618315744,
@@ -119,7 +119,7 @@
       "triage_per_network": {
         "l_town": {
           "accuracy": 0.30646646363056873,
-          "auprc": 0.4860173659959932,
+          "auprc": 0.4860173661020645,
           "auroc": 0.4308417170476861,
           "balanced_accuracy": 0.35688364447604504,
           "f1": 0.4130692784444418,
@@ -136,7 +136,7 @@
           "tp": 34457
         }
       },
-      "triage_weighted_auprc": 0.4860173659959932,
+      "triage_weighted_auprc": 0.4860173661020645,
       "weighted_auprc": 0.6139925936066493
     },
     "gnn_baseline": {
@@ -146,8 +146,8 @@
       "per_network": {
         "l_town": {
           "accuracy": 0.5997166938168426,
-          "auprc": 0.44617410718045347,
-          "auroc": 0.5361095631201975,
+          "auprc": 0.44055597143844033,
+          "auroc": 0.5449957702326572,
           "balanced_accuracy": 0.5,
           "f1": 0.0,
           "fn": 56516,
@@ -163,7 +163,7 @@
           "tp": 0
         }
       },
-      "weighted_auprc": 0.44617410718045347
+      "weighted_auprc": 0.44055597143844033
     },
     "noise": {
       "augmented_train_rows": 73547,
@@ -171,8 +171,8 @@
       "heuristic_per_network": {
         "l_town": {
           "accuracy": 0.5997166938168426,
-          "auprc": 0.7754097613011215,
-          "auroc": 0.7887490562761253,
+          "auprc": 0.7754097607925142,
+          "auroc": 0.7887490553357721,
           "balanced_accuracy": 0.5,
           "f1": 0.0,
           "fn": 56516,
@@ -188,7 +188,7 @@
           "tp": 0
         }
       },
-      "heuristic_weighted_auprc": 0.7754097613011215,
+      "heuristic_weighted_auprc": 0.7754097607925142,
       "per_network": {
         "l_town": {
           "accuracy": 0.40028330618315744,
@@ -212,7 +212,7 @@
       "triage_per_network": {
         "l_town": {
           "accuracy": 0.40028330618315744,
-          "auprc": 0.47279606461795065,
+          "auprc": 0.47279606461795054,
           "auroc": 0.3985123605411649,
           "balanced_accuracy": 0.5,
           "f1": 0.5717176008821179,
@@ -229,17 +229,17 @@
           "tp": 56516
         }
       },
-      "triage_weighted_auprc": 0.47279606461795065,
+      "triage_weighted_auprc": 0.47279606461795054,
       "weighted_auprc": 0.5634123303314144
     },
     "smote": {
-      "augmented_train_rows": 73547,
+      "augmented_train_rows": 58349,
       "augmenter": "smote",
       "heuristic_per_network": {
         "l_town": {
           "accuracy": 0.5997166938168426,
-          "auprc": 0.7643532634140112,
-          "auroc": 0.7813921969243167,
+          "auprc": 0.8064719164686825,
+          "auroc": 0.8246105661251937,
           "balanced_accuracy": 0.5,
           "f1": 0.0,
           "fn": 56516,
@@ -255,49 +255,49 @@
           "tp": 0
         }
       },
-      "heuristic_weighted_auprc": 0.7643532634140113,
+      "heuristic_weighted_auprc": 0.8064719164686825,
       "per_network": {
         "l_town": {
-          "accuracy": 0.40028330618315744,
-          "auprc": 0.5744446677179555,
-          "auroc": 0.6588607636407476,
-          "balanced_accuracy": 0.5,
-          "f1": 0.5717176008821179,
-          "fn": 0,
-          "fp": 84674,
+          "accuracy": 0.7043133366385721,
+          "auprc": 0.5843184172763513,
+          "auroc": 0.6525317555070969,
+          "balanced_accuracy": 0.6425215033248057,
+          "f1": 0.4738884968242766,
+          "fn": 37714,
+          "fp": 4034,
           "network_id": "l_town",
           "positive_rows": 56516,
-          "precision": 0.40028330618315744,
-          "recall": 1.0,
+          "precision": 0.8233490979155719,
+          "recall": 0.3326845495081039,
           "rows": 141190,
-          "specificity": 0.0,
+          "specificity": 0.9523584571415075,
           "support": 141190,
-          "tn": 0,
-          "tp": 56516
+          "tn": 80640,
+          "tp": 18802
         }
       },
       "triage_per_network": {
         "l_town": {
-          "accuracy": 0.40028330618315744,
-          "auprc": 0.46557853514988573,
-          "auroc": 0.37441303527478287,
-          "balanced_accuracy": 0.5,
-          "f1": 0.5717176008821179,
-          "fn": 0,
-          "fp": 84674,
+          "accuracy": 0.48961682838727955,
+          "auprc": 0.4859670415525559,
+          "auroc": 0.4440377181749264,
+          "balanced_accuracy": 0.4679774940220993,
+          "f1": 0.3605547815747207,
+          "fn": 36200,
+          "fp": 35861,
           "network_id": "l_town",
           "positive_rows": 56516,
-          "precision": 0.40028330618315744,
-          "recall": 1.0,
+          "precision": 0.3616426651476583,
+          "recall": 0.3594734234553047,
           "rows": 141190,
-          "specificity": 0.0,
+          "specificity": 0.5764815645888939,
           "support": 141190,
-          "tn": 0,
-          "tp": 56516
+          "tn": 48813,
+          "tp": 20316
         }
       },
-      "triage_weighted_auprc": 0.46557853514988573,
-      "weighted_auprc": 0.5744446677179555
+      "triage_weighted_auprc": 0.4859670415525559,
+      "weighted_auprc": 0.5843184172763513
     }
   },
   "protocol": "LOLO",

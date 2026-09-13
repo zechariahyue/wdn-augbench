@@ -73,13 +73,13 @@
       "weighted_auprc": 0.4879767446944961
     },
     "gmm": {
-      "augmented_train_rows": 200296,
+      "augmented_train_rows": 155650,
       "augmenter": "gmm",
       "heuristic_per_network": {
         "d_town": {
           "accuracy": 0.5667643869724107,
-          "auprc": 0.408297285042325,
-          "auroc": 0.446495606624543,
+          "auprc": 0.42552152054246917,
+          "auroc": 0.459507944326477,
           "balanced_accuracy": 0.5,
           "f1": 0.0,
           "fn": 21576,
@@ -95,12 +95,105 @@
           "tp": 0
         }
       },
-      "heuristic_weighted_auprc": 0.408297285042325,
+      "heuristic_weighted_auprc": 0.42552152054246917,
       "per_network": {
         "d_town": {
           "accuracy": 0.43323561302758923,
-          "auprc": 0.45117521179722,
-          "auroc": 0.48824860603254705,
+          "auprc": 0.47717513302674097,
+          "auroc": 0.5047065859528688,
+          "balanced_accuracy": 0.5,
+          "f1": 0.6045560256661716,
+          "fn": 0,
+          "fp": 28226,
+          "network_id": "d_town",
+          "positive_rows": 21576,
+          "precision": 0.43323561302758923,
+          "recall": 1.0,
+          "rows": 49802,
+          "specificity": 0.0,
+          "support": 49802,
+          "tn": 0,
+          "tp": 21576
+        }
+      },
+      "triage_per_network": {
+        "d_town": {
+          "accuracy": 0.43323561302758923,
+          "auprc": 0.5804382776253063,
+          "auroc": 0.5762869259865304,
+          "balanced_accuracy": 0.5,
+          "f1": 0.6045560256661716,
+          "fn": 0,
+          "fp": 28226,
+          "network_id": "d_town",
+          "positive_rows": 21576,
+          "precision": 0.43323561302758923,
+          "recall": 1.0,
+          "rows": 49802,
+          "specificity": 0.0,
+          "support": 49802,
+          "tn": 0,
+          "tp": 21576
+        }
+      },
+      "triage_weighted_auprc": 0.5804382776253063,
+      "weighted_auprc": 0.47717513302674097
+    },
+    "gnn_baseline": {
+      "augmented_train_rows": 142990,
+      "augmenter": "gnn_baseline",
+      "detector": "GNNDetector",
+      "per_network": {
+        "d_town": {
+          "accuracy": 0.4684751616400948,
+          "auprc": 0.46104030463904216,
+          "auroc": 0.5488241758788859,
+          "balanced_accuracy": 0.5224401416912452,
+          "f1": 0.6016703032127004,
+          "fn": 1584,
+          "fp": 24887,
+          "network_id": "d_town",
+          "positive_rows": 21576,
+          "precision": 0.4454644711334923,
+          "recall": 0.9265850945494994,
+          "rows": 49802,
+          "specificity": 0.11829518883299087,
+          "support": 49802,
+          "tn": 3339,
+          "tp": 19992
+        }
+      },
+      "weighted_auprc": 0.4610403046390422
+    },
+    "noise": {
+      "augmented_train_rows": 196394,
+      "augmenter": "noise",
+      "heuristic_per_network": {
+        "d_town": {
+          "accuracy": 0.5667643869724107,
+          "auprc": 0.42663912357817074,
+          "auroc": 0.46197159902561985,
+          "balanced_accuracy": 0.5,
+          "f1": 0.0,
+          "fn": 21576,
+          "fp": 0,
+          "network_id": "d_town",
+          "positive_rows": 21576,
+          "precision": 0.0,
+          "recall": 0.0,
+          "rows": 49802,
+          "specificity": 1.0,
+          "support": 49802,
+          "tn": 28226,
+          "tp": 0
+        }
+      },
+      "heuristic_weighted_auprc": 0.42663912357817074,
+      "per_network": {
+        "d_town": {
+          "accuracy": 0.43323561302758923,
+          "auprc": 0.47098400729812145,
+          "auroc": 0.5056971596201336,
           "balanced_accuracy": 0.5,
           "f1": 0.6045560256661716,
           "fn": 0,
@@ -119,8 +212,8 @@
       "triage_per_network": {
         "d_town": {
           "accuracy": 0.3801453756877234,
-          "auprc": 0.4264863539663357,
-          "auroc": 0.44798190431456086,
+          "auprc": 0.4355076584953767,
+          "auroc": 0.45479049966317475,
           "balanced_accuracy": 0.43872821653689287,
           "f1": 0.5508772950795823,
           "fn": 2644,
@@ -136,110 +229,17 @@
           "tp": 18932
         }
       },
-      "triage_weighted_auprc": 0.4264863539663357,
-      "weighted_auprc": 0.45117521179722
-    },
-    "gnn_baseline": {
-      "augmented_train_rows": 142990,
-      "augmenter": "gnn_baseline",
-      "detector": "GNNDetector",
-      "per_network": {
-        "d_town": {
-          "accuracy": 0.4696397735030722,
-          "auprc": 0.46105234812822804,
-          "auroc": 0.5488385805420158,
-          "balanced_accuracy": 0.523309230969871,
-          "f1": 0.6018480833295647,
-          "fn": 1613,
-          "fp": 24800,
-          "network_id": "d_town",
-          "positive_rows": 21576,
-          "precision": 0.4459710028371646,
-          "recall": 0.9252410085279941,
-          "rows": 49802,
-          "specificity": 0.12137745341174803,
-          "support": 49802,
-          "tn": 3426,
-          "tp": 19963
-        }
-      },
-      "weighted_auprc": 0.46105234812822804
-    },
-    "noise": {
-      "augmented_train_rows": 200296,
-      "augmenter": "noise",
-      "heuristic_per_network": {
-        "d_town": {
-          "accuracy": 0.5667643869724107,
-          "auprc": 0.4789434613403518,
-          "auroc": 0.49230965536104965,
-          "balanced_accuracy": 0.5,
-          "f1": 0.0,
-          "fn": 21576,
-          "fp": 0,
-          "network_id": "d_town",
-          "positive_rows": 21576,
-          "precision": 0.0,
-          "recall": 0.0,
-          "rows": 49802,
-          "specificity": 1.0,
-          "support": 49802,
-          "tn": 28226,
-          "tp": 0
-        }
-      },
-      "heuristic_weighted_auprc": 0.4789434613403518,
-      "per_network": {
-        "d_town": {
-          "accuracy": 0.43323561302758923,
-          "auprc": 0.5959496081369416,
-          "auroc": 0.6379099829029744,
-          "balanced_accuracy": 0.5,
-          "f1": 0.6045560256661716,
-          "fn": 0,
-          "fp": 28226,
-          "network_id": "d_town",
-          "positive_rows": 21576,
-          "precision": 0.43323561302758923,
-          "recall": 1.0,
-          "rows": 49802,
-          "specificity": 0.0,
-          "support": 49802,
-          "tn": 0,
-          "tp": 21576
-        }
-      },
-      "triage_per_network": {
-        "d_town": {
-          "accuracy": 0.43323561302758923,
-          "auprc": 0.5895400224255396,
-          "auroc": 0.5961651164441276,
-          "balanced_accuracy": 0.5,
-          "f1": 0.6045560256661716,
-          "fn": 0,
-          "fp": 28226,
-          "network_id": "d_town",
-          "positive_rows": 21576,
-          "precision": 0.43323561302758923,
-          "recall": 1.0,
-          "rows": 49802,
-          "specificity": 0.0,
-          "support": 49802,
-          "tn": 0,
-          "tp": 21576
-        }
-      },
-      "triage_weighted_auprc": 0.5895400224255396,
-      "weighted_auprc": 0.5959496081369416
+      "triage_weighted_auprc": 0.4355076584953767,
+      "weighted_auprc": 0.47098400729812145
     },
     "smote": {
-      "augmented_train_rows": 200296,
+      "augmented_train_rows": 170940,
       "augmenter": "smote",
       "heuristic_per_network": {
         "d_town": {
           "accuracy": 0.5667643869724107,
-          "auprc": 0.40353128161149376,
-          "auroc": 0.43636484358031724,
+          "auprc": 0.4736901026806626,
+          "auroc": 0.4804315331985507,
           "balanced_accuracy": 0.5,
           "f1": 0.0,
           "fn": 21576,
@@ -255,12 +255,12 @@
           "tp": 0
         }
       },
-      "heuristic_weighted_auprc": 0.40353128161149376,
+      "heuristic_weighted_auprc": 0.4736901026806626,
       "per_network": {
         "d_town": {
           "accuracy": 0.43323561302758923,
-          "auprc": 0.4409804019402507,
-          "auroc": 0.46410387668671754,
+          "auprc": 0.5779626815830814,
+          "auroc": 0.6038082495841539,
           "balanced_accuracy": 0.5,
           "f1": 0.6045560256661716,
           "fn": 0,
@@ -278,26 +278,26 @@
       },
       "triage_per_network": {
         "d_town": {
-          "accuracy": 0.43323561302758923,
-          "auprc": 0.5645723245087888,
-          "auroc": 0.5490944769810577,
-          "balanced_accuracy": 0.5,
-          "f1": 0.6045560256661716,
-          "fn": 0,
+          "accuracy": 0.4325127504919481,
+          "auprc": 0.5764524564549804,
+          "auroc": 0.579371694653207,
+          "balanced_accuracy": 0.49916573971078976,
+          "f1": 0.6038518684645791,
+          "fn": 36,
           "fp": 28226,
           "network_id": "d_town",
           "positive_rows": 21576,
-          "precision": 0.43323561302758923,
-          "recall": 1.0,
+          "precision": 0.43282562391994533,
+          "recall": 0.9983314794215795,
           "rows": 49802,
           "specificity": 0.0,
           "support": 49802,
           "tn": 0,
-          "tp": 21576
+          "tp": 21540
         }
       },
-      "triage_weighted_auprc": 0.5645723245087888,
-      "weighted_auprc": 0.44098040194025073
+      "triage_weighted_auprc": 0.5764524564549804,
+      "weighted_auprc": 0.5779626815830814
     }
   },
   "protocol": "LOLO",

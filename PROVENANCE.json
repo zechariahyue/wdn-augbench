@@ -4,8 +4,8 @@
     "aug_fix": "2026-07-13T15:25:00"
   },
   "summary": {
-    "current": 14,
-    "stale": 1,
+    "current": 15,
+    "stale": 0,
     "missing": 0,
     "total": 18
   },
@@ -148,9 +148,9 @@
         "run_intrascale_lolo.py"
       ],
       "artifact": "intrascale_lolo/intrascale_summary.json",
-      "sha256": "a692996fd119e63b3197490097551741e46db40027a6468eece80c340d4727a2",
-      "mtime": "2026-05-26T04:29:18",
-      "status": "STALE",
+      "sha256": "89410e885e687564f004778370f6716a482b690bab118d4fdde22bbef3261637",
+      "mtime": "2026-09-13T05:39:52",
+      "status": "CURRENT",
       "augmenter_dependent": true,
       "note": "re-run queue excludes this as a hanoi-bug control, but its augmenter columns are still pre-augmenter-fix"
     },

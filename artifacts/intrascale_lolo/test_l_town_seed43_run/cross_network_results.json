@@ -11,8 +11,8 @@
       "heuristic_per_network": {
         "l_town": {
           "accuracy": 0.5997166938168426,
-          "auprc": 0.8109406716088863,
-          "auroc": 0.83032546759591,
+          "auprc": 0.810940673845586,
+          "auroc": 0.8303254707304207,
           "balanced_accuracy": 0.5,
           "f1": 0.0,
           "fn": 56516,
@@ -28,7 +28,7 @@
           "tp": 0
         }
       },
-      "heuristic_weighted_auprc": 0.8109406716088863,
+      "heuristic_weighted_auprc": 0.810940673845586,
       "per_network": {
         "l_town": {
           "accuracy": 0.6854309795311283,
@@ -52,8 +52,8 @@
       "triage_per_network": {
         "l_town": {
           "accuracy": 0.47289468092641124,
-          "auprc": 0.4860763200143815,
-          "auroc": 0.4378896547951253,
+          "auprc": 0.4860763200143814,
+          "auroc": 0.43788965479512537,
           "balanced_accuracy": 0.4652126430038832,
           "f1": 0.39322636402178524,
           "fn": 32401,
@@ -69,7 +69,7 @@
           "tp": 24115
         }
       },
-      "triage_weighted_auprc": 0.4860763200143815,
+      "triage_weighted_auprc": 0.48607632001438134,
       "weighted_auprc": 0.5384264140719902
     },
     "gmm": {
@@ -78,8 +78,8 @@
       "heuristic_per_network": {
         "l_town": {
           "accuracy": 0.5997166938168426,
-          "auprc": 0.7994041644968317,
-          "auroc": 0.8149194184234403,
+          "auprc": 0.8000265664632328,
+          "auroc": 0.8157349994229909,
           "balanced_accuracy": 0.5,
           "f1": 0.0,
           "fn": 56516,
@@ -95,7 +95,7 @@
           "tp": 0
         }
       },
-      "heuristic_weighted_auprc": 0.7994041644968317,
+      "heuristic_weighted_auprc": 0.8000265664632328,
       "per_network": {
         "l_town": {
           "accuracy": 0.40028330618315744,
@@ -118,25 +118,25 @@
       },
       "triage_per_network": {
         "l_town": {
-          "accuracy": 0.33484666052836604,
-          "auprc": 0.4867159214476062,
-          "auroc": 0.4322079361957645,
-          "balanced_accuracy": 0.3802419495595095,
-          "f1": 0.42250385866524,
-          "fn": 22162,
-          "fp": 71751,
+          "accuracy": 0.33942205538635883,
+          "auprc": 0.4868766900826845,
+          "auroc": 0.43273473022535497,
+          "balanced_accuracy": 0.3813675444359489,
+          "f1": 0.417616315010584,
+          "fn": 23076,
+          "fp": 70191,
           "network_id": "l_town",
           "positive_rows": 56516,
-          "precision": 0.32377362047028885,
-          "recall": 0.6078632599617807,
+          "precision": 0.32268336694618405,
+          "recall": 0.5916908486092434,
           "rows": 141190,
-          "specificity": 0.15262063915723834,
+          "specificity": 0.1710442402626544,
           "support": 141190,
-          "tn": 12923,
-          "tp": 34354
+          "tn": 14483,
+          "tp": 33440
         }
       },
-      "triage_weighted_auprc": 0.4867159214476062,
+      "triage_weighted_auprc": 0.48687669008268447,
       "weighted_auprc": 0.5851583504129744
     },
     "gnn_baseline": {
@@ -146,8 +146,8 @@
       "per_network": {
         "l_town": {
           "accuracy": 0.5997166938168426,
-          "auprc": 0.45122590616416264,
-          "auroc": 0.5446173009392117,
+          "auprc": 0.44629782258803496,
+          "auroc": 0.5486421549690991,
           "balanced_accuracy": 0.5,
           "f1": 0.0,
           "fn": 56516,
@@ -163,7 +163,7 @@
           "tp": 0
         }
       },
-      "weighted_auprc": 0.45122590616416264
+      "weighted_auprc": 0.44629782258803496
     },
     "noise": {
       "augmented_train_rows": 73542,
@@ -171,8 +171,8 @@
       "heuristic_per_network": {
         "l_town": {
           "accuracy": 0.5997166938168426,
-          "auprc": 0.775758710577196,
-          "auroc": 0.7890444067026687,
+          "auprc": 0.7757587111780392,
+          "auroc": 0.7890444084788913,
           "balanced_accuracy": 0.5,
           "f1": 0.0,
           "fn": 56516,
@@ -188,7 +188,7 @@
           "tp": 0
         }
       },
-      "heuristic_weighted_auprc": 0.775758710577196,
+      "heuristic_weighted_auprc": 0.7757587111780392,
       "per_network": {
         "l_town": {
           "accuracy": 0.40028330618315744,
@@ -212,7 +212,7 @@
       "triage_per_network": {
         "l_town": {
           "accuracy": 0.40028330618315744,
-          "auprc": 0.4712027177148083,
+          "auprc": 0.4712027177148084,
           "auroc": 0.394032797139296,
           "balanced_accuracy": 0.5,
           "f1": 0.5717176008821179,
@@ -229,17 +229,17 @@
           "tp": 56516
         }
       },
-      "triage_weighted_auprc": 0.4712027177148083,
+      "triage_weighted_auprc": 0.4712027177148084,
       "weighted_auprc": 0.5379725417328876
     },
     "smote": {
-      "augmented_train_rows": 73541,
+      "augmented_train_rows": 58350,
       "augmenter": "smote",
       "heuristic_per_network": {
         "l_town": {
           "accuracy": 0.5997166938168426,
-          "auprc": 0.7667136936668296,
-          "auroc": 0.7845063659723743,
+          "auprc": 0.8095752883394105,
+          "auroc": 0.8285181549726968,
           "balanced_accuracy": 0.5,
           "f1": 0.0,
           "fn": 56516,
@@ -255,49 +255,49 @@
           "tp": 0
         }
       },
-      "heuristic_weighted_auprc": 0.7667136936668296,
+      "heuristic_weighted_auprc": 0.8095752883394105,
       "per_network": {
         "l_town": {
-          "accuracy": 0.40028330618315744,
-          "auprc": 0.5550327484308811,
-          "auroc": 0.6409126946713198,
-          "balanced_accuracy": 0.5,
-          "f1": 0.5717176008821179,
-          "fn": 0,
-          "fp": 84674,
+          "accuracy": 0.6854309795311283,
+          "auprc": 0.5645952685799378,
+          "auroc": 0.671639604431896,
+          "balanced_accuracy": 0.6189352622603284,
+          "f1": 0.42083300732858664,
+          "fn": 40380,
+          "fp": 4034,
           "network_id": "l_town",
           "positive_rows": 56516,
-          "precision": 0.40028330618315744,
-          "recall": 1.0,
+          "precision": 0.8,
+          "recall": 0.28551206737914925,
           "rows": 141190,
-          "specificity": 0.0,
+          "specificity": 0.9523584571415075,
           "support": 141190,
-          "tn": 0,
-          "tp": 56516
+          "tn": 80640,
+          "tp": 16136
         }
       },
       "triage_per_network": {
         "l_town": {
-          "accuracy": 0.40028330618315744,
-          "auprc": 0.4668926286207292,
-          "auroc": 0.3778752465023152,
-          "balanced_accuracy": 0.5,
-          "f1": 0.5717176008821179,
-          "fn": 0,
-          "fp": 84674,
+          "accuracy": 0.5457751965436646,
+          "auprc": 0.48836697355737474,
+          "auroc": 0.45185426021798647,
+          "balanced_accuracy": 0.5080580011394005,
+          "f1": 0.3598450819508494,
+          "fn": 38491,
+          "fp": 25641,
           "network_id": "l_town",
           "positive_rows": 56516,
-          "precision": 0.40028330618315744,
-          "recall": 1.0,
+          "precision": 0.41279256171849954,
+          "recall": 0.3189362304480147,
           "rows": 141190,
-          "specificity": 0.0,
+          "specificity": 0.6971797718307863,
           "support": 141190,
-          "tn": 0,
-          "tp": 56516
+          "tn": 59033,
+          "tp": 18025
         }
       },
-      "triage_weighted_auprc": 0.4668926286207293,
-      "weighted_auprc": 0.5550327484308811
+      "triage_weighted_auprc": 0.4883669735573748,
+      "weighted_auprc": 0.5645952685799378
     }
   },
   "protocol": "LOLO",
