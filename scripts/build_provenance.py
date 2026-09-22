@@ -105,6 +105,14 @@ ROWS = [
      ["run_intrascale_lolo.py"], "intrascale_lolo/intrascale_summary.json", [], True,
      "re-run queue excludes this as a hanoi-bug control, but its augmenter columns "
      "are still pre-augmenter-fix"),
+    ("tab:rsi-balanced (RSI of the residual detector vs RF on the balanced endpoint)",
+     "reviewer FATAL-1 check: RSI(resid, RF) with scenario-level bootstrap CIs, prior 0.47",
+     ["run_nonsat_hydraulic_rsi.py"], "nonsat_hydraulic_rsi/results.json", [], False,
+     "no augmenter arm; RF + label-free residual detector only"),
+    ("prevalence / family-level tests (S3.2, S5.2, tab:lolo caption, S:lolo-wilcoxon)",
+     "reviewer FATAL-2 / MAJOR-2 / MAJOR-3: row priors, family-level Wilcoxon, network bootstrap",
+     ["compute_prevalence_and_family_tests.py"], "prevalence_family_tests/results.json", [], True,
+     "derived from lolo_5seed_revised, per_disturbance_lolo and expanded_lolo artifacts"),
     ("tab:sensitivity / fig:sensitivity", "Emitter-magnitude sensitivity sweep",
      ["run_sensitivity_analysis.py"], "sensitivity/sensitivity_results.json", [], False,
      "RF with no augmentation arm (see script docstring), so only the SIM_FIX boundary "

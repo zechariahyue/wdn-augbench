@@ -1,0 +1,179 @@
+{
+  "row_prevalence_seed42_baseline_arm": {
+    "all_disturbances": {
+      "net3": 0.4389,
+      "ALL": 0.4092,
+      "d_town": 0.4332,
+      "l_town": 0.4003
+    },
+    "leak": {
+      "net3": 0.3484,
+      "ALL": 0.3233,
+      "d_town": 0.3235,
+      "l_town": 0.3229
+    },
+    "pipe_closure": {
+      "net3": 0.75,
+      "ALL": 0.75,
+      "d_town": 0.75,
+      "l_town": 0.75
+    },
+    "pump_outage": {
+      "net3": 0.6667,
+      "ALL": 0.6008,
+      "d_town": 0.75,
+      "l_town": 0.5
+    }
+  },
+  "row_counts_all_disturbances": {
+    "net3": 1800,
+    "ALL": 192792,
+    "d_town": 49802,
+    "l_town": 141190
+  },
+  "family_tests": {
+    "noise": {
+      "delta_per_network": {
+        "net3": 0.0116,
+        "d_town": 0.001,
+        "l_town": -0.0559,
+        "ky2": -0.0663,
+        "ky3": -0.0018,
+        "ky5": -0.052,
+        "ky6": -0.0335,
+        "ky7": -0.005
+      },
+      "wins_of_8": 2,
+      "p_n8": 0.0781,
+      "wins_core_of_3": 2,
+      "core_deltas": {
+        "net3": 0.0116,
+        "d_town": 0.001,
+        "l_town": -0.0559
+      },
+      "ky_mean_delta": -0.0317,
+      "wins_of_4_families": 2,
+      "p_n4": 0.625,
+      "sign_floor_n4": 0.125,
+      "leave_one_ky_out_p": {
+        "ky2": 0.1562,
+        "ky3": 0.1094,
+        "ky5": 0.1562,
+        "ky6": 0.1562,
+        "ky7": 0.1094
+      }
+    },
+    "gmm": {
+      "delta_per_network": {
+        "net3": -0.0149,
+        "d_town": -0.0491,
+        "l_town": -0.0864,
+        "ky2": -0.1097,
+        "ky3": -0.1382,
+        "ky5": -0.1678,
+        "ky6": -0.0289,
+        "ky7": -0.096
+      },
+      "wins_of_8": 0,
+      "p_n8": 0.0078,
+      "wins_core_of_3": 0,
+      "core_deltas": {
+        "net3": -0.0149,
+        "d_town": -0.0491,
+        "l_town": -0.0864
+      },
+      "ky_mean_delta": -0.1081,
+      "wins_of_4_families": 0,
+      "p_n4": 0.125,
+      "sign_floor_n4": 0.125,
+      "leave_one_ky_out_p": {
+        "ky2": 0.0156,
+        "ky3": 0.0156,
+        "ky5": 0.0156,
+        "ky6": 0.0156,
+        "ky7": 0.0156
+      }
+    },
+    "smote": {
+      "delta_per_network": {
+        "net3": 0.0184,
+        "d_town": -0.0101,
+        "l_town": -0.0015,
+        "ky2": -0.0046,
+        "ky3": 0.0305,
+        "ky5": 0.0112,
+        "ky6": -0.0038,
+        "ky7": 0.0194
+      },
+      "wins_of_8": 4,
+      "p_n8": 0.3125,
+      "wins_core_of_3": 1,
+      "core_deltas": {
+        "net3": 0.0184,
+        "d_town": -0.0101,
+        "l_town": -0.0015
+      },
+      "ky_mean_delta": 0.0105,
+      "wins_of_4_families": 2,
+      "p_n4": 0.625,
+      "sign_floor_n4": 0.125,
+      "leave_one_ky_out_p": {
+        "ky2": 0.2188,
+        "ky3": 0.5781,
+        "ky5": 0.5781,
+        "ky6": 0.2188,
+        "ky7": 0.5781
+      }
+    }
+  },
+  "network_bootstrap_B2000": {
+    "baseline": {
+      "macro_eqwt": 0.5802,
+      "macro_ci": [
+        0.5486,
+        0.6147
+      ],
+      "delta_vs_baseline": 0.0,
+      "delta_ci": [
+        0.0,
+        0.0
+      ]
+    },
+    "noise": {
+      "macro_eqwt": 0.5549,
+      "macro_ci": [
+        0.5186,
+        0.5894
+      ],
+      "delta_vs_baseline": -0.0252,
+      "delta_ci": [
+        -0.0456,
+        -0.0063
+      ]
+    },
+    "gmm": {
+      "macro_eqwt": 0.4938,
+      "macro_ci": [
+        0.4582,
+        0.5322
+      ],
+      "delta_vs_baseline": -0.0864,
+      "delta_ci": [
+        -0.1219,
+        -0.0513
+      ]
+    },
+    "smote": {
+      "macro_eqwt": 0.5876,
+      "macro_ci": [
+        0.5557,
+        0.6213
+      ],
+      "delta_vs_baseline": 0.0074,
+      "delta_ci": [
+        -0.0013,
+        0.0169
+      ]
+    }
+  }
+}

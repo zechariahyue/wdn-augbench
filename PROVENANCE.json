@@ -4,10 +4,10 @@
     "aug_fix": "2026-07-13T15:25:00"
   },
   "summary": {
-    "current": 15,
+    "current": 17,
     "stale": 0,
     "missing": 0,
-    "total": 18
+    "total": 20
   },
   "records": [
     {
@@ -153,6 +153,32 @@
       "status": "CURRENT",
       "augmenter_dependent": true,
       "note": "re-run queue excludes this as a hanoi-bug control, but its augmenter columns are still pre-augmenter-fix"
+    },
+    {
+      "label": "tab:rsi-balanced (RSI of the residual detector vs RF on the balanced endpoint)",
+      "description": "reviewer FATAL-1 check: RSI(resid, RF) with scenario-level bootstrap CIs, prior 0.47",
+      "scripts": [
+        "run_nonsat_hydraulic_rsi.py"
+      ],
+      "artifact": "nonsat_hydraulic_rsi/results.json",
+      "sha256": "7b014eb0adadbe3f294fa7f9804ac85a94f1bd2f8a8226a95171f9b632102d0f",
+      "mtime": "2026-09-22T14:25:22",
+      "status": "CURRENT",
+      "augmenter_dependent": false,
+      "note": "no augmenter arm; RF + label-free residual detector only"
+    },
+    {
+      "label": "prevalence / family-level tests (S3.2, S5.2, tab:lolo caption, S:lolo-wilcoxon)",
+      "description": "reviewer FATAL-2 / MAJOR-2 / MAJOR-3: row priors, family-level Wilcoxon, network bootstrap",
+      "scripts": [
+        "compute_prevalence_and_family_tests.py"
+      ],
+      "artifact": "prevalence_family_tests/results.json",
+      "sha256": "9964f0dad42c9495586f424d40b79ff1b177234fd02cfbc0d0ba94b832a1f1ff",
+      "mtime": "2026-09-22T12:00:13",
+      "status": "CURRENT",
+      "augmenter_dependent": true,
+      "note": "derived from lolo_5seed_revised, per_disturbance_lolo and expanded_lolo artifacts"
     },
     {
       "label": "tab:sensitivity / fig:sensitivity",
