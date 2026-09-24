@@ -103,8 +103,7 @@ ROWS = [
      [], False, "derived from lolo_5seed_revised baseline rows"),
     ("tab:intrascale", "Intra-scale large-to-large fold (baseline col sim-only; noise/gmm/smote cols aug-dep.)",
      ["run_intrascale_lolo.py"], "intrascale_lolo/intrascale_summary.json", [], True,
-     "re-run queue excludes this as a hanoi-bug control, but its augmenter columns "
-     "are still pre-augmenter-fix"),
+     "augmenter columns regenerated 2026-09-13 on the fixed pipeline (stage 15)"),
     ("tab:rsi-balanced (RSI of the residual detector vs RF on the balanced endpoint)",
      "reviewer FATAL-1 check: RSI(resid, RF) with scenario-level bootstrap CIs, prior 0.47",
      ["run_nonsat_hydraulic_rsi.py"], "nonsat_hydraulic_rsi/results.json", [], False,

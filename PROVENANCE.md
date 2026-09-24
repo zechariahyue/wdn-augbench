@@ -44,7 +44,7 @@ _This record was generated in the working tree, where artifact mtimes are author
 | leak-only sweep (S6.8, fig:leak_only_*) | `run_leak_only_lolo.py` |  |
 | tab:classifier-generality | `run_lolo_classifier_check.py` |  |
 | tab:early-warning | `compute_early_warning_endpoint.py` | derived from lolo_5seed_revised baseline rows |
-| tab:intrascale | `run_intrascale_lolo.py` | re-run queue excludes this as a hanoi-bug control, but its augmenter columns are still pre-augmenter-fix |
+| tab:intrascale | `run_intrascale_lolo.py` | augmenter columns regenerated 2026-09-13 on the fixed pipeline (stage 15) |
 | tab:rsi-balanced (RSI of the residual detector vs RF on the balanced endpoint) | `run_nonsat_hydraulic_rsi.py` | no augmenter arm; RF + label-free residual detector only |
 | prevalence / family-level tests (S3.2, S5.2, tab:lolo caption, S:lolo-wilcoxon) | `compute_prevalence_and_family_tests.py` | derived from lolo_5seed_revised, per_disturbance_lolo and expanded_lolo artifacts |
 | tab:sensitivity / fig:sensitivity | `run_sensitivity_analysis.py` | RF with no augmentation arm (see script docstring), so only the SIM_FIX boundary applies; the 2026-07-12 run postdates it |

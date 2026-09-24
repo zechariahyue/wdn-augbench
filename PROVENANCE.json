@@ -152,7 +152,7 @@
       "mtime": "2026-09-13T05:39:52",
       "status": "CURRENT",
       "augmenter_dependent": true,
-      "note": "re-run queue excludes this as a hanoi-bug control, but its augmenter columns are still pre-augmenter-fix"
+      "note": "augmenter columns regenerated 2026-09-13 on the fixed pipeline (stage 15)"
     },
     {
       "label": "tab:rsi-balanced (RSI of the residual detector vs RF on the balanced endpoint)",
