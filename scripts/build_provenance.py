@@ -1,6 +1,7 @@
 """Generate a per-result provenance table for the manuscript (Codex S29 FATAL 2 / Q1).
 
-For every numeric table and figure in `sn-article.tex`, this records the generating
+For every numeric table and figure in `sn-article.tex` and `supplementary.tex` (the
+Supplementary Material, S35), this records the generating
 script, the artifact it reads, that artifact's sha256 and modification time, and --
 the point of the exercise -- whether the artifact was produced AFTER the two data
 defects found in S29 were fixed. A reviewer (or we) can then tell at a glance which
