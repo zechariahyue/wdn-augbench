@@ -2,9 +2,9 @@
 
 Reproducibility code and summary artifacts for the paper:
 
-> **Scenario-Level Evidence Discipline for Rare-Event Monitoring in Water Distribution Networks**
-> (submitted to *Stochastic Environmental Research and Risk Assessment*, Special Issue
-> "Machine-Learning Algorithms and the Use of Statistics in Modern Environmental Modeling").
+> **Cross-Network Monitoring of Rare Disturbance Scenarios in Water Distribution Networks:
+> Why Synthetic Augmentation Fails and Event-Level Accuracy Overstates Early Warning**
+> (Y. Zhu and Q. Liu, submitted to the *Journal of Hydroinformatics*, 2026).
 
 The paper introduces **Row-Scenario Inflation (RSI)** — a diagnostic for when per-timestep
 (row-level) method comparisons fail to carry to the per-event (scenario) level — and
@@ -41,7 +41,9 @@ Each result maps to a driver script (run from the repo root):
 
 | Manuscript result | Script(s) |
 |---|---|
-| LOLO transfer benchmark (Table: `tab:lolo`) | `run_lolo_5seed.py`, `aggregate_lolo_seeds.py` |
+| LOLO transfer benchmark, 8 held-out networks (Table: `tab:lolo`) | `run_expanded_lolo.py` |
+| Original 3-network LOLO + per-row triage records | `run_lolo_5seed.py`, `aggregate_lolo_seeds.py` |
+| Balanced-endpoint RSI of the aggregate-residual detector (Table: `tab:rsi-balanced`) | `run_nonsat_hydraulic_rsi.py` |
 | Balanced non-saturated RSI (Table: `tab:nonsat-rsi`) | `run_nonsat_endpoint.py`, `compute_nonsat_rsi.py` |
 | Saturated-label RSI cross-check (Table: `tab:meanpool-rsi`) | `compute_meanpool_rsi.py` |
 | Leak-only difficulty sweep | `run_leak_only_lolo.py` |
@@ -51,6 +53,7 @@ Each result maps to a driver script (run from the repo root):
 | Early-warning / temporal-localization endpoint | `compute_early_warning_endpoint.py` |
 | GCN / Graph-CVAE transfer | `run_graph_cvae_lolo_5seed.py`, `run_topology_gnn_lolo.py` |
 | Post-hoc triage diagnostics (exploratory) | `run_triage_validation.py` |
+| Provenance table (script / artifact / sha256 / freshness per table and figure) | `build_provenance.py` |
 | Network-pool screen (held-out expansion) | network-expansion screen under `artifacts/network_expansion_screen/` |
 
 All experiments use seeds 42–46. The **RSI metric** and its hierarchical-bootstrap confidence

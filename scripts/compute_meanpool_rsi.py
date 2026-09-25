@@ -19,8 +19,13 @@ from pathlib import Path
 import numpy as np
 from sklearn.metrics import average_precision_score
 
-ART = Path(r"c:/Users/Zachy/OneDrive/Desktop/LLM water/dev/active/artifacts/lolo_5seed_revised")
-OUT = Path(r"c:/Users/Zachy/OneDrive/Desktop/LLM water/dev/active/artifacts/lolo_meanpool_rsi")
+import os
+_REPO = Path(__file__).resolve().parents[1]
+# Override with WDN_AUGBENCH_ARTIFACTS / WDN_AUGBENCH_FIGS to point at a full regenerated run.
+_ART = Path(os.environ.get("WDN_AUGBENCH_ARTIFACTS", _REPO / "artifacts"))
+_FIGS = Path(os.environ.get("WDN_AUGBENCH_FIGS", _REPO / "figures"))
+ART = _ART / "lolo_5seed_revised"
+OUT = _ART / "lolo_meanpool_rsi"
 OUT.mkdir(exist_ok=True)
 
 SEEDS = [42, 43, 44, 45, 46]

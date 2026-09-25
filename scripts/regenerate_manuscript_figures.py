@@ -7,11 +7,15 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-ROOT = Path(r"c:/Users/Zachy/OneDrive/Desktop/LLM water")
-MANUSCRIPT_FIGS = ROOT / "manuscript" / "figures"
-VALIDATION_SUMMARY = ROOT / "dev/active/artifacts/validation_package_full/summary.json"
-LOLO_RESULTS = ROOT / "dev/active/artifacts/cross_network_lolo3/aggregated_lolo_results.json"
-GRAPH_CVAE_RESULTS = ROOT / "dev/active/artifacts/graph_cvae_lolo3/aggregated_graph_cvae_lolo_results.json"
+import os
+_REPO = Path(__file__).resolve().parents[1]
+# Override with WDN_AUGBENCH_ARTIFACTS / WDN_AUGBENCH_FIGS to point at a full regenerated run.
+_ART = Path(os.environ.get("WDN_AUGBENCH_ARTIFACTS", _REPO / "artifacts"))
+_FIGS = Path(os.environ.get("WDN_AUGBENCH_FIGS", _REPO / "figures"))
+MANUSCRIPT_FIGS = _FIGS
+VALIDATION_SUMMARY = _ART / "validation_package_full/summary.json"
+LOLO_RESULTS = _ART / "cross_network_lolo3/aggregated_lolo_results.json"
+GRAPH_CVAE_RESULTS = _ART / "graph_cvae_lolo3/aggregated_graph_cvae_lolo_results.json"
 
 COLORBLIND = {
     "blue": "#0072B2",

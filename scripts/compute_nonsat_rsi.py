@@ -1,7 +1,12 @@
 """Compute RSI on the non-saturated endpoint from nonsat_results_full.json."""
 import json, numpy as np
 from pathlib import Path
-ART = Path(r"C:/Users/Zachy/OneDrive/Desktop/LLM water/dev/active/artifacts/nonsat_endpoint")
+import os
+_REPO = Path(__file__).resolve().parents[1]
+# Override with WDN_AUGBENCH_ARTIFACTS / WDN_AUGBENCH_FIGS to point at a full regenerated run.
+_ART = Path(os.environ.get("WDN_AUGBENCH_ARTIFACTS", _REPO / "artifacts"))
+_FIGS = Path(os.environ.get("WDN_AUGBENCH_FIGS", _REPO / "figures"))
+ART = _ART / "nonsat_endpoint"
 d = json.loads((ART/"nonsat_results_full.json").read_text())
 seeds = d["seeds"]; nets = d["test_nets"]
 _first = d["per_seed"][f"seed_{seeds[0]}"]

@@ -11,7 +11,12 @@ import json, glob, os
 import numpy as np
 from pathlib import Path
 
-ART = Path(r"C:/Users/Zachy/OneDrive/Desktop/LLM water/dev/active/artifacts/nonsat_endpoint")
+import os
+_REPO = Path(__file__).resolve().parents[1]
+# Override with WDN_AUGBENCH_ARTIFACTS / WDN_AUGBENCH_FIGS to point at a full regenerated run.
+_ART = Path(os.environ.get("WDN_AUGBENCH_ARTIFACTS", _REPO / "artifacts"))
+_FIGS = Path(os.environ.get("WDN_AUGBENCH_FIGS", _REPO / "figures"))
+ART = _ART / "nonsat_endpoint"
 FILES = sorted(glob.glob(str(ART / "nonsat_results_*.json")))
 COMMON_NETS = ["net3", "d_town"]  # present across all nb levels
 
