@@ -11,6 +11,13 @@ from .epanet import (
     summarize_many,
 )
 from .io import discover_files, load_inp_paths
+from .normalise import (
+    AGGREGATE_FEATURES,
+    SCENARIO_METADATA_COLUMNS,
+    assert_no_scenario_metadata,
+    normalise_by_network_reference,
+    z_columns,
+)
 from .manifests import collect_benchmark_entries, load_yaml_file, resolve_path, resolve_split_manifest
 from .schema import FeatureSchema, SimulationConfig, SplitConfig
 from .simulation import (
@@ -32,6 +39,11 @@ __all__ = [
     "SplitConfig",
     "build_acwa_case_study_frame",
     "build_leak_scenarios",
+    "AGGREGATE_FEATURES",
+    "SCENARIO_METADATA_COLUMNS",
+    "assert_no_scenario_metadata",
+    "normalise_by_network_reference",
+    "z_columns",
     "build_pyg_graph",
     "collect_benchmark_entries",
     "compute_betweenness_centrality_placement",

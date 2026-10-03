@@ -39,6 +39,7 @@ if str(SRC_ROOT) not in sys.path:
     sys.path.insert(0, str(SRC_ROOT))
 
 from watergen.data import (  # noqa: E402
+    assert_no_scenario_metadata,
     build_leak_scenarios,
     collect_benchmark_entries,
     resolve_path,
@@ -95,25 +96,42 @@ NETWORK_NODE_COUNTS: dict[str, int] = {
 # and mean-pool consume.
 RUN_GNN_BASELINE = True
 
-# Feature columns — matches run_experiment.py exactly
-FEATURE_COLUMNS = [
-    "pressure_mean",
-    "pressure_min",
-    "pressure_max",
-    "pressure_std",
-    "demand_mean",
-    "demand_sum",
-    "demand_std",
-    "flow_mean",
-    "flow_abs_mean",
-    "flow_std",
-    "tank_head_mean",
-    "tank_head_std",
-    "sensor_coverage",
-    "observed_junction_count",
-    "observed_link_count",
+# Feature columns.
+#
+# v1 (every result in the S35 manuscript) used the raw spatial aggregates PLUS three
+# non-sensor columns: `leak_area` (the true emitter area of the simulated scenario,
+# constant on every row of a leak scenario, 0 otherwise) and the two sensor-count
+# columns. `leak_area` is ground-truth scenario metadata: the rule "leak_area == 0"
+# alone reproduces the v1 baseline's row AUPRC (S36 C1). That list is kept ONLY as a
+# record of what v1 did and is never used for fitting.
+FEATURE_COLUMNS_V1_WITH_LEAK = [
+    "pressure_mean", "pressure_min", "pressure_max", "pressure_std",
+    "demand_mean", "demand_sum", "demand_std",
+    "flow_mean", "flow_abs_mean", "flow_std",
+    "tank_head_mean", "tank_head_std",
+    "sensor_coverage", "observed_junction_count", "observed_link_count",
     "leak_area",
 ]
+
+# Raw sensor aggregates only (no scenario metadata, no network-size counts). Used by
+# the v2 raw-feature ablation arm and as the default for legacy entry points.
+FEATURE_COLUMNS_RAW = [
+    "pressure_mean", "pressure_min", "pressure_max", "pressure_std",
+    "demand_mean", "demand_sum", "demand_std",
+    "flow_mean", "flow_abs_mean", "flow_std",
+    "tank_head_mean", "tank_head_std",
+    "pressure_trend", "pressure_trend_cumsum", "demand_trend",
+    "sensor_coverage",
+]
+
+# v2 detector inputs: the same aggregates expressed as z-scores against each network's
+# own normal-operation scenarios at the same coverage (watergen.data.normalise), plus
+# the coverage fraction. Requires normalise_by_network_reference() to have been applied.
+FEATURE_COLUMNS_V2 = [f"z__{c}" for c in FEATURE_COLUMNS_RAW if c != "sensor_coverage"] + ["sensor_coverage"]
+
+FEATURE_COLUMNS = list(FEATURE_COLUMNS_RAW)
+for _lst in (FEATURE_COLUMNS_RAW, FEATURE_COLUMNS_V2, FEATURE_COLUMNS):
+    assert_no_scenario_metadata(_lst)
 
 # Augmenter labels used in output tables/figures
 AUGMENTER_LABELS = ["baseline", "noise", "gmm", "smote"]
@@ -199,8 +217,14 @@ def _simulate_network_group(
     disturbance_types: list[str],
     max_candidates: int = 5,
     leak_area_values: list[float] | None = None,
+    placement_seed: int | None = None,
+    scenario_rng: "np.random.Generator | None" = None,
 ) -> pd.DataFrame:
-    """Simulate all scenarios for a group of networks and return a combined frame."""
+    """Simulate all scenarios for a group of networks and return a combined frame.
+
+    v2: ``placement_seed`` draws a random sensor layout per (seed, network, coverage);
+    ``scenario_rng`` samples each leak's onset and length. Both None -> v1 behaviour.
+    """
     if leak_area_values is None:
         leak_area_values = [0.0001, 0.0003, 0.0005, 0.001, 0.003, 0.005]
 
@@ -219,13 +243,15 @@ def _simulate_network_group(
                 max_candidates_per_network=max_candidates,
                 disturbance_types=disturbance_types,
                 include_baseline=True,
+                rng=scenario_rng,
             )
             # Filter to only this network's specs to avoid re-simulating
             network_specs = [s for s in specs if s.benchmark_id == nid]
             if not network_specs:
                 print(f"[warn] No scenarios generated for '{nid}' — skipping", file=sys.stderr)
                 continue
-            df = simulate_many(network_specs, sensor_coverage_levels=sensor_coverage_levels)
+            df = simulate_many(network_specs, sensor_coverage_levels=sensor_coverage_levels,
+                               placement_seed=placement_seed)
             frames.append(df)
             print(f"[info] Simulated {len(network_specs)} scenarios for '{nid}' -> {len(df)} rows")
         except Exception as exc:

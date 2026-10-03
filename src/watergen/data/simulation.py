@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Any, Iterable
 
 import numpy as np
+import zlib
 import pandas as pd
 import wntr
 
@@ -111,6 +112,21 @@ def default_leak_window(benchmark_path: Path | str, *, rng: np.random.Generator 
     return start_time, end_time
 
 
+def _sample_leak_window(duration: int, report_step: int, rng: np.random.Generator) -> tuple[int, int]:
+    """Sampled leak window: onset uniform in [report_step, duration/2], length uniform in
+    [duration/6, duration/3], clipped to the horizon (same rule as default_leak_window)."""
+    earliest_start = report_step
+    latest_start = max(report_step, duration // 2)
+    start_time = int(rng.integers(earliest_start, latest_start + 1))
+    min_event_len = max(report_step, duration // 6)
+    max_event_len = max(min_event_len, duration // 3)
+    event_len = int(rng.integers(min_event_len, max_event_len + 1))
+    end_time = min(duration - report_step, start_time + event_len)
+    if end_time <= start_time:
+        end_time = min(duration, start_time + report_step)
+    return start_time, end_time
+
+
 def choose_pipe_candidates(wn: wntr.network.WaterNetworkModel, *, max_candidates: int = 3) -> list[str]:
     """Choose deterministic pipe candidates with the largest diameters."""
     scored = []
@@ -135,8 +151,16 @@ def build_leak_scenarios(
     max_candidates_per_network: int,
     disturbance_types: Iterable[str] | None = None,
     include_baseline: bool = True,
+    rng: np.random.Generator | None = None,
 ) -> list[LeakScenarioSpec]:
-    """Build baseline and leak scenario specs for selected split partitions."""
+    """Build baseline and leak scenario specs for selected split partitions.
+
+    If *rng* is given, every leak scenario gets its own sampled onset
+    (uniform in ``[report_step, duration/2]``) and length (uniform in
+    ``[duration/6, duration/3]``), i.e. the randomised window of
+    :func:`default_leak_window`.  Without *rng* the legacy fixed window
+    ``[duration/3, 2*duration/3]`` is used for every leak (v1 behaviour).
+    """
     selected_splits = {str(item) for item in smoke_splits}
     enabled_disturbances = {str(item) for item in (disturbance_types or ["leak"])}
     scenarios: list[LeakScenarioSpec] = []
@@ -180,6 +204,10 @@ def build_leak_scenarios(
                 leak_nodes = [name for name, _ in ranked[:max_candidates_per_network]]
                 for leak_node in leak_nodes:
                     for leak_area in leak_area_values:
+                        if rng is not None:
+                            s_t, e_t = _sample_leak_window(duration, report_step, rng)
+                        else:
+                            s_t, e_t = start_time, end_time
                         scenarios.append(
                             LeakScenarioSpec(
                                 scenario_id=f"{benchmark_id}__leak__{leak_node}__{leak_area:g}",
@@ -191,8 +219,8 @@ def build_leak_scenarios(
                                 leak_node=leak_node,
                                 disturbance_target=leak_node,
                                 leak_area=float(leak_area),
-                                start_time=int(start_time),
-                                end_time=int(end_time),
+                                start_time=int(s_t),
+                                end_time=int(e_t),
                             )
                         )
 
@@ -262,14 +290,26 @@ def scenario_specs_to_records(scenarios: Iterable[LeakScenarioSpec]) -> list[dic
     return [asdict(item) for item in scenarios]
 
 
-def _select_coverage_columns(columns: list[str], coverage: float) -> list[str]:
-    """Select a deterministic subset of columns for a given sensor coverage level."""
+def _select_coverage_columns(
+    columns: list[str], coverage: float, rng: np.random.Generator | None = None
+) -> list[str]:
+    """Select a subset of columns for a given sensor coverage level.
+
+    With *rng* the subset is a uniform random draw without replacement (random
+    sensor placement; the caller seeds *rng* per (run seed, network, coverage) so
+    every scenario of one network sees the same layout).  Without *rng* the legacy
+    deterministic stride is used (v1 behaviour, which the v1 manuscript wrongly
+    described as random).
+    """
     if not columns:
         return []
     bounded = max(0.0, min(1.0, float(coverage)))
     count = max(1, ceil(len(columns) * bounded))
     if count >= len(columns):
         return columns
+    if rng is not None:
+        idx = np.sort(rng.choice(len(columns), size=count, replace=False))
+        return [columns[int(i)] for i in idx]
     step = max(1, len(columns) // count)
     selected = columns[::step][:count]
     if len(selected) < count:
@@ -284,12 +324,20 @@ def _aggregate_view(
     head_df: pd.DataFrame | None,
     *,
     coverage: float,
+    placement_rng: np.random.Generator | None = None,
 ) -> pd.DataFrame:
-    """Aggregate a sensor view at a given coverage level."""
-    pressure_cols = _select_coverage_columns(list(pressure_df.columns), coverage)
-    demand_cols = _select_coverage_columns(list(demand_df.columns), coverage)
-    flow_cols = _select_coverage_columns(list(flow_df.columns), coverage)
-    head_cols = _select_coverage_columns(list(head_df.columns), coverage) if head_df is not None else []
+    """Aggregate a sensor view at a given coverage level.
+
+    *placement_rng* (optional) selects the observed junctions and links at random;
+    pressure and demand share one junction set.  None -> legacy stride selection.
+    """
+    pressure_cols = _select_coverage_columns(list(pressure_df.columns), coverage, placement_rng)
+    if list(demand_df.columns) == list(pressure_df.columns):
+        demand_cols = list(pressure_cols)
+    else:
+        demand_cols = _select_coverage_columns(list(demand_df.columns), coverage, placement_rng)
+    flow_cols = _select_coverage_columns(list(flow_df.columns), coverage, placement_rng)
+    head_cols = _select_coverage_columns(list(head_df.columns), coverage, placement_rng) if head_df is not None else []
 
     pressure_view = pressure_df[pressure_cols]
     demand_view = demand_df[demand_cols]
@@ -620,8 +668,15 @@ def simulate_scenario(
     sensor_nodes: list[str] | None = None,
     demand_noise: bool = False,
     demand_noise_fraction: float = 0.20,
+    placement_seed: int | None = None,
 ) -> pd.DataFrame:
     """Run one WNTR simulation and convert it into a tabular time-series dataset.
+
+    ``placement_seed`` (v2): when given, the ``"random"`` placement strategy draws
+    the observed junction/link set at random, seeded by (placement_seed,
+    benchmark_id, coverage) so that every scenario of one network within one run
+    seed shares the same sensor layout while different seeds get different layouts.
+    When None, the legacy deterministic stride is used.
 
     Parameters
     ----------
@@ -785,13 +840,15 @@ def simulate_scenario(
                 coverage=float(coverage),
             )
         else:
-            # "random" — original behaviour
+            # "random": seeded random layout per (run seed, network, coverage) when a
+            # placement_seed is given; legacy deterministic stride otherwise.
             frame = _aggregate_view(
                 pressure_df,
                 demand_df,
                 flow_df,
                 head_df,
                 coverage=float(coverage),
+                placement_rng=placement_rng_for(placement_seed, spec.benchmark_id, float(coverage)),
             )
         frame["benchmark_id"] = spec.benchmark_id
         frame["scenario_id"] = spec.scenario_id
@@ -813,6 +870,17 @@ def simulate_scenario(
     return pd.concat(frames, axis=0, ignore_index=True)
 
 
+def placement_rng_for(
+    placement_seed: int | None, benchmark_id: str, coverage: float
+) -> np.random.Generator | None:
+    """Deterministic RNG for the sensor layout of one (run seed, network, coverage)."""
+    if placement_seed is None:
+        return None
+    return np.random.default_rng(
+        [int(placement_seed), zlib.crc32(str(benchmark_id).encode("utf-8")), int(round(coverage * 10000))]
+    )
+
+
 def simulate_scenario_raw(
     spec: LeakScenarioSpec,
     *,
@@ -831,10 +899,11 @@ def simulate_many(
     scenarios: Iterable[LeakScenarioSpec],
     *,
     sensor_coverage_levels: Iterable[float] | None = None,
+    placement_seed: int | None = None,
 ) -> pd.DataFrame:
     """Simulate multiple scenarios and concatenate the resulting rows."""
     frames = [
-        simulate_scenario(spec, sensor_coverage_levels=sensor_coverage_levels)
+        simulate_scenario(spec, sensor_coverage_levels=sensor_coverage_levels, placement_seed=placement_seed)
         for spec in scenarios
     ]
     if not frames:
