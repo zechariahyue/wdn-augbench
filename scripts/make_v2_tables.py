@@ -18,6 +18,9 @@ OUT = ACTIVE.parents[1] / "manuscript" / "tables_v2"
 NET_LABEL = {"net3": "Net3", "d_town": "D-Town", "l_town": "L-TOWN", "ky2": "ky2", "ky3": "ky3", "ky5": "ky5", "ky6": "ky6", "ky7": "ky7"}
 ARM_LABEL = {"rf_baseline": "RF, no aug.", "rf_noise": "RF + noise", "rf_gmm": "RF + GMM", "rf_smote": "RF + SMOTE",
              "rf_raw_baseline": "RF, raw features", "lr_baseline": "Logistic regr.", "gcn_baseline": "GCN (sample-space)", "resid": "Residual (label-free)"}
+# short column heads for the two wide (10-column) per-network tables; the caption spells them out
+ARM_SHORT = {"rf_baseline": "RF", "rf_noise": "RF+noise", "rf_gmm": "RF+GMM", "rf_smote": "RF+SMOTE",
+             "rf_raw_baseline": "RF raw", "lr_baseline": "LR", "gcn_baseline": "GCN", "resid": "Resid."}
 MAIN_ARMS = ["rf_baseline", "rf_noise", "rf_gmm", "rf_smote", "rf_raw_baseline", "lr_baseline", "gcn_baseline", "resid"]
 
 
@@ -41,7 +44,7 @@ def main() -> int:
     arms = [x for x in MAIN_ARMS if x in S["arms"]]
 
     # T2: row AUPRC per network (mean ± std over seeds) + prior; macro row
-    hdr = "Network & Prior & " + " & ".join(ARM_LABEL[x] for x in arms)
+    hdr = "Network & Prior & " + " & ".join(ARM_SHORT[x] for x in arms)
     rows = []
     for n in nets:
         cells = [f"${f(pn[n][x]['row_auprc'][0])} \\pm {f(pn[n][x]['row_auprc'][1], 2)}$" if x in pn[n] else "---" for x in arms]
@@ -60,7 +63,7 @@ def main() -> int:
     sel = [x for x in ("rf_baseline", "rf_raw_baseline", "rf_noise", "rf_gmm", "rf_smote", "lr_baseline", "gcn_baseline", "resid") if x in arms]
     rows = [f"{NET_LABEL[n]} & ${f(pn[n]['rf_baseline']['scen_prior'][0])}$ & " + " & ".join(f"${f(pn[n][x]['scen_auprc_max'][0])}$" if x in pn[n] else "---" for x in sel) for n in nets]
     rows.append(r"\midrule Macro (eq.) & $" + f(macro["rf_baseline"]["scen_prior"]) + "$ & " + " & ".join(f"${f(macro[x]['scen_auprc_max'])}$" for x in sel))
-    (OUT / "tab_scen_auprc.tex").write_text(wrap("l" + "c" * (len(sel) + 1), "Network & Prior & " + " & ".join(ARM_LABEL[x] for x in sel), rows, size=r"\scriptsize", sep="2pt"), encoding="utf-8")
+    (OUT / "tab_scen_auprc.tex").write_text(wrap("l" + "c" * (len(sel) + 1), "Network & Prior & " + " & ".join(ARM_SHORT[x] for x in sel), rows, size=r"\scriptsize", sep="2pt"), encoding="utf-8")
 
     # T5: early warning rf_baseline vs resid
     rows = []
@@ -68,7 +71,7 @@ def main() -> int:
         r, s = pn[n]["rf_baseline"], pn[n].get("resid")
         rows.append(f"{NET_LABEL[n]} & ${f(r['wstl_chance'][0])}$ & ${f(r['wstl_auprc'][0])}$ & ${f(s['wstl_auprc'][0]) if s else '---'}$ & "
                     f"${f(r['first3h_leaks'][0])}$ & ${f(s['first3h_leaks'][0]) if s else '---'}$ & ${f(r['ttd_median_h_leaks'][0], 1)}$ & ${f(s['ttd_median_h_leaks'][0], 1) if s else '---'}$")
-    (OUT / "tab_early_warning.tex").write_text(wrap("lccccccc", r"Network & WSTL chance & WSTL RF & WSTL resid. & 1st-3h RF & 1st-3h resid. & Median TTD RF (h) & Median TTD resid. (h)", rows), encoding="utf-8")
+    (OUT / "tab_early_warning.tex").write_text(wrap("lccccccc", r"Network & Chance & WSTL RF & WSTL res. & 3-h RF & 3-h res. & TTD RF (h) & TTD res. (h)", rows), encoding="utf-8")
 
     # S: per-disturbance slices (rf_baseline) with priors
     rows = []
@@ -103,6 +106,16 @@ def main() -> int:
         for n, v in dd.items():
             rows.append(f"{nb} & {NET_LABEL[n]} & ${f(v['row_prior'])}$ & ${f(v['scen_prior'])}$ & ${f(v['scen_auprc_max'])}$ & ${f(v['rsi_resid_rf'], plus=True)}$")
     (OUT / "tab_prior_sweep.tex").write_text(wrap("llcccc", "Normals per network & Network & Row prior & Scenario prior & RF scen.\\ AUPRC & RSI(resid, RF)", rows), encoding="utf-8")
+
+    # S: seed-level row AUPRC for the normalised RF baseline and the raw-feature RF
+    ps = S["per_seed_network_arm"]; seeds = S["seeds"]
+    rows = []
+    for arm, lab in (("rf_baseline", "RF, no aug."), ("rf_raw_baseline", "RF, raw features")):
+        for n in nets:
+            vals = " & ".join(f"${f(ps[f'{sd}|{n}|{arm}']['row_auprc'])}$" for sd in seeds)
+            rows.append(f"{lab} & {NET_LABEL[n]} & {vals}")
+    hdr = "Arm & Network & " + " & ".join(f"seed {sd}" for sd in seeds)
+    (OUT / "tab_seed_level.tex").write_text(wrap("ll" + "c" * len(seeds), hdr, rows), encoding="utf-8")
 
     # key numbers as LaTeX macros for the prose
     m = [r"\newcommand{\vTwoMacroPrior}{" + f(macro["rf_baseline"]["row_prior"]) + "}",
