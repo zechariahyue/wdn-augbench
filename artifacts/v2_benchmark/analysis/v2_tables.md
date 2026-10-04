@@ -41,63 +41,63 @@
 
 Baseline lift over prior: mean +0.144, Wilcoxon p = 0.008; per network: net3 +0.004, d_town +0.155, l_town +0.350, ky2 +0.107, ky3 +0.182, ky5 +0.145, ky6 +0.055, ky7 +0.153
 
-## Early warning (rf_baseline vs resid): WSTL on leak scenarios, first-3h detection
+## Early warning (rf_baseline vs resid): WSTL on leak scenarios, first-3h / in-window detection
 
-| network | WSTL rf | WSTL resid | chance | first-3h rf | first-3h resid | FA/normal rf | FA/normal resid |
-|---|---|---|---|---|---|---|---|
-| net3 | 0.303 | 0.376 | 0.242 | 0.103 | 0.230 | 1.05 | 1.00 |
-| d_town | 0.253 | 0.256 | 0.251 | 0.020 | 0.003 | 1.12 | 1.00 |
-| l_town | 0.677 | 0.403 | 0.245 | 0.520 | 0.273 | 1.26 | 1.00 |
-| ky2 | 0.408 | 0.269 | 0.240 | 0.207 | 0.110 | 1.16 | 1.76 |
-| ky3 | 0.391 | 0.232 | 0.250 | 0.150 | 0.010 | 1.06 | 1.00 |
-| ky5 | 0.373 | 0.259 | 0.240 | 0.097 | 0.087 | 1.09 | 1.00 |
-| ky6 | 0.341 | 0.265 | 0.248 | 0.087 | 0.053 | 1.10 | 1.00 |
-| ky7 | 0.323 | 0.286 | 0.243 | 0.153 | 0.053 | 1.01 | 1.00 |
+| network | WSTL rf | WSTL resid | chance | first-3h rf | first-3h resid | in-window rf | in-window resid | FA/normal rf | FA/normal resid |
+|---|---|---|---|---|---|---|---|---|---|
+| net3 | 0.303 | 0.376 | 0.242 | 0.107 | 0.217 | 0.147 | 0.267 | 1.04 | 1.00 |
+| d_town | 0.253 | 0.256 | 0.251 | 0.023 | 0.000 | 0.200 | 0.000 | 1.08 | 1.00 |
+| l_town | 0.677 | 0.403 | 0.245 | 0.517 | 0.280 | 0.767 | 0.637 | 1.22 | 1.00 |
+| ky2 | 0.408 | 0.269 | 0.240 | 0.233 | 0.093 | 0.297 | 0.097 | 1.12 | 1.36 |
+| ky3 | 0.391 | 0.232 | 0.250 | 0.253 | 0.003 | 0.460 | 0.010 | 1.09 | 1.00 |
+| ky5 | 0.373 | 0.259 | 0.240 | 0.083 | 0.087 | 0.097 | 0.113 | 1.04 | 1.00 |
+| ky6 | 0.341 | 0.265 | 0.248 | 0.097 | 0.050 | 0.137 | 0.057 | 1.07 | 1.00 |
+| ky7 | 0.323 | 0.286 | 0.243 | 0.157 | 0.053 | 0.190 | 0.070 | 1.00 | 1.00 |
 
 ## RSI (seed mean ± seed std; pooled scenario bootstrap 95%)
 
-- net3 RSI(resid,rf_baseline): -0.024 ± 0.040 [-0.065, +0.011]
-- net3 RSI(rf_noise,rf_baseline): +0.028 ± 0.017 [+0.008, +0.053]
-- net3 RSI(rf_gmm,rf_baseline): +0.023 ± 0.019 [-0.001, +0.048]
-- net3 RSI(rf_smote,rf_baseline): +0.008 ± 0.023 [-0.009, +0.025]
-- net3 RSI(gcn_baseline,rf_baseline): -0.010 ± 0.023 [-0.057, +0.035]
-- d_town RSI(resid,rf_baseline): -0.067 ± 0.046 [-0.198, +0.043]
-- d_town RSI(rf_noise,rf_baseline): +0.011 ± 0.034 [-0.008, +0.043]
-- d_town RSI(rf_gmm,rf_baseline): -0.007 ± 0.055 [-0.040, +0.035]
-- d_town RSI(rf_smote,rf_baseline): +0.009 ± 0.031 [-0.013, +0.028]
-- d_town RSI(gcn_baseline,rf_baseline): +0.015 ± 0.032 [-0.017, +0.049]
-- l_town RSI(resid,rf_baseline): -0.257 ± 0.154 [-0.381, -0.154]
-- l_town RSI(rf_noise,rf_baseline): +0.027 ± 0.095 [-0.006, +0.057]
-- l_town RSI(rf_gmm,rf_baseline): +0.033 ± 0.096 [+0.003, +0.066]
-- l_town RSI(rf_smote,rf_baseline): -0.044 ± 0.070 [-0.064, -0.026]
-- l_town RSI(gcn_baseline,rf_baseline): +0.076 ± 0.130 [+0.036, +0.106]
-- ky2 RSI(resid,rf_baseline): +0.073 ± 0.159 [+0.025, +0.124]
-- ky2 RSI(rf_noise,rf_baseline): -0.030 ± 0.123 [-0.097, +0.028]
-- ky2 RSI(rf_gmm,rf_baseline): -0.020 ± 0.049 [-0.039, +0.010]
-- ky2 RSI(rf_smote,rf_baseline): -0.031 ± 0.085 [-0.056, -0.009]
-- ky2 RSI(gcn_baseline,rf_baseline): +0.116 ± 0.089 [+0.063, +0.161]
-- ky3 RSI(resid,rf_baseline): -0.048 ± 0.038 [-0.154, +0.037]
-- ky3 RSI(rf_noise,rf_baseline): -0.019 ± 0.036 [-0.078, +0.053]
-- ky3 RSI(rf_gmm,rf_baseline): +0.115 ± 0.019 [+0.039, +0.166]
-- ky3 RSI(rf_smote,rf_baseline): +0.007 ± 0.027 [-0.013, +0.027]
-- ky3 RSI(gcn_baseline,rf_baseline): -0.013 ± 0.016 [-0.080, +0.036]
-- ky5 RSI(resid,rf_baseline): -0.135 ± 0.063 [-0.253, -0.045]
-- ky5 RSI(rf_noise,rf_baseline): +0.060 ± 0.045 [+0.015, +0.100]
-- ky5 RSI(rf_gmm,rf_baseline): +0.045 ± 0.046 [+0.007, +0.078]
-- ky5 RSI(rf_smote,rf_baseline): +0.002 ± 0.024 [-0.017, +0.020]
-- ky5 RSI(gcn_baseline,rf_baseline): +0.055 ± 0.066 [-0.022, +0.121]
-- ky6 RSI(resid,rf_baseline): -0.081 ± 0.101 [-0.160, -0.015]
-- ky6 RSI(rf_noise,rf_baseline): +0.009 ± 0.040 [-0.023, +0.038]
-- ky6 RSI(rf_gmm,rf_baseline): +0.037 ± 0.027 [+0.017, +0.051]
-- ky6 RSI(rf_smote,rf_baseline): +0.003 ± 0.009 [-0.008, +0.015]
-- ky6 RSI(gcn_baseline,rf_baseline): -0.022 ± 0.038 [-0.082, +0.025]
-- ky7 RSI(resid,rf_baseline): -0.012 ± 0.112 [-0.136, +0.100]
-- ky7 RSI(rf_noise,rf_baseline): -0.073 ± 0.050 [-0.123, -0.024]
-- ky7 RSI(rf_gmm,rf_baseline): +0.022 ± 0.057 [-0.013, +0.057]
-- ky7 RSI(rf_smote,rf_baseline): -0.016 ± 0.029 [-0.033, -0.002]
-- ky7 RSI(gcn_baseline,rf_baseline): -0.080 ± 0.064 [-0.155, +0.027]
+- net3 RSI(resid,rf_baseline): -0.024 ± 0.040 [-0.066, +0.024]
+- net3 RSI(rf_noise,rf_baseline): +0.028 ± 0.017 [+0.001, +0.061]
+- net3 RSI(rf_gmm,rf_baseline): +0.023 ± 0.019 [-0.009, +0.054]
+- net3 RSI(rf_smote,rf_baseline): +0.008 ± 0.023 [-0.014, +0.030]
+- net3 RSI(gcn_baseline,rf_baseline): -0.010 ± 0.023 [-0.057, +0.036]
+- d_town RSI(resid,rf_baseline): -0.067 ± 0.046 [-0.160, +0.047]
+- d_town RSI(rf_noise,rf_baseline): +0.011 ± 0.034 [-0.020, +0.055]
+- d_town RSI(rf_gmm,rf_baseline): -0.007 ± 0.055 [-0.036, +0.037]
+- d_town RSI(rf_smote,rf_baseline): +0.009 ± 0.031 [-0.017, +0.036]
+- d_town RSI(gcn_baseline,rf_baseline): +0.015 ± 0.032 [-0.023, +0.046]
+- l_town RSI(resid,rf_baseline): -0.257 ± 0.154 [-0.376, -0.154]
+- l_town RSI(rf_noise,rf_baseline): +0.027 ± 0.095 [-0.016, +0.069]
+- l_town RSI(rf_gmm,rf_baseline): +0.033 ± 0.096 [-0.006, +0.073]
+- l_town RSI(rf_smote,rf_baseline): -0.044 ± 0.070 [-0.066, -0.021]
+- l_town RSI(gcn_baseline,rf_baseline): +0.076 ± 0.130 [+0.030, +0.117]
+- ky2 RSI(resid,rf_baseline): +0.073 ± 0.159 [+0.012, +0.124]
+- ky2 RSI(rf_noise,rf_baseline): -0.030 ± 0.123 [-0.100, +0.041]
+- ky2 RSI(rf_gmm,rf_baseline): -0.020 ± 0.049 [-0.051, +0.009]
+- ky2 RSI(rf_smote,rf_baseline): -0.031 ± 0.085 [-0.058, -0.000]
+- ky2 RSI(gcn_baseline,rf_baseline): +0.116 ± 0.089 [+0.066, +0.153]
+- ky3 RSI(resid,rf_baseline): -0.048 ± 0.038 [-0.120, +0.025]
+- ky3 RSI(rf_noise,rf_baseline): -0.019 ± 0.036 [-0.077, +0.047]
+- ky3 RSI(rf_gmm,rf_baseline): +0.115 ± 0.019 [+0.050, +0.157]
+- ky3 RSI(rf_smote,rf_baseline): +0.007 ± 0.027 [-0.016, +0.034]
+- ky3 RSI(gcn_baseline,rf_baseline): -0.013 ± 0.016 [-0.063, +0.034]
+- ky5 RSI(resid,rf_baseline): -0.135 ± 0.063 [-0.239, -0.037]
+- ky5 RSI(rf_noise,rf_baseline): +0.060 ± 0.045 [+0.009, +0.098]
+- ky5 RSI(rf_gmm,rf_baseline): +0.045 ± 0.046 [+0.008, +0.086]
+- ky5 RSI(rf_smote,rf_baseline): +0.002 ± 0.024 [-0.020, +0.024]
+- ky5 RSI(gcn_baseline,rf_baseline): +0.055 ± 0.066 [-0.016, +0.118]
+- ky6 RSI(resid,rf_baseline): -0.081 ± 0.101 [-0.169, -0.006]
+- ky6 RSI(rf_noise,rf_baseline): +0.009 ± 0.040 [-0.030, +0.046]
+- ky6 RSI(rf_gmm,rf_baseline): +0.037 ± 0.027 [+0.016, +0.055]
+- ky6 RSI(rf_smote,rf_baseline): +0.003 ± 0.009 [-0.010, +0.019]
+- ky6 RSI(gcn_baseline,rf_baseline): -0.022 ± 0.038 [-0.076, +0.034]
+- ky7 RSI(resid,rf_baseline): -0.012 ± 0.112 [-0.115, +0.107]
+- ky7 RSI(rf_noise,rf_baseline): -0.073 ± 0.050 [-0.129, -0.026]
+- ky7 RSI(rf_gmm,rf_baseline): +0.022 ± 0.057 [-0.022, +0.068]
+- ky7 RSI(rf_smote,rf_baseline): -0.016 ± 0.029 [-0.038, +0.003]
+- ky7 RSI(gcn_baseline,rf_baseline): -0.080 ± 0.064 [-0.158, -0.007]
 
-## Scenario-prior sweep (subsampled normal scenarios): rf_baseline scen AUPRC max-pool and RSI(resid, rf_baseline)
+## Scenario-prior sweep (first n normal scenarios kept per network): rf_baseline scen AUPRC max-pool and RSI(resid, rf_baseline)
 
 - N normals = 20: net3: prior 0.64, scen 0.631, RSI -0.050; d_town: prior 0.64, scen 0.717, RSI -0.087; l_town: prior 0.63, scen 0.896, RSI -0.259; ky2: prior 0.63, scen 0.760, RSI +0.014; ky3: prior 0.64, scen 0.725, RSI -0.170; ky5: prior 0.64, scen 0.712, RSI -0.207; ky6: prior 0.64, scen 0.695, RSI -0.072; ky7: prior 0.63, scen 0.712, RSI -0.046
 - N normals = 40: net3: prior 0.47, scen 0.497, RSI -0.013; d_town: prior 0.47, scen 0.548, RSI -0.077; l_town: prior 0.46, scen 0.836, RSI -0.274; ky2: prior 0.46, scen 0.646, RSI +0.051; ky3: prior 0.47, scen 0.596, RSI -0.108; ky5: prior 0.47, scen 0.573, RSI -0.180; ky6: prior 0.47, scen 0.532, RSI -0.082; ky7: prior 0.46, scen 0.580, RSI -0.024

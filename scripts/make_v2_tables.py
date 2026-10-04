@@ -30,6 +30,26 @@ def f(x, d=3, plus=False):
     return f"{x:+.{d}f}" if plus else f"{x:.{d}f}"
 
 
+def best(vals):
+    v = [x for x in vals if x == x]
+    return max(v) if v else None
+
+
+def cell(x, bold=False, d=3):
+    return f"$\\mathbf{{{f(x, d)}}}$" if bold else f"${f(x, d)}$"
+
+
+def pm(ms, d=3, bold=False):
+    """'mean +- std' cell from a (mean, std) pair; both at the same precision."""
+    body = f"{f(ms[0], d)} \\pm {f(ms[1], d)}"
+    return f"$\\mathbf{{{body}}}$" if bold else f"${body}$"
+
+
+PAIR_LABEL = {"RSI(resid,rf_baseline)": "RSI(Resid., RF)", "RSI(rf_noise,rf_baseline)": "RSI(RF+noise, RF)",
+              "RSI(rf_gmm,rf_baseline)": "RSI(RF+GMM, RF)", "RSI(rf_smote,rf_baseline)": "RSI(RF+SMOTE, RF)",
+              "RSI(gcn_baseline,rf_baseline)": "RSI(GCN, RF)"}
+
+
 def wrap(cols: str, header: str, rows: list[str], size: str = r"\footnotesize", sep: str = "3pt", star: bool = True) -> str:
     env = r"\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}" + cols + "}" if star else r"\begin{tabular}{" + cols + "}"
     end = r"\end{tabular*}" if star else r"\end{tabular}"
@@ -84,10 +104,12 @@ def main() -> int:
     hdr = "Network & Prior & " + " & ".join(ARM_SHORT[x] for x in arms)
     rows = []
     for n in nets:
-        cells = [f"${f(pn[n][x]['row_auprc'][0])} \\pm {f(pn[n][x]['row_auprc'][1], 2)}$" if x in pn[n] else "---" for x in arms]
+        vals = [pn[n][x]["row_auprc"][0] if x in pn[n] else float("nan") for x in arms]
+        cells = [pm(pn[n][x]["row_auprc"], bold=(v == best(vals))) if x in pn[n] else "---" for x, v in zip(arms, vals)]
         rows.append(f"{NET_LABEL[n]} & ${f(pn[n]['rf_baseline']['row_prior'][0])}$ & " + " & ".join(cells))
-    rows.append(r"\midrule Macro (eq.) & $" + f(macro["rf_baseline"]["row_prior"]) + "$ & " + " & ".join(f"$\\mathbf{{{f(macro[x]['row_auprc'])}}}$" for x in arms))
-    (OUT / "tab_row_auprc.tex").write_text(wrap("l" + "c" * (len(arms) + 1), hdr, rows, size=r"\scriptsize", sep="2pt"), encoding="utf-8")
+    vals = [macro[x]["row_auprc"] for x in arms]
+    rows.append(r"\midrule Macro (eq.) & $" + f(macro["rf_baseline"]["row_prior"]) + "$ & " + " & ".join(cell(v, bold=(v == best(vals))) for v in vals))
+    (OUT / "tab_row_auprc.tex").write_text(wrap("l" + "c" * (len(arms) + 1), hdr, rows, size=r"\scriptsize", sep="1.5pt"), encoding="utf-8")
 
     # T3: deltas vs rf_baseline
     d = agg["deltas_vs_rf_baseline"]
@@ -106,34 +128,37 @@ def main() -> int:
 
     # T4: scenario AUPRC (max-pool) + prior, selected arms
     sel = [x for x in ("rf_baseline", "rf_raw_baseline", "rf_noise", "rf_gmm", "rf_smote", "lr_baseline", "gcn_baseline", "resid") if x in arms]
-    rows = [f"{NET_LABEL[n]} & ${f(pn[n]['rf_baseline']['scen_prior'][0])}$ & " + " & ".join(f"${f(pn[n][x]['scen_auprc_max'][0])}$" if x in pn[n] else "---" for x in sel) for n in nets]
-    rows.append(r"\midrule Macro (eq.) & $" + f(macro["rf_baseline"]["scen_prior"]) + "$ & " + " & ".join(f"${f(macro[x]['scen_auprc_max'])}$" for x in sel))
-    (OUT / "tab_scen_auprc.tex").write_text(wrap("l" + "c" * (len(sel) + 1), "Network & Prior & " + " & ".join(ARM_SHORT[x] for x in sel), rows, size=r"\scriptsize", sep="2pt"), encoding="utf-8")
+    rows = []
+    for n in nets:
+        vals = [pn[n][x]["scen_auprc_max"][0] if x in pn[n] else float("nan") for x in sel]
+        rows.append(f"{NET_LABEL[n]} & ${f(pn[n]['rf_baseline']['scen_prior'][0])}$ & "
+                    + " & ".join(pm(pn[n][x]["scen_auprc_max"], bold=(v == best(vals))) if x in pn[n] else "---" for x, v in zip(sel, vals)))
+    vals = [macro[x]["scen_auprc_max"] for x in sel]
+    rows.append(r"\midrule Macro (eq.) & $" + f(macro["rf_baseline"]["scen_prior"]) + "$ & " + " & ".join(cell(v, bold=(v == best(vals))) for v in vals))
+    (OUT / "tab_scen_auprc.tex").write_text(wrap("l" + "c" * (len(sel) + 1), "Network & Prior & " + " & ".join(ARM_SHORT[x] for x in sel), rows, size=r"\scriptsize", sep="1.5pt"), encoding="utf-8")
 
     # T5: early warning rf_baseline vs resid
     rows = []
     for n in nets:
-        r, s = pn[n]["rf_baseline"], pn[n].get("resid")
-        rows.append(f"{NET_LABEL[n]} & ${f(r['wstl_chance'][0])}$ & ${f(r['wstl_auprc'][0])}$ & ${f(s['wstl_auprc'][0]) if s else '---'}$ & "
-                    f"${f(r['first3h_leaks'][0])}$ & ${f(s['first3h_leaks'][0]) if s else '---'}$ & ${f(r['ttd_median_h_leaks'][0], 1)}$ & ${f(s['ttd_median_h_leaks'][0], 1) if s else '---'}$")
-    (OUT / "tab_early_warning.tex").write_text(wrap("lccccccc", r"Network & Chance & WSTL RF & WSTL res. & 3-h RF & 3-h res. & TTD RF (h) & TTD res. (h)", rows), encoding="utf-8")
+        r, s = pn[n]["rf_baseline"], pn[n]["resid"]
+        rows.append(f"{NET_LABEL[n]} & {int(round(r['n_leak_streams'][0]))} & ${f(r['wstl_chance'][0])}$ & {pm(r['wstl_auprc'])} & {pm(s['wstl_auprc'])} & "
+                    f"{pm(r['first3h_leaks'])} & {pm(s['first3h_leaks'])} & ${f(r['detected_in_window_leaks'][0])}$ & ${f(s['detected_in_window_leaks'][0])}$ & "
+                    f"{pm(r['ttd_median_h_leaks'], 1)} & {pm(s['ttd_median_h_leaks'], 1)} & ${f(r['false_alarm_rate_normals'][0], 2)}$ & ${f(s['false_alarm_rate_normals'][0], 2)}$")
+    (OUT / "tab_early_warning.tex").write_text(wrap("lcccccccccccc", r"Network & $n$ & Chance & WSTL RF & WSTL res. & 3-h RF & 3-h res. & In-win.\ RF & In-win.\ res. & TTD RF (h) & TTD res. (h) & FA RF & FA res.", rows, size=r"\footnotesize", sep="3pt"), encoding="utf-8")
 
     # S: per-disturbance slices (rf_baseline) with priors
     rows = []
+    KIND = {"leak": "Leak", "pipe_closure": "Pipe closure", "pump_outage": "Pump outage"}
     for n in nets:
-        r = pn[n]["rf_baseline"]
-        cells = []
+        r, s = pn[n]["rf_baseline"], pn[n]["resid"]
         for k in ("leak", "pipe_closure", "pump_outage"):
             if f"slice_{k}_auprc" in r:
-                cells.append(f"${f(r[f'slice_{k}_auprc'][0])}$ / ${f(r[f'slice_{k}_prior'][0])}$")
-            else:
-                cells.append("---")
-        rows.append(f"{NET_LABEL[n]} & " + " & ".join(cells))
-    (OUT / "tab_slices.tex").write_text(wrap("lccc", "Network & Leak (AUPRC / prior) & Pipe closure (AUPRC / prior) & Pump outage (AUPRC / prior)", rows), encoding="utf-8")
+                rows.append(f"{NET_LABEL[n]} & {KIND[k]} & {int(round(r[f'n_pos_scen_{k}'][0]))} & ${f(r[f'slice_{k}_prior'][0])}$ & {pm(r[f'slice_{k}_auprc'])} & {pm(s[f'slice_{k}_auprc'])}")
+    (OUT / "tab_slices.tex").write_text(wrap("llcccc", r"Network & Disturbance & $n$ scen. & Prior & RF, no aug. & Resid.", rows), encoding="utf-8")
 
     # S: max-pool vs mean-pool (rf_baseline, resid)
-    rows = [f"{NET_LABEL[n]} & ${f(pn[n]['rf_baseline']['scen_auprc_max'][0])}$ & ${f(pn[n]['rf_baseline']['scen_auprc_mean'][0])}$ & "
-            f"${f(pn[n]['resid']['scen_auprc_max'][0]) if 'resid' in pn[n] else '---'}$ & ${f(pn[n]['resid']['scen_auprc_mean'][0]) if 'resid' in pn[n] else '---'}$" for n in nets]
+    rows = [f"{NET_LABEL[n]} & {pm(pn[n]['rf_baseline']['scen_auprc_max'])} & {pm(pn[n]['rf_baseline']['scen_auprc_mean'])} & "
+            f"{pm(pn[n]['resid']['scen_auprc_max'])} & {pm(pn[n]['resid']['scen_auprc_mean'])}" for n in nets]
     (OUT / "tab_pooling.tex").write_text(wrap("lcccc", "Network & RF max-pool & RF mean-pool & Resid.\\ max-pool & Resid.\\ mean-pool", rows), encoding="utf-8")
 
     # S: RSI list
@@ -141,8 +166,8 @@ def main() -> int:
     for n in nets:
         for k, v in S["rsi"][n].items():
             ci = f"$[{f(v['bootstrap_95'][0], plus=True)},\\,{f(v['bootstrap_95'][1], plus=True)}]$" if v["bootstrap_95"] else "---"
-            pair = k.replace("_", "\\_")
-            rows.append(f"{NET_LABEL[n]} & {pair} & ${f(v['mean'], plus=True)} \\pm {f(v['seed_std'], 2)}$ & {ci}")
+            pair = PAIR_LABEL.get(k, k.replace("_", "\\_"))
+            rows.append(f"{NET_LABEL[n]} & {pair} & ${f(v['mean'], plus=True)} \\pm {f(v['seed_std'])}$ & {ci}")
     (OUT / "tab_rsi.tex").write_text(wrap("llcc", "Network & Pair & RSI (seed mean $\\pm$ std) & Pooled scenario bootstrap 95\\%", rows), encoding="utf-8")
 
     # S: prior sweep

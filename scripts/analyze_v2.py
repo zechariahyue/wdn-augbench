@@ -7,8 +7,9 @@ Metrics, per (seed, network, arm):
   row AUPRC (+ row prior); scenario AUPRC under max-pool and mean-pool over
   (scenario, coverage) streams (+ scenario prior); per-disturbance slices (one
   disturbance class against ALL normal scenarios, with the slice prior); WSTL AUPRC on
-  leak scenarios (chance = within-scenario positive fraction); time-to-detection at a
-  <= 1 alarm per normal scenario budget, threshold calibrated on the N normal scenarios.
+  leak scenarios (chance = within-scenario positive fraction); time-to-detection inside the
+  active window at a threshold set per (seed, network, coverage, detector) on the N normal
+  streams so that the expected number of exceedance rows per normal stream is one.
 The label-free residual comparator is built here (causal_residual_score) from the
 recorded mass/energy residual proxies, standardised by the network's normal-operation
 reference (never by whole-scenario statistics).
@@ -84,11 +85,21 @@ def add_residual_arm(rec: pd.DataFrame) -> pd.DataFrame:
 
 
 # ---------------------------------------------------------------- per (seed, network, arm)
-def stream_table(g: pd.DataFrame, score: str) -> pd.DataFrame:
-    """One row per (scenario, coverage) stream: max/mean score, any-positive label, kind."""
-    agg = g.groupby(["scenario_id", "sensor_coverage"], sort=False).agg(
+STREAM_KEY = ["scenario_id", "sensor_coverage"]
+REP_STREAM_KEY = ["rep", "scenario_id", "sensor_coverage"]   # bootstrap replicates: every drawn copy is its own stream
+
+
+def stream_table(g: pd.DataFrame, score: str, by=STREAM_KEY) -> pd.DataFrame:
+    """One row per stream (default: (scenario, coverage)): max/mean score, any-positive label, kind."""
+    agg = g.groupby(list(by), sort=False).agg(
         smax=(score, "max"), smean=(score, "mean"), ypos=("event_label", "max"), kind=("scenario_kind", "first"))
     return agg.reset_index()
+
+
+def replicate_concat(parts: list[pd.DataFrame]) -> pd.DataFrame:
+    """Concatenate bootstrap-drawn scenario frames, tagging each drawn copy with a replicate
+    index `rep` so that a scenario drawn twice yields two streams under REP_STREAM_KEY."""
+    return pd.concat(parts, keys=range(len(parts)), names=["rep", "row"]).reset_index(level="rep")
 
 
 def metrics_for(g: pd.DataFrame, score: str, normal_ids: set | None = None) -> dict:
@@ -106,6 +117,7 @@ def metrics_for(g: pd.DataFrame, score: str, normal_ids: set | None = None) -> d
         if (g.scenario_kind == kind).any():
             out[f"slice_{kind}_auprc"] = ap(gk.event_label, gk[score])
             out[f"slice_{kind}_prior"] = float(gk.event_label.mean())
+            out[f"n_pos_scen_{kind}"] = int(g[g.scenario_kind == kind].scenario_id.nunique())
     # WSTL on leak scenarios (the only kind with an onset inside the horizon)
     w, chance = [], []
     for _, gg in g[g.scenario_kind == "leak"].groupby(["scenario_id", "sensor_coverage"], sort=False):
@@ -114,25 +126,45 @@ def metrics_for(g: pd.DataFrame, score: str, normal_ids: set | None = None) -> d
             w.append(ap(yy, gg[score])); chance.append(yy.mean())
     out["wstl_auprc"] = float(np.nanmean(w)) if w else float("nan")
     out["wstl_chance"] = float(np.mean(chance)) if chance else float("nan")
-    # time-to-detection at <= 1 alarm per normal scenario, threshold from the normal scenarios
-    normals = [gg[score].to_numpy(float) for _, gg in g[g.scenario_kind == "baseline"].groupby(["scenario_id", "sensor_coverage"], sort=False)]
+    # time-to-detection. Threshold: per (seed, network, coverage, detector) the 1 - 1/L quantile
+    # of the detector's own scores over the N normal streams (L = mean stream length), i.e.
+    # the level at which the EXPECTED number of exceedance rows per normal stream is one.
+    # An alarm counts only if it fires INSIDE the active window [onset, last active step];
+    # alarms after the window are misses, with the delay censored at the window end.
+    normals = {}
+    for (_, cov), gg in g[g.scenario_kind == "baseline"].groupby(["scenario_id", "sensor_coverage"], sort=False):
+        normals.setdefault(cov, []).append(gg[score].to_numpy(float))
     if normals:
-        flat = np.concatenate(normals); mean_len = np.mean([len(x) for x in normals])
-        thr = np.quantile(flat, max(0.0, 1.0 - 1.0 / mean_len))
-        delays, early = [], []
-        for _, gg in g[g.scenario_kind == "leak"].groupby(["scenario_id", "sensor_coverage"], sort=False):
+        thr = {}
+        for cov, arrs in normals.items():
+            flat = np.concatenate(arrs); mean_len = np.mean([len(x) for x in arrs])
+            thr[cov] = float(np.quantile(flat, max(0.0, 1.0 - 1.0 / mean_len)))
+        delays, early, inwin = [], [], []
+        for (_, cov), gg in g[g.scenario_kind == "leak"].groupby(["scenario_id", "sensor_coverage"], sort=False):
             yy = gg.event_label.to_numpy(int)
             if yy.sum() == 0:
                 continue
             t_h = gg.time_seconds.to_numpy(float) / 3600.0
-            onset = int(np.argmax(yy > 0)); ss = gg[score].to_numpy(float)
-            fired = np.where(ss[onset:] >= thr)[0]
-            d = (t_h[onset + int(fired[0])] - t_h[onset]) if len(fired) else (t_h[-1] - t_h[onset])
-            delays.append(d); early.append(1 if (len(fired) and d < FIRST_K_H) else 0)
+            d, hit = detection_delay(yy, gg[score].to_numpy(float), t_h, thr[cov])
+            delays.append(d); inwin.append(int(hit)); early.append(int(hit and d < FIRST_K_H))
         out["ttd_median_h_leaks"] = float(np.median(delays)) if delays else float("nan")
         out["first3h_leaks"] = float(np.mean(early)) if early else float("nan")
-        out["false_alarm_rate_normals"] = float(np.mean([(x >= thr).sum() for x in normals]))
+        out["detected_in_window_leaks"] = float(np.mean(inwin)) if inwin else float("nan")
+        out["n_leak_streams"] = int(len(delays))
+        out["false_alarm_rate_normals"] = float(np.mean([(x >= thr[cov]).sum() for cov, arrs in normals.items() for x in arrs]))
     return out
+
+
+def detection_delay(yy, ss, t_h, thr):
+    """(delay in hours, detected) for one leak stream: the first exceedance of thr INSIDE the
+    active window [onset, last active step]. No exceedance inside the window -> not detected,
+    delay censored at the end of the active window (exceedances after it do not count)."""
+    act = np.where(np.asarray(yy) > 0)[0]
+    onset, last = int(act[0]), int(act[-1])
+    fired = np.where(np.asarray(ss, float)[onset:last + 1] >= thr)[0]
+    if len(fired):
+        return float(t_h[onset + int(fired[0])] - t_h[onset]), True
+    return float(t_h[last] - t_h[onset]), False
 
 
 # ---------------------------------------------------------------- aggregation
@@ -150,7 +182,7 @@ def aggregate(per: dict, nets: list[str], arms: list[str], seeds: list[int]) -> 
                                                 float(np.nanstd([v.get(k, np.nan) for v in vals]))) for k in keys}
     for arm in arms:
         res["macro_eqwt"][arm] = {k: float(np.nanmean([res["per_network"][n][arm][k][0] for n in nets if arm in res["per_network"][n]]))
-                                  for k in ("row_auprc", "scen_auprc_max", "scen_auprc_mean", "wstl_auprc", "first3h_leaks", "row_prior", "scen_prior")}
+                                  for k in ("row_auprc", "scen_auprc_max", "scen_auprc_mean", "wstl_auprc", "first3h_leaks", "detected_in_window_leaks", "row_prior", "scen_prior")}
     base = np.array([res["per_network"][n]["rf_baseline"]["row_auprc"][0] for n in nets])
     prior = np.array([res["per_network"][n]["rf_baseline"]["row_prior"][0] for n in nets])
     res["baseline_vs_prior"] = {"lift_mean": float((base - prior).mean()), "wilcoxon_p": float(wilcoxon(base, prior).pvalue) if len(nets) >= 6 else None,
@@ -178,45 +210,54 @@ def aggregate(per: dict, nets: list[str], arms: list[str], seeds: list[int]) -> 
     return res
 
 
-def rsi_with_bootstrap(rec: pd.DataFrame, nets, seeds, pairs, B=200, normal_ids_by_net=None):
+def rsi_with_bootstrap(rec: pd.DataFrame, nets, seeds, pairs, B=500, normal_ids_by_net=None):
     """RSI(A,B) = (rowA-rowB) - (scenA-scenB) per network: seed mean, seed std, and a pooled
     scenario bootstrap (resample scenario ids within the network, recompute every seed,
-    average over seeds; percentile interval of that seed-averaged statistic)."""
+    average over seeds; percentile interval of that seed-averaged statistic). Each drawn
+    copy of a scenario is tagged with a replicate index and counted as its own stream
+    (replicate_concat + REP_STREAM_KEY), so the scenario-level term is reweighted exactly
+    like the row-level term. One set of B draws is shared by all pairs of a network."""
     rng = np.random.default_rng(1)
     out = {}
+    cols = sorted({c for a, b in pairs for c in (a, b) if c in rec.columns})
     for net in nets:
         gnet = rec[rec.network_id == net]
         if normal_ids_by_net is not None:
             gnet = gnet[(gnet.scenario_kind != "baseline") | gnet.scenario_id.isin(normal_ids_by_net[net])]
         sids = sorted(gnet.scenario_id.unique())
-        by_seed = {s: gnet[gnet.seed == s] for s in seeds}
-        # cache per-(seed, scenario) arrays
-        cache = {s: {sid: g for sid, g in by_seed[s].groupby("scenario_id", sort=False)} for s in seeds}
+        # cache per (seed, scenario): row label/score arrays and the per-coverage stream table
+        cache = {}
+        for s in seeds:
+            for sid, g in gnet[gnet.seed == s].groupby("scenario_id", sort=False):
+                st = g.groupby(STREAM_KEY, sort=False).agg(ypos=("event_label", "max"), kind=("scenario_kind", "first"),
+                                                          **{c: (c, "max") for c in cols}).reset_index()
+                cache[(s, sid)] = (g.event_label.to_numpy(int), {c: g[c].to_numpy(float) for c in cols}, st)
 
-        def rsi_for(a, b, chosen):
-            vals = []
+        def gaps(chosen):
+            """Per seed: {col: (row AP, scenario AP)} for the drawn (possibly repeated) scenarios."""
+            res = []
             for s in seeds:
-                parts = [cache[s][sid] for sid in chosen if sid in cache[s]]
+                parts = [cache[(s, sid)] for sid in chosen if (s, sid) in cache]
                 if not parts:
                     continue
-                g = pd.concat(parts)
-                row_a, row_b = ap(g.event_label, g[a]), ap(g.event_label, g[b])
-                sta, stb = stream_table(g, a), stream_table(g, b)
-                vals.append((row_a - row_b) - (ap(sta.ypos, sta.smax) - ap(stb.ypos, stb.smax)))
-            return vals
+                y = np.concatenate([p[0] for p in parts])
+                streams = replicate_concat([p[2] for p in parts])          # one stream per drawn copy
+                res.append({c: (ap(y, np.concatenate([p[1][c] for p in parts])), ap(streams.ypos, streams[c])) for c in cols})
+            return res
+
+        def rsi_from(gp, a, b):
+            return [(g[a][0] - g[b][0]) - (g[a][1] - g[b][1]) for g in gp]
+
+        point = gaps(sids)
+        boots = [gaps(list(rng.choice(sids, size=len(sids), replace=True))) for _ in range(B)]
         out[net] = {}
         for a, b in pairs:
-            if a not in gnet.columns or b not in gnet.columns:
+            if a not in cols or b not in cols:
                 continue
-            point = rsi_for(a, b, sids)
-            boots = []
-            for _ in range(B):
-                chosen = list(rng.choice(sids, size=len(sids), replace=True))
-                v = rsi_for(a, b, chosen)
-                if v:
-                    boots.append(float(np.nanmean(v)))
-            out[net][f"RSI({a},{b})"] = {"mean": float(np.nanmean(point)), "seed_std": float(np.nanstd(point)),
-                                         "bootstrap_95": [float(np.nanpercentile(boots, 2.5)), float(np.nanpercentile(boots, 97.5))] if boots else None}
+            pv = rsi_from(point, a, b)
+            bv = [float(np.nanmean(rsi_from(gp, a, b))) for gp in boots if gp]
+            out[net][f"RSI({a},{b})"] = {"mean": float(np.nanmean(pv)), "seed_std": float(np.nanstd(pv)),
+                                         "bootstrap_95": [float(np.nanpercentile(bv, 2.5)), float(np.nanpercentile(bv, 97.5))] if bv else None}
     return out
 
 
@@ -241,17 +282,17 @@ def md_tables(summary: dict) -> str:
         L.append(f"| {a} | {_f(d['delta_mean'], '+.3f')} | {d['wins']}/{d['n']} | {_f(d['wilcoxon_p'])} | [{_f(d['network_bootstrap_95'][0], '+.3f')}, {_f(d['network_bootstrap_95'][1], '+.3f')}] | {_f(d['mde_between_network'])} |")
     b = summary["aggregate"]["baseline_vs_prior"]
     L += ["", f"Baseline lift over prior: mean {_f(b['lift_mean'], '+.3f')}, Wilcoxon p = {_f(b['wilcoxon_p'])}; per network: " + ", ".join(f"{n} {v:+.3f}" for n, v in b["per_network_lift"].items()), ""]
-    L += ["## Early warning (rf_baseline vs resid): WSTL on leak scenarios, first-3h detection", "", "| network | WSTL rf | WSTL resid | chance | first-3h rf | first-3h resid | FA/normal rf | FA/normal resid |", "|---|---|---|---|---|---|---|---|"]
+    L += ["## Early warning (rf_baseline vs resid): WSTL on leak scenarios, first-3h / in-window detection", "", "| network | WSTL rf | WSTL resid | chance | first-3h rf | first-3h resid | in-window rf | in-window resid | FA/normal rf | FA/normal resid |", "|---|---|---|---|---|---|---|---|---|---|"]
     for n in nets:
         pn = summary["aggregate"]["per_network"][n]
         if "resid" in pn:
-            L.append(f"| {n} | {_f(pn['rf_baseline']['wstl_auprc'][0])} | {_f(pn['resid']['wstl_auprc'][0])} | {_f(pn['rf_baseline']['wstl_chance'][0])} | {_f(pn['rf_baseline']['first3h_leaks'][0])} | {_f(pn['resid']['first3h_leaks'][0])} | {_f(pn['rf_baseline']['false_alarm_rate_normals'][0], '.2f')} | {_f(pn['resid']['false_alarm_rate_normals'][0], '.2f')} |")
+            L.append(f"| {n} | {_f(pn['rf_baseline']['wstl_auprc'][0])} | {_f(pn['resid']['wstl_auprc'][0])} | {_f(pn['rf_baseline']['wstl_chance'][0])} | {_f(pn['rf_baseline']['first3h_leaks'][0])} | {_f(pn['resid']['first3h_leaks'][0])} | {_f(pn['rf_baseline']['detected_in_window_leaks'][0])} | {_f(pn['resid']['detected_in_window_leaks'][0])} | {_f(pn['rf_baseline']['false_alarm_rate_normals'][0], '.2f')} | {_f(pn['resid']['false_alarm_rate_normals'][0], '.2f')} |")
     L += ["", "## RSI (seed mean ± seed std; pooled scenario bootstrap 95%)", ""]
     for n, d in summary["rsi"].items():
         for k, v in d.items():
             ci = f"[{_f(v['bootstrap_95'][0], '+.3f')}, {_f(v['bootstrap_95'][1], '+.3f')}]" if v["bootstrap_95"] else "—"
             L.append(f"- {n} {k}: {_f(v['mean'], '+.3f')} ± {_f(v['seed_std'])} {ci}")
-    L += ["", "## Scenario-prior sweep (subsampled normal scenarios): rf_baseline scen AUPRC max-pool and RSI(resid, rf_baseline)", ""]
+    L += ["", "## Scenario-prior sweep (first n normal scenarios kept per network): rf_baseline scen AUPRC max-pool and RSI(resid, rf_baseline)", ""]
     for nb, d in summary["prior_sweep"].items():
         L.append(f"- N normals = {nb}: " + "; ".join(f"{n}: prior {_f(v['scen_prior'], '.2f')}, scen {_f(v['scen_auprc_max'])}, RSI {_f(v['rsi_resid_rf'], '+.3f')}" for n, v in d.items()))
     return "\n".join(L) + "\n"
@@ -260,7 +301,7 @@ def md_tables(summary: dict) -> str:
 def main() -> int:
     apr = argparse.ArgumentParser()
     apr.add_argument("--tag", default="v2_benchmark")
-    apr.add_argument("--bootstrap", type=int, default=200)
+    apr.add_argument("--bootstrap", type=int, default=500)
     args = apr.parse_args()
     d = ACTIVE / "artifacts" / args.tag
     files = sorted(d.glob("records_seed*.parquet"))

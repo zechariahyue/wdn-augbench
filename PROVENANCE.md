@@ -10,18 +10,18 @@ _This record was generated in the working tree, where artifact mtimes are author
 
 | Result | Artifact | Boundary | mtime | sha256 (12) | Status |
 |---|---|:--:|---|---|:--:|
-| tab:row-auprc | `v2_benchmark/analysis/v2_summary.json` | AUG | 2026-10-04 02:01:02 | `b116be51bcaf` | ✅ CURRENT |
-| tab:deltas | `v2_benchmark/analysis/v2_summary.json` | AUG | 2026-10-04 02:01:02 | `b116be51bcaf` | ✅ CURRENT |
-| tab:scen-auprc | `v2_benchmark/analysis/v2_summary.json` | AUG | 2026-10-04 02:01:02 | `b116be51bcaf` | ✅ CURRENT |
-| tab:early-warning | `v2_benchmark/analysis/v2_summary.json` | SIM | 2026-10-04 02:01:02 | `b116be51bcaf` | ✅ CURRENT |
-| tab:slices | `v2_benchmark/analysis/v2_summary.json` | SIM | 2026-10-04 02:01:02 | `b116be51bcaf` | ✅ CURRENT |
-| tab:pooling | `v2_benchmark/analysis/v2_summary.json` | SIM | 2026-10-04 02:01:02 | `b116be51bcaf` | ✅ CURRENT |
-| tab:rsi | `v2_benchmark/analysis/v2_summary.json` | AUG | 2026-10-04 02:01:02 | `b116be51bcaf` | ✅ CURRENT |
-| tab:prior-sweep | `v2_benchmark/analysis/v2_summary.json` | SIM | 2026-10-04 02:01:02 | `b116be51bcaf` | ✅ CURRENT |
-| tab:seed-level | `v2_benchmark/analysis/v2_summary.json` | SIM | 2026-10-04 02:01:02 | `b116be51bcaf` | ✅ CURRENT |
-| tab:family | `v2_benchmark/analysis/v2_summary.json` | SIM | 2026-10-04 02:01:02 | `b116be51bcaf` | ✅ CURRENT |
-| fig:forest | `v2_benchmark/analysis/v2_summary.json` | AUG | 2026-10-04 02:01:02 | `b116be51bcaf` | ✅ CURRENT |
-| macros_v2 (prose numbers) | `v2_benchmark/analysis/v2_summary.json` | AUG | 2026-10-04 02:01:02 | `b116be51bcaf` | ✅ CURRENT |
+| tab:row-auprc | `v2_benchmark/analysis/v2_summary.json` | AUG | 2026-10-04 04:24:32 | `15e82d8f2284` | ✅ CURRENT |
+| tab:deltas | `v2_benchmark/analysis/v2_summary.json` | AUG | 2026-10-04 04:24:32 | `15e82d8f2284` | ✅ CURRENT |
+| tab:scen-auprc | `v2_benchmark/analysis/v2_summary.json` | AUG | 2026-10-04 04:24:32 | `15e82d8f2284` | ✅ CURRENT |
+| tab:early-warning | `v2_benchmark/analysis/v2_summary.json` | SIM | 2026-10-04 04:24:32 | `15e82d8f2284` | ✅ CURRENT |
+| tab:slices | `v2_benchmark/analysis/v2_summary.json` | SIM | 2026-10-04 04:24:32 | `15e82d8f2284` | ✅ CURRENT |
+| tab:pooling | `v2_benchmark/analysis/v2_summary.json` | SIM | 2026-10-04 04:24:32 | `15e82d8f2284` | ✅ CURRENT |
+| tab:rsi | `v2_benchmark/analysis/v2_summary.json` | AUG | 2026-10-04 04:24:32 | `15e82d8f2284` | ✅ CURRENT |
+| tab:prior-sweep | `v2_benchmark/analysis/v2_summary.json` | SIM | 2026-10-04 04:24:32 | `15e82d8f2284` | ✅ CURRENT |
+| tab:seed-level | `v2_benchmark/analysis/v2_summary.json` | SIM | 2026-10-04 04:24:32 | `15e82d8f2284` | ✅ CURRENT |
+| tab:family | `v2_benchmark/analysis/v2_summary.json` | SIM | 2026-10-04 04:24:32 | `15e82d8f2284` | ✅ CURRENT |
+| fig:forest | `v2_benchmark/analysis/v2_summary.json` | AUG | 2026-10-04 04:24:32 | `15e82d8f2284` | ✅ CURRENT |
+| macros_v2 (prose numbers) | `v2_benchmark/analysis/v2_summary.json` | AUG | 2026-10-04 04:24:32 | `15e82d8f2284` | ✅ CURRENT |
 | what-changed (S8.2) | `leak_area_ablation/ablation_summary.json` | SIM | 2026-10-02 04:32:49 | `66d2a6e1f483` | ✅ CURRENT |
 | tab:meta-audit | `_(not computed)_` | — | — | `—` | — N/A |
 | tab:networks | `_(not computed)_` | — | — | `—` | — N/A |

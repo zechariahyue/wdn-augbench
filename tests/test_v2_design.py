@@ -196,3 +196,32 @@ def test_plausibility_screen_is_fitted_on_real_positives_and_keeps_perturbed_pos
     assert len(kept_pos) > len(kept_all), "positive-fitted bounds must keep more perturbed positives than pooled bounds"
     assert len(kept_pos) / len(perturbed) > 0.9
     assert rce.PLAUSIBILITY_REFERENCE == "positive" and rce.DOSE_MATCH_AUGMENTERS is True
+
+
+# ---------------------------------------------------------------------------
+# 7. early-warning endpoint and RSI bootstrap (S37b, round-2 review W1 / W6)
+# ---------------------------------------------------------------------------
+
+def test_alarm_after_the_active_window_is_not_a_detection():
+    from analyze_v2 import detection_delay
+    yy = np.array([0, 0, 1, 1, 1, 0, 0, 0])          # active window = steps 2..4
+    t_h = np.arange(8, dtype=float)
+    late = np.array([0, 0, 0, 0, 0, 0, 9, 0], float)  # fires only after the window
+    d, hit = detection_delay(yy, late, t_h, thr=1.0)
+    assert hit is False and d == 2.0, "post-window alarm must be a miss, censored at the window end"
+    inside = np.array([0, 0, 0, 5, 0, 0, 9, 0], float)
+    d, hit = detection_delay(yy, inside, t_h, thr=1.0)
+    assert hit is True and d == 1.0
+
+
+def test_bootstrap_duplicate_scenario_yields_two_streams():
+    from analyze_v2 import REP_STREAM_KEY, replicate_concat, stream_table
+    def scen(sid, score):
+        return pd.DataFrame({"scenario_id": sid, "scenario_kind": "leak", "sensor_coverage": [0.25] * 3,
+                             "event_label": [0, 1, 1], "s": score})
+    parts = {"A": scen("A", [0.1, 0.9, 0.2]), "B": scen("B", [0.3, 0.4, 0.5])}
+    chosen = ["A", "A", "B"]                          # A drawn twice
+    g = replicate_concat([parts[c] for c in chosen])
+    st = stream_table(g, "s", REP_STREAM_KEY)
+    assert len(st) == 3 and (st.scenario_id == "A").sum() == 2, "a duplicated scenario must appear as two streams"
+    assert len(stream_table(g, "s")) == 2, "the un-tagged grouping collapses the duplicate (the v2.0 defect)"
