@@ -36,6 +36,43 @@ def wrap(cols: str, header: str, rows: list[str], size: str = r"\footnotesize", 
     return "\n".join([size, rf"\setlength{{\tabcolsep}}{{{sep}}}", env, r"\toprule", header + r" \\", r"\midrule", *[r + r" \\" for r in rows], r"\bottomrule", end, ""])
 
 
+def forest_plot(d: dict, nets: list[str]) -> None:
+    """Single manuscript figure: per-network paired delta vs rf_baseline for every arm, with the
+    8-network mean and its network-bootstrap 95% interval. Writes manuscript/figures/v2_forest_deltas.png."""
+    try:
+        import matplotlib
+        matplotlib.use("Agg")
+        import matplotlib.pyplot as plt
+    except ImportError:  # figure is optional; tables carry the result
+        print("matplotlib not available; skipping forest plot")
+        return
+    arms = [x for x in MAIN_ARMS if x in d]
+    # Okabe-Ito colour-blind-safe palette, one colour per network
+    pal = ["#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"]
+    fig, ax = plt.subplots(figsize=(6.5, 3.6))
+    for i, x in enumerate(arms):
+        y = len(arms) - 1 - i
+        for j, n in enumerate(nets):
+            ax.plot(d[x]["per_network"][n], y + 0.18, marker="o", ms=4, color=pal[j], ls="none",
+                    label=NET_LABEL[n] if i == 0 else None, alpha=0.9)
+        lo, hi = d[x]["network_bootstrap_95"]
+        ax.plot([lo, hi], [y - 0.18, y - 0.18], color="0.3", lw=1.2)
+        ax.plot(d[x]["delta_mean"], y - 0.18, marker="D", ms=5, color="0.1", ls="none")
+    ax.axvline(0, color="0.5", lw=0.8, ls="--")
+    ax.set_yticks(range(len(arms))); ax.set_yticklabels([ARM_LABEL[x] for x in reversed(arms)], fontsize=8)
+    ax.set_xlabel(r"$\Delta$ row AUPRC vs normalised RF baseline (seed mean per network)", fontsize=8)
+    ax.tick_params(axis="x", labelsize=8)
+    ax.legend(fontsize=7, ncol=8, loc="upper center", bbox_to_anchor=(0.5, -0.22), frameon=False,
+              handletextpad=0.2, columnspacing=0.9)
+    ax.set_ylim(-0.5, len(arms) - 0.5)
+    fig.tight_layout()
+    out = OUT.parent / "figures" / "v2_forest_deltas.png"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(out, dpi=300)
+    plt.close(fig)
+    print("wrote", out.name)
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(); ap.add_argument("--tag", default="v2_benchmark"); a = ap.parse_args()
     S = json.loads((ACTIVE / "artifacts" / a.tag / "analysis" / "v2_summary.json").read_text())
@@ -57,7 +94,15 @@ def main() -> int:
     rows = [f"{ARM_LABEL[x]} & ${f(v['delta_mean'], plus=True)}$ & {v['wins']}/{v['n']} & ${f(v['wilcoxon_p'])}$ & "
             f"$[{f(v['network_bootstrap_95'][0], plus=True)},\\,{f(v['network_bootstrap_95'][1], plus=True)}]$ & ${f(v['mde_between_network'])}$"
             for x, v in d.items() if x in ARM_LABEL]
-    (OUT / "tab_deltas.tex").write_text(wrap("lccccc", r"Arm & $\Delta$ row AUPRC & Wins & Wilcoxon $p$ & Network bootstrap 95\% & MDE", rows), encoding="utf-8")
+    # last column: 2.5 x the between-network standard error of the paired delta (JSON key
+    # mde_between_network) -- a descriptive scale for detectable effects, not a powered MDE
+    (OUT / "tab_deltas.tex").write_text(wrap("lccccc", r"Arm & $\Delta$ row AUPRC & Wins & Wilcoxon $p$ & Network bootstrap 95\% & $2.5\,\mathrm{SE}_\Delta$", rows), encoding="utf-8")
+
+    # S: family-level deltas vs rf_baseline: [Net3, D-Town, L-TOWN, mean of the five Kentucky networks]
+    rows = [f"{ARM_LABEL[x]} & " + " & ".join(f"${f(v, plus=True)}$" for v in d[x]["family_level_deltas"]) + f" & ${f(d[x]['delta_mean'], plus=True)}$"
+            for x in d if x in ARM_LABEL]
+    (OUT / "tab_family.tex").write_text(wrap("lccccc", r"Arm & Net3 & D-Town & L-TOWN & Kentucky (mean of 5) & All 8 (mean)", rows), encoding="utf-8")
+    forest_plot(d, nets)
 
     # T4: scenario AUPRC (max-pool) + prior, selected arms
     sel = [x for x in ("rf_baseline", "rf_raw_baseline", "rf_noise", "rf_gmm", "rf_smote", "lr_baseline", "gcn_baseline", "resid") if x in arms]
