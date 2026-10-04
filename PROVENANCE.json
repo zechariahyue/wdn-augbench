@@ -4,10 +4,10 @@
     "aug_fix": "2026-07-13T15:25:00"
   },
   "summary": {
-    "current": 11,
+    "current": 13,
     "stale": 0,
     "missing": 0,
-    "total": 13
+    "total": 15
   },
   "records": [
     {
@@ -27,7 +27,7 @@
     },
     {
       "label": "tab:deltas",
-      "description": "Paired deltas vs rf_baseline: wins, Wilcoxon, network bootstrap, MDE (main T3)",
+      "description": "Paired deltas vs rf_baseline: wins, Wilcoxon, network bootstrap, 2.5 SE_Delta (main T3)",
       "scripts": [
         "run_v2_benchmark.py",
         "analyze_v2.py",
@@ -143,6 +143,36 @@
       "mtime": "2026-10-04T02:01:02",
       "status": "CURRENT",
       "augmenter_dependent": false,
+      "note": ""
+    },
+    {
+      "label": "tab:family",
+      "description": "Family-level paired deltas vs rf_baseline: Net3, D-Town, L-TOWN, Kentucky mean (S6)",
+      "scripts": [
+        "run_v2_benchmark.py",
+        "analyze_v2.py",
+        "make_v2_tables.py"
+      ],
+      "artifact": "v2_benchmark/analysis/v2_summary.json",
+      "sha256": "b116be51bcaf5af1d3767253332a7f63834b6a17efac0c483a2287d89437a53e",
+      "mtime": "2026-10-04T02:01:02",
+      "status": "CURRENT",
+      "augmenter_dependent": false,
+      "note": ""
+    },
+    {
+      "label": "fig:forest",
+      "description": "Per-network paired deltas vs rf_baseline, forest plot (main Fig. 1)",
+      "scripts": [
+        "run_v2_benchmark.py",
+        "analyze_v2.py",
+        "make_v2_tables.py"
+      ],
+      "artifact": "v2_benchmark/analysis/v2_summary.json",
+      "sha256": "b116be51bcaf5af1d3767253332a7f63834b6a17efac0c483a2287d89437a53e",
+      "mtime": "2026-10-04T02:01:02",
+      "status": "CURRENT",
+      "augmenter_dependent": true,
       "note": ""
     },
     {
