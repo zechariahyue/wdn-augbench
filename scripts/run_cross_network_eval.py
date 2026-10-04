@@ -130,6 +130,11 @@ FEATURE_COLUMNS_RAW = [
 FEATURE_COLUMNS_V2 = [f"z__{c}" for c in FEATURE_COLUMNS_RAW if c != "sensor_coverage"] + ["sensor_coverage"]
 
 FEATURE_COLUMNS = list(FEATURE_COLUMNS_RAW)
+
+# v2 augmentation protocol (see _apply_augmenter): plausibility bounds learned from the
+# real positive rows, and every augmenter adds one synthetic positive per real positive.
+PLAUSIBILITY_REFERENCE = "positive"   # "positive" (v2) | "all" (v1)
+DOSE_MATCH_AUGMENTERS = True          # v1: SMOTE balanced classes 1:1 (11x the other arms at the v2 prior)
 for _lst in (FEATURE_COLUMNS_RAW, FEATURE_COLUMNS_V2, FEATURE_COLUMNS):
     assert_no_scenario_metadata(_lst)
 
@@ -282,7 +287,19 @@ def _apply_augmenter(
     if augmenter_name in (None, "baseline"):
         return train_df.copy()
 
-    plausibility_filter = QuantilePlausibilityFilter().fit(train_df, FEATURE_COLUMNS)
+    # v2: the screen asks whether a synthetic POSITIVE lies within the range of real
+    # positive (disturbed) states the simulator produced, so its bounds are fitted on the
+    # positive training rows. Fitting on all rows (v1) was harmless at a 41% positive
+    # rate, but at the v2 rare prior (~8% positive) the 1-99% bounds are set by normal
+    # operation, real disturbances sit in the tails, and the screen rejected 95-98% of
+    # noise/GMM samples for being disturbance-like (S36b, seed-42 diagnostic run).
+    _ref = train_df.loc[train_df["event_label"] == 1] if PLAUSIBILITY_REFERENCE == "positive" else train_df
+    if len(_ref) < 50:
+        _ref = train_df
+    plausibility_filter = QuantilePlausibilityFilter().fit(_ref, FEATURE_COLUMNS)
+    # v2: every augmenter adds the same number of synthetic positives (one per real
+    # positive), so arms differ in WHAT they synthesise, not in how much.
+    n_pos = int((train_df["event_label"] == 1).sum())
 
     if augmenter_name == "noise":
         augmenter = PositiveClassAugmenter(random_state=random_state, noise_scale=0.05)
@@ -321,6 +338,7 @@ def _apply_augmenter(
                 train_df,
                 feature_columns=FEATURE_COLUMNS,
                 target_column="event_label",
+                n_samples=n_pos if DOSE_MATCH_AUGMENTERS else None,
             )
         except Exception as exc:
             print(f"[warn] SMOTE augmenter failed ({exc}); falling back to noise", file=sys.stderr)

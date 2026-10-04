@@ -172,3 +172,27 @@ def test_causal_residual_score_ignores_the_future():
     perturbed = causal_residual_score(mass2, energy2, ref)
     assert np.allclose(base[:40], perturbed[:40]), "scores before t=40 must not change when the future changes"
     assert not np.allclose(base[40:], perturbed[40:])
+
+
+# ---------------------------------------------------------------------------
+# 6. plausibility screen under a rare prior
+# ---------------------------------------------------------------------------
+
+def test_plausibility_screen_is_fitted_on_real_positives_and_keeps_perturbed_positives():
+    """At an 8% positive rate, bounds fitted on ALL rows come from normal operation and
+    reject nearly every perturbed positive (seed-42 diagnostic: 95-98% rejected). Bounds
+    fitted on the real positives keep small perturbations of them."""
+    from watergen.models import QuantilePlausibilityFilter
+    rng = np.random.default_rng(0)
+    feats = [f"f{i}" for i in range(15)]
+    normal = pd.DataFrame({f: rng.normal(0, 1, 9200) for f in feats}); normal["event_label"] = 0
+    positive = pd.DataFrame({f: rng.normal(3, 1.5, 800) for f in feats}); positive["event_label"] = 1
+    train = pd.concat([normal, positive], ignore_index=True)
+    perturbed = positive.copy()
+    for f in feats:
+        perturbed[f] = positive[f] + rng.normal(0, 0.05 * positive[f].std(), len(positive))
+    kept_all = QuantilePlausibilityFilter().fit(train, feats).filter(perturbed, feats)
+    kept_pos = QuantilePlausibilityFilter().fit(positive, feats).filter(perturbed, feats)
+    assert len(kept_pos) > len(kept_all), "positive-fitted bounds must keep more perturbed positives than pooled bounds"
+    assert len(kept_pos) / len(perturbed) > 0.9
+    assert rce.PLAUSIBILITY_REFERENCE == "positive" and rce.DOSE_MATCH_AUGMENTERS is True
