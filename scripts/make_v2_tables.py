@@ -113,18 +113,44 @@ def main() -> int:
 
     # T3: deltas vs rf_baseline
     d = agg["deltas_vs_rf_baseline"]
-    rows = [f"{ARM_LABEL[x]} & ${f(v['delta_mean'], plus=True)}$ & {v['wins']}/{v['n']} & ${f(v['wilcoxon_p'])}$ & "
+    # Holm step-down adjustment over the tabulated arm-vs-baseline Wilcoxon tests
+    tested = [x for x in d if x in ARM_LABEL]
+    order = sorted(tested, key=lambda x: d[x]["wilcoxon_p"])
+    holm, run = {}, 0.0
+    for i, x in enumerate(order):
+        run = max(run, min(1.0, (len(order) - i) * d[x]["wilcoxon_p"]))
+        holm[x] = run
+    rows = [f"{ARM_LABEL[x]} & ${f(v['delta_mean'], plus=True)}$ & {v['wins']}/{v['n']} & ${f(v['wilcoxon_p'])}$ & ${f(holm[x])}$ & "
             f"$[{f(v['network_bootstrap_95'][0], plus=True)},\\,{f(v['network_bootstrap_95'][1], plus=True)}]$ & ${f(v['mde_between_network'])}$"
             for x, v in d.items() if x in ARM_LABEL]
     # last column: 2.5 x the between-network standard error of the paired delta (JSON key
     # mde_between_network) -- a descriptive scale for detectable effects, not a powered MDE
-    (OUT / "tab_deltas.tex").write_text(wrap("lccccc", r"Arm & $\Delta$ row AUPRC & Wins & Wilcoxon $p$ & Network bootstrap 95\% & $2.5\,\mathrm{SE}_\Delta$", rows), encoding="utf-8")
+    (OUT / "tab_deltas.tex").write_text(wrap("lcccccc", r"Arm & $\Delta$ row AUPRC & Wins & Wilcoxon $p$ & Holm $p$ & Network bootstrap 95\% & $2.5\,\mathrm{SE}_\Delta$", rows), encoding="utf-8")
 
     # S: family-level deltas vs rf_baseline: [Net3, D-Town, L-TOWN, mean of the five Kentucky networks]
     rows = [f"{ARM_LABEL[x]} & " + " & ".join(f"${f(v, plus=True)}$" for v in d[x]["family_level_deltas"]) + f" & ${f(d[x]['delta_mean'], plus=True)}$"
             for x in d if x in ARM_LABEL]
     (OUT / "tab_family.tex").write_text(wrap("lccccc", r"Arm & Net3 & D-Town & L-TOWN & Kentucky (mean of 5) & All 8 (mean)", rows), encoding="utf-8")
     forest_plot(d, nets)
+
+    # S: split-calibration check (run_v2_splitcal.py): full vs disjoint normal reference, same evaluation rows
+    sc_path = ACTIVE / "artifacts" / "v2_splitcal" / "splitcal_summary.json"
+    if sc_path.exists():
+        sc = json.loads(sc_path.read_text())
+        def m(n, k, key):
+            src = sc["per_network"][n] if n != "macro" else None
+            return src[k][key]["mean"] if src else sc["macro"][k][key]
+        rows = []
+        for n in sc["networks"] + ["macro"]:
+            lab = r"\midrule Macro (eq.)" if n == "macro" else NET_LABEL[n]
+            vals = [m(n, "rf_baseline__full", "row_prior"), m(n, "rf_raw_baseline__full", "row_auprc"),
+                    m(n, "rf_baseline__full", "row_auprc"), m(n, "rf_baseline__split", "row_auprc"),
+                    m(n, "rf_baseline__full", "scen_prior"), m(n, "rf_baseline__full", "scen_auprc_max"), m(n, "rf_baseline__split", "scen_auprc_max"),
+                    m(n, "rf_baseline__full", "first3h_leaks"), m(n, "rf_baseline__split", "first3h_leaks_refthr")]
+            rows.append(lab + " & " + " & ".join(f"${f(v)}$" for v in vals))
+        (OUT / "tab_splitcal.tex").write_text(wrap("lccccccccc",
+            r" & \multicolumn{4}{c}{Row AUPRC} & \multicolumn{3}{c}{Scenario AUPRC} & \multicolumn{2}{c}{Leaks in 3~h} \\ \cmidrule(lr){2-5}\cmidrule(lr){6-8}\cmidrule(lr){9-10} Network & Prior & RF raw & Full & Split & Prior & Full & Split & Full & Split", rows,
+            size=r"\scriptsize", sep="2pt"), encoding="utf-8")
 
     # T4: scenario AUPRC (max-pool) + prior, selected arms
     sel = [x for x in ("rf_baseline", "rf_raw_baseline", "rf_noise", "rf_gmm", "rf_smote", "lr_baseline", "gcn_baseline", "resid") if x in arms]

@@ -53,7 +53,7 @@ GCN 0.225; residual comparator 0.092.
 src/        Python package: simulation, feature extraction, per-network normalisation,
             detectors, augmenters, and the v1 models retained for the record.
 scripts/    Runnable experiment drivers. v2: run_v2_benchmark.py, analyze_v2.py,
-            make_v2_tables.py, run_leak_area_ablation.py, build_provenance.py (see the map below).
+            make_v2_tables.py, run_v2_splitcal.py, run_leak_area_ablation.py, build_provenance.py (see the map below).
 configs/    Benchmark manifest and experiment configuration files.
 artifacts/  v2_benchmark/analysis/v2_summary.json + v2_tables.md (every number the paper
             reports) and per-seed summaries; leak_area_ablation/ (the v1 leak diagnostic);
@@ -81,6 +81,7 @@ Three commands regenerate every table and macro in the manuscript (run from the 
 | 1. Simulate, normalise, fit every arm, score the 8 test networks (5 seeds; resumable) | `scripts/run_v2_benchmark.py` | `artifacts/v2_benchmark/records_seed{42..46}.parquet`, `summary_seed*.json` |
 | 2. Residual comparator, all metrics, paired tests, RSI bootstrap, prior sweep | `scripts/analyze_v2.py` | `artifacts/v2_benchmark/analysis/v2_summary.json`, `v2_tables.md` |
 | 3. LaTeX table bodies + prose macros `\input` by the manuscript | `scripts/make_v2_tables.py` | `manuscript/tables_v2/*.tex` |
+| 4. Split-calibration check (disjoint normal reference; Supplementary S7). Re-simulates the test networks, ~2–3 h with 3 workers; re-run any file whose canary fails serially | `scripts/run_v2_splitcal.py simulate` then `analyze` | `artifacts/v2_splitcal/splitcal_summary.json` |
 | Metadata-leak diagnostic on the withdrawn v1 (quoted only as superseded) | `scripts/run_leak_area_ablation.py` | `artifacts/leak_area_ablation/` |
 | Provenance table (script / artifact / sha256 / freshness per table) | `scripts/build_provenance.py` | `PROVENANCE.md`, `PROVENANCE.json` |
 

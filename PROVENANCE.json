@@ -4,10 +4,10 @@
     "aug_fix": "2026-07-13T15:25:00"
   },
   "summary": {
-    "current": 13,
+    "current": 14,
     "stale": 0,
     "missing": 0,
-    "total": 15
+    "total": 16
   },
   "records": [
     {
@@ -19,8 +19,8 @@
         "make_v2_tables.py"
       ],
       "artifact": "v2_benchmark/analysis/v2_summary.json",
-      "sha256": "b116be51bcaf5af1d3767253332a7f63834b6a17efac0c483a2287d89437a53e",
-      "mtime": "2026-10-04T02:01:02",
+      "sha256": "15e82d8f22843a9ed622a0aeff0b20c8d223a034f52cddba8fdc77e97d316e9b",
+      "mtime": "2026-10-04T04:24:32",
       "status": "CURRENT",
       "augmenter_dependent": true,
       "note": ""
@@ -34,8 +34,8 @@
         "make_v2_tables.py"
       ],
       "artifact": "v2_benchmark/analysis/v2_summary.json",
-      "sha256": "b116be51bcaf5af1d3767253332a7f63834b6a17efac0c483a2287d89437a53e",
-      "mtime": "2026-10-04T02:01:02",
+      "sha256": "15e82d8f22843a9ed622a0aeff0b20c8d223a034f52cddba8fdc77e97d316e9b",
+      "mtime": "2026-10-04T04:24:32",
       "status": "CURRENT",
       "augmenter_dependent": true,
       "note": ""
@@ -49,8 +49,8 @@
         "make_v2_tables.py"
       ],
       "artifact": "v2_benchmark/analysis/v2_summary.json",
-      "sha256": "b116be51bcaf5af1d3767253332a7f63834b6a17efac0c483a2287d89437a53e",
-      "mtime": "2026-10-04T02:01:02",
+      "sha256": "15e82d8f22843a9ed622a0aeff0b20c8d223a034f52cddba8fdc77e97d316e9b",
+      "mtime": "2026-10-04T04:24:32",
       "status": "CURRENT",
       "augmenter_dependent": true,
       "note": ""
@@ -64,8 +64,8 @@
         "make_v2_tables.py"
       ],
       "artifact": "v2_benchmark/analysis/v2_summary.json",
-      "sha256": "b116be51bcaf5af1d3767253332a7f63834b6a17efac0c483a2287d89437a53e",
-      "mtime": "2026-10-04T02:01:02",
+      "sha256": "15e82d8f22843a9ed622a0aeff0b20c8d223a034f52cddba8fdc77e97d316e9b",
+      "mtime": "2026-10-04T04:24:32",
       "status": "CURRENT",
       "augmenter_dependent": false,
       "note": "no augmenter arm; residual comparator built in analyze_v2.py from recorded residual proxies"
@@ -79,8 +79,8 @@
         "make_v2_tables.py"
       ],
       "artifact": "v2_benchmark/analysis/v2_summary.json",
-      "sha256": "b116be51bcaf5af1d3767253332a7f63834b6a17efac0c483a2287d89437a53e",
-      "mtime": "2026-10-04T02:01:02",
+      "sha256": "15e82d8f22843a9ed622a0aeff0b20c8d223a034f52cddba8fdc77e97d316e9b",
+      "mtime": "2026-10-04T04:24:32",
       "status": "CURRENT",
       "augmenter_dependent": false,
       "note": ""
@@ -94,8 +94,8 @@
         "make_v2_tables.py"
       ],
       "artifact": "v2_benchmark/analysis/v2_summary.json",
-      "sha256": "b116be51bcaf5af1d3767253332a7f63834b6a17efac0c483a2287d89437a53e",
-      "mtime": "2026-10-04T02:01:02",
+      "sha256": "15e82d8f22843a9ed622a0aeff0b20c8d223a034f52cddba8fdc77e97d316e9b",
+      "mtime": "2026-10-04T04:24:32",
       "status": "CURRENT",
       "augmenter_dependent": false,
       "note": ""
@@ -109,8 +109,8 @@
         "make_v2_tables.py"
       ],
       "artifact": "v2_benchmark/analysis/v2_summary.json",
-      "sha256": "b116be51bcaf5af1d3767253332a7f63834b6a17efac0c483a2287d89437a53e",
-      "mtime": "2026-10-04T02:01:02",
+      "sha256": "15e82d8f22843a9ed622a0aeff0b20c8d223a034f52cddba8fdc77e97d316e9b",
+      "mtime": "2026-10-04T04:24:32",
       "status": "CURRENT",
       "augmenter_dependent": true,
       "note": ""
@@ -124,8 +124,8 @@
         "make_v2_tables.py"
       ],
       "artifact": "v2_benchmark/analysis/v2_summary.json",
-      "sha256": "b116be51bcaf5af1d3767253332a7f63834b6a17efac0c483a2287d89437a53e",
-      "mtime": "2026-10-04T02:01:02",
+      "sha256": "15e82d8f22843a9ed622a0aeff0b20c8d223a034f52cddba8fdc77e97d316e9b",
+      "mtime": "2026-10-04T04:24:32",
       "status": "CURRENT",
       "augmenter_dependent": false,
       "note": ""
@@ -139,8 +139,8 @@
         "make_v2_tables.py"
       ],
       "artifact": "v2_benchmark/analysis/v2_summary.json",
-      "sha256": "b116be51bcaf5af1d3767253332a7f63834b6a17efac0c483a2287d89437a53e",
-      "mtime": "2026-10-04T02:01:02",
+      "sha256": "15e82d8f22843a9ed622a0aeff0b20c8d223a034f52cddba8fdc77e97d316e9b",
+      "mtime": "2026-10-04T04:24:32",
       "status": "CURRENT",
       "augmenter_dependent": false,
       "note": ""
@@ -154,8 +154,22 @@
         "make_v2_tables.py"
       ],
       "artifact": "v2_benchmark/analysis/v2_summary.json",
-      "sha256": "b116be51bcaf5af1d3767253332a7f63834b6a17efac0c483a2287d89437a53e",
-      "mtime": "2026-10-04T02:01:02",
+      "sha256": "15e82d8f22843a9ed622a0aeff0b20c8d223a034f52cddba8fdc77e97d316e9b",
+      "mtime": "2026-10-04T04:24:32",
+      "status": "CURRENT",
+      "augmenter_dependent": false,
+      "note": ""
+    },
+    {
+      "label": "tab:splitcal",
+      "description": "Split-calibration check: full vs disjoint normal reference, same evaluation rows (S7)",
+      "scripts": [
+        "run_v2_splitcal.py",
+        "make_v2_tables.py"
+      ],
+      "artifact": "v2_splitcal/splitcal_summary.json",
+      "sha256": "4535f7834daaff9e5a00af82956f7a0ebe7453b96fb92c4583f12ac9eb022f13",
+      "mtime": "2026-10-10T04:56:23",
       "status": "CURRENT",
       "augmenter_dependent": false,
       "note": ""
@@ -169,8 +183,8 @@
         "make_v2_tables.py"
       ],
       "artifact": "v2_benchmark/analysis/v2_summary.json",
-      "sha256": "b116be51bcaf5af1d3767253332a7f63834b6a17efac0c483a2287d89437a53e",
-      "mtime": "2026-10-04T02:01:02",
+      "sha256": "15e82d8f22843a9ed622a0aeff0b20c8d223a034f52cddba8fdc77e97d316e9b",
+      "mtime": "2026-10-04T04:24:32",
       "status": "CURRENT",
       "augmenter_dependent": true,
       "note": ""
@@ -184,8 +198,8 @@
         "make_v2_tables.py"
       ],
       "artifact": "v2_benchmark/analysis/v2_summary.json",
-      "sha256": "b116be51bcaf5af1d3767253332a7f63834b6a17efac0c483a2287d89437a53e",
-      "mtime": "2026-10-04T02:01:02",
+      "sha256": "15e82d8f22843a9ed622a0aeff0b20c8d223a034f52cddba8fdc77e97d316e9b",
+      "mtime": "2026-10-04T04:24:32",
       "status": "CURRENT",
       "augmenter_dependent": true,
       "note": ""
