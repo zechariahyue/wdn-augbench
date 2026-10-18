@@ -69,11 +69,12 @@ def forest_plot(d: dict, nets: list[str]) -> None:
     arms = [x for x in MAIN_ARMS if x in d]
     # Okabe-Ito colour-blind-safe palette, one colour per network
     pal = ["#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"]
+    mk = ["o", "s", "^", "v", "P", "X", "h", "*"]  # distinct shapes so networks read in greyscale
     fig, ax = plt.subplots(figsize=(6.5, 3.6))
     for i, x in enumerate(arms):
         y = len(arms) - 1 - i
         for j, n in enumerate(nets):
-            ax.plot(d[x]["per_network"][n], y + 0.18, marker="o", ms=4, color=pal[j], ls="none",
+            ax.plot(d[x]["per_network"][n], y + 0.18, marker=mk[j], ms=4, color=pal[j], mec="0.2", mew=0.3, ls="none",
                     label=NET_LABEL[n] if i == 0 else None, alpha=0.9)
         lo, hi = d[x]["network_bootstrap_95"]
         ax.plot([lo, hi], [y - 0.18, y - 0.18], color="0.3", lw=1.2)
