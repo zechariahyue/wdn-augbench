@@ -106,10 +106,10 @@ def main() -> int:
     rows = []
     for n in nets:
         vals = [pn[n][x]["row_auprc"][0] if x in pn[n] else float("nan") for x in arms]
-        cells = [pm(pn[n][x]["row_auprc"], bold=(v == best(vals))) if x in pn[n] else "---" for x, v in zip(arms, vals)]
+        cells = [pm(pn[n][x]["row_auprc"], bold=(round(v, 3) == round(best(vals), 3))) if x in pn[n] else "---" for x, v in zip(arms, vals)]
         rows.append(f"{NET_LABEL[n]} & ${f(pn[n]['rf_baseline']['row_prior'][0])}$ & " + " & ".join(cells))
     vals = [macro[x]["row_auprc"] for x in arms]
-    rows.append(r"\midrule Macro (eq.) & $" + f(macro["rf_baseline"]["row_prior"]) + "$ & " + " & ".join(cell(v, bold=(v == best(vals))) for v in vals))
+    rows.append(r"\midrule Macro (eq.) & $" + f(macro["rf_baseline"]["row_prior"]) + "$ & " + " & ".join(cell(v, bold=(round(v, 3) == round(best(vals), 3))) for v in vals))
     (OUT / "tab_row_auprc.tex").write_text(wrap("l" + "c" * (len(arms) + 1), hdr, rows, size=r"\scriptsize", sep="1.5pt"), encoding="utf-8")
 
     # T3: deltas vs rf_baseline
@@ -147,7 +147,7 @@ def main() -> int:
             vals = [m(n, "rf_baseline__full", "row_prior"), m(n, "rf_raw_baseline__full", "row_auprc"),
                     m(n, "rf_baseline__full", "row_auprc"), m(n, "rf_baseline__split", "row_auprc"),
                     m(n, "rf_baseline__full", "scen_prior"), m(n, "rf_baseline__full", "scen_auprc_max"), m(n, "rf_baseline__split", "scen_auprc_max"),
-                    m(n, "rf_baseline__full", "first3h_leaks"), m(n, "rf_baseline__split", "first3h_leaks_refthr")]
+                    m(n, "rf_baseline__full", "first3h_leaks_refthr"), m(n, "rf_baseline__split", "first3h_leaks_refthr")]
             rows.append(lab + " & " + " & ".join(f"${f(v)}$" for v in vals))
         (OUT / "tab_splitcal.tex").write_text(wrap("lccccccccc",
             r" & \multicolumn{4}{c}{Row AUPRC} & \multicolumn{3}{c}{Scenario AUPRC} & \multicolumn{2}{c}{Leaks in 3~h} \\ \cmidrule(lr){2-5}\cmidrule(lr){6-8}\cmidrule(lr){9-10} Network & Prior & RF raw & Full & Split & Prior & Full & Split & Full & Split", rows,
@@ -159,9 +159,9 @@ def main() -> int:
     for n in nets:
         vals = [pn[n][x]["scen_auprc_max"][0] if x in pn[n] else float("nan") for x in sel]
         rows.append(f"{NET_LABEL[n]} & ${f(pn[n]['rf_baseline']['scen_prior'][0])}$ & "
-                    + " & ".join(pm(pn[n][x]["scen_auprc_max"], bold=(v == best(vals))) if x in pn[n] else "---" for x, v in zip(sel, vals)))
+                    + " & ".join(pm(pn[n][x]["scen_auprc_max"], bold=(round(v, 3) == round(best(vals), 3))) if x in pn[n] else "---" for x, v in zip(sel, vals)))
     vals = [macro[x]["scen_auprc_max"] for x in sel]
-    rows.append(r"\midrule Macro (eq.) & $" + f(macro["rf_baseline"]["scen_prior"]) + "$ & " + " & ".join(cell(v, bold=(v == best(vals))) for v in vals))
+    rows.append(r"\midrule Macro (eq.) & $" + f(macro["rf_baseline"]["scen_prior"]) + "$ & " + " & ".join(cell(v, bold=(round(v, 3) == round(best(vals), 3))) for v in vals))
     (OUT / "tab_scen_auprc.tex").write_text(wrap("l" + "c" * (len(sel) + 1), "Network & Prior & " + " & ".join(ARM_SHORT[x] for x in sel), rows, size=r"\scriptsize", sep="1.5pt"), encoding="utf-8")
 
     # T5: early warning rf_baseline vs resid

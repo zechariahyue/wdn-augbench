@@ -7,6 +7,8 @@ from math import ceil
 from pathlib import Path
 from typing import Any, Iterable
 
+import functools
+
 import numpy as np
 import zlib
 import pandas as pd
@@ -127,20 +129,51 @@ def _sample_leak_window(duration: int, report_step: int, rng: np.random.Generato
     return start_time, end_time
 
 
+CLOSURE_PRESSURE_FACTOR = 3.0  # closure screen: max |p| <= factor * normal max |p| (>= 100 m)
+
+
+@functools.lru_cache(maxsize=None)
+def _max_abs_pressure(inp_path: str, closed_link: str | None = None) -> float:
+    wn = wntr.network.WaterNetworkModel(inp_path)
+    _ensure_eps_simulation(wn)
+    if closed_link is not None:
+        wn.get_link(closed_link).initial_status = wntr.network.base.LinkStatus.Closed
+        _remove_link_controls(wn, closed_link)
+    p = wntr.sim.EpanetSimulator(wn).run_sim().node["pressure"][wn.junction_name_list]
+    return float(np.nanmax(np.abs(p.to_numpy())))
+
+
+def _closure_is_solvable(wn: wntr.network.WaterNetworkModel, link_name: str) -> bool:
+    """True if closing the link leaves pressures within a physical range.
+
+    A closure that cuts nodes off from every source, or leaves demand-driven
+    nodes unservable, makes EPANET report |p| of 1e3-1e8 m; such a scenario
+    tests a solver artefact, not detection, so it is not used as a candidate.
+    """
+    bound = max(CLOSURE_PRESSURE_FACTOR * _max_abs_pressure(wn.name), 100.0)
+    return _max_abs_pressure(wn.name, link_name) <= bound
+
+
 def choose_pipe_candidates(wn: wntr.network.WaterNetworkModel, *, max_candidates: int = 3) -> list[str]:
-    """Choose deterministic pipe candidates with the largest diameters."""
+    """Largest-diameter pipes whose closure passes :func:`_closure_is_solvable`."""
     scored = []
     for name in wn.pipe_name_list:
         link = wn.get_link(name)
         diameter = float(getattr(link, "diameter", 0.0) or 0.0)
         scored.append((name, diameter))
     ranked = sorted(scored, key=lambda item: (-item[1], item[0]))
-    return [name for name, _ in ranked[:max_candidates]]
+    chosen = []
+    for name, _ in ranked:
+        if len(chosen) == max_candidates:
+            break
+        if _closure_is_solvable(wn, name):
+            chosen.append(name)
+    return chosen
 
 
 def choose_pump_candidates(wn: wntr.network.WaterNetworkModel, *, max_candidates: int = 3) -> list[str]:
-    """Choose deterministic pump candidates (up to all pumps in network)."""
-    return list(sorted(wn.pump_name_list))[:max_candidates]
+    """Pumps in name order whose outage passes :func:`_closure_is_solvable`."""
+    return [n for n in sorted(wn.pump_name_list) if _closure_is_solvable(wn, n)][:max_candidates]
 
 
 def build_leak_scenarios(
@@ -659,6 +692,40 @@ def _ensure_eps_simulation(wn: "wntr.network.WaterNetworkModel") -> None:
         wn.options.time.hydraulic_timestep = 3600
 
 
+def _remove_link_controls(wn: "wntr.network.WaterNetworkModel", link_name: str) -> None:
+    """Remove every control or rule with an action targeting ``link_name``."""
+    for name, ctrl in list(wn.controls()):
+        if any(getattr(a.target()[0], "name", None) == link_name for a in ctrl.actions()):
+            wn.remove_control(name)
+
+
+LEAK_DISCHARGE_COEFF = 0.75  # WNTR's Junction.add_leak default
+
+
+def _add_emitter_leak(wn: "wntr.network.WaterNetworkModel", spec: LeakScenarioSpec) -> tuple[str, str]:
+    """EPANET-solvable leak: an emitter on a dummy junction behind a timed pipe.
+
+    ``EpanetSimulator`` ignores ``Junction.add_leak``.  The emitter reproduces
+    WNTR's orifice law q = Cd * A * sqrt(2 g p) (emitter exponent 0.5) and the
+    connecting pipe is open on [start_time, end_time], matching the labels.
+    Returns the dummy (node, link) names so callers can drop them from outputs.
+    """
+    from wntr.network.controls import Control
+
+    host = wn.get_node(spec.leak_node)
+    node, link = f"__leak_{spec.leak_node}", f"__leakpipe_{spec.leak_node}"
+    wn.add_junction(node, base_demand=0.0, elevation=host.elevation, coordinates=host.coordinates)
+    wn.get_node(node).emitter_coefficient = LEAK_DISCHARGE_COEFF * float(spec.leak_area) * (2 * 9.81) ** 0.5
+    wn.add_pipe(link, spec.leak_node, node, length=1.0, diameter=1.0, roughness=150.0,
+                minor_loss=0.0, initial_status="CLOSED")
+    pipe = wn.get_link(link)
+    # closed just after end_time so the leak is still on at the last labelled step
+    for t, status in ((spec.start_time, "OPEN"), (spec.end_time + 1, "CLOSED")):
+        act = wntr.network.controls.ControlAction(pipe, "status", wntr.network.base.LinkStatus[status.title()])
+        wn.add_control(f"{link}_{status.lower()}", Control._time_control(wn, int(t), "SIM_TIME", False, act))
+    return node, link
+
+
 def simulate_scenario(
     spec: LeakScenarioSpec,
     *,
@@ -723,16 +790,14 @@ def simulate_scenario(
         add_demand_noise(wn, noise_fraction=demand_noise_fraction)
 
     if spec.kind == "leak" and spec.leak_node and spec.leak_area:
-        junction = wn.get_node(spec.leak_node)
-        junction.add_leak(
-            wn,
-            area=spec.leak_area,
-            start_time=spec.start_time,
-            end_time=spec.end_time,
-        )
+        _add_emitter_leak(wn, spec)
     elif spec.kind in {"pipe_closure", "pump_outage"} and spec.disturbance_target:
         link = wn.get_link(spec.disturbance_target)
         link.initial_status = wntr.network.base.LinkStatus.Closed
+        # INP controls/rules on the link (pump schedules, level switches) would
+        # reopen it at their first firing, so a closed-at-t=0 outage could be a
+        # no-op for the whole run; drop every control that acts on the link.
+        _remove_link_controls(wn, link.name)
 
     elif spec.kind == "demand_surge" and spec.disturbance_target:
         # Apply 5x demand multiplier at the target node during the disturbance window
@@ -754,55 +819,17 @@ def simulate_scenario(
         except Exception:
             pass
 
-    import sys as _sys
+    # One solver for every scenario.  WNTRSimulator fails on variable-speed pumps
+    # (D-Town) and silently truncates the Kentucky horizons, and a per-scenario
+    # fallback mixed solvers within a network; EpanetSimulator in turn ignores
+    # Junction.add_leak, hence the emitter leak above (same orifice law).
+    results = wntr.sim.EpanetSimulator(wn).run_sim()
 
-    requested_duration = effective_duration_seconds(wn)
-    report_step = effective_report_step_seconds(wn)
-
-    def _reached_horizon(res) -> bool:
-        try:
-            index = res.node["pressure"].index
-        except Exception:
-            return False
-        return len(index) > 0 and int(index[-1]) >= requested_duration - report_step
-
-    results = None
-    try:
-        results = wntr.sim.WNTRSimulator(wn).run_sim()
-    except Exception as exc:
-        err_msg = str(exc).lower()
-        if "pump speed" not in err_msg and "pump speeds" not in err_msg:
-            raise
-        # Networks with variable-speed pumps are not supported by WNTRSimulator.
-        print(
-            f"[info] WNTRSimulator failed (pump speed), retrying with EpanetSimulator: {exc}",
-            file=_sys.stderr,
-        )
-
-    # WNTRSimulator can also halt early *without raising*, silently returning a
-    # truncated horizon (the Kentucky networks stop at ~9 h of a 24 h run). A
-    # truncated horizon drops the disturbance window, which labels every leak row
-    # negative rather than failing loudly, so treat a short result as a failure
-    # and re-solve with EPANET. This does not fire for net3/d_town/l_town, which
-    # reach their full horizon under WNTRSimulator.
-    if results is None or not _reached_horizon(results):
-        if results is not None:
-            index = results.node["pressure"].index
-            last = f"{int(index[-1])}s" if len(index) else "no timesteps"
-            print(
-                f"[info] WNTRSimulator returned a truncated horizon "
-                f"({last} of {requested_duration}s); re-solving with EpanetSimulator",
-                file=_sys.stderr,
-            )
-        results = wntr.sim.EpanetSimulator(wn).run_sim()
-
-    junctions = wn.junction_name_list
+    # dummy leak node/pipe (EPANET path) are not sensors: keep original names only
+    junctions = [j for j in wn.junction_name_list if not j.startswith("__leak")]
     pressure_df = results.node["pressure"][junctions]
     demand_df = results.node["demand"][junctions]
-    leak_df = results.node.get("leak_demand")
-    if leak_df is not None:
-        leak_df = leak_df[junctions]
-    flow_df = results.link["flowrate"]
+    flow_df = results.link["flowrate"][[c for c in results.link["flowrate"].columns if not c.startswith("__leak")]]
     tank_names = wn.tank_name_list
     head_df = results.node["head"][tank_names] if tank_names else None
 

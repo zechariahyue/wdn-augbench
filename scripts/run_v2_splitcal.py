@@ -167,9 +167,11 @@ def analyze(args) -> int:
                     sc = f"score__{arm}"
                     fold[f"{arm}__full"] = _metrics(full[ev], sc)
                     fold[f"{arm}__split"] = _metrics(split[ev], sc)
-                    # alarm threshold from the reference half only, applied to the evaluation half
-                    thr = _threshold(split[ref_rows], sc)
-                    fold[f"{arm}__split"].update({f"{k}_refthr": v for k, v in _ttd(split[ev], sc, thr).items()})
+                    # alarm threshold from the reference half only, applied to the evaluation half,
+                    # for BOTH arms so the first-3h comparison differs only in the normalisation reference
+                    for tag, fr in (("split", split), ("full", full)):
+                        thr = _threshold(fr[ref_rows], sc)
+                        fold[f"{arm}__{tag}"].update({f"{k}_refthr": v for k, v in _ttd(fr[ev], sc, thr).items()})
                 folds.append(fold)
             per[f"{seed}/{nid}"] = {k: {m: float(np.nanmean([f[k][m] for f in folds])) for m in folds[0][k]} for k in folds[0]}
             r = per[f"{seed}/{nid}"]

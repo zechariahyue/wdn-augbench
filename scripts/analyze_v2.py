@@ -118,6 +118,18 @@ def metrics_for(g: pd.DataFrame, score: str, normal_ids: set | None = None) -> d
             out[f"slice_{kind}_auprc"] = ap(gk.event_label, gk[score])
             out[f"slice_{kind}_prior"] = float(gk.event_label.mean())
             out[f"n_pos_scen_{kind}"] = int(g[g.scenario_kind == kind].scenario_id.nunique())
+    # leak-only scenario ranking (leak streams vs normal streams), full-record max and
+    # onset-aware max (leak streams scored only over their active window)
+    sl = st[st.kind.isin(["leak", "baseline"])]
+    if (sl.kind == "leak").any():
+        out["scen_leak_auprc_max"] = ap(sl.ypos, sl.smax)
+        out["scen_leak_prior"] = float(sl.ypos.mean())
+        act = g[(g.scenario_kind == "leak") & (g.event_label == 1)].groupby(STREAM_KEY, sort=False)[score].max()
+        on = sl.set_index(STREAM_KEY).smax.copy()
+        on.loc[act.index] = act
+        out["scen_leak_auprc_onset"] = ap(sl.ypos, on.loc[pd.MultiIndex.from_frame(sl[STREAM_KEY])].to_numpy())
+    # max-pool ceiling: share of streams tied with the largest stream maximum
+    out["smax_top_tie_frac"] = float((st.smax >= st.smax.max()).mean())
     # WSTL on leak scenarios (the only kind with an onset inside the horizon)
     w, chance = [], []
     for _, gg in g[g.scenario_kind == "leak"].groupby(["scenario_id", "sensor_coverage"], sort=False):
@@ -152,6 +164,11 @@ def metrics_for(g: pd.DataFrame, score: str, normal_ids: set | None = None) -> d
         out["detected_in_window_leaks"] = float(np.mean(inwin)) if inwin else float("nan")
         out["n_leak_streams"] = int(len(delays))
         out["false_alarm_rate_normals"] = float(np.mean([(x >= thr[cov]).sum() for cov, arrs in normals.items() for x in arrs]))
+        # distinct false-alarm episodes (runs of consecutive exceedances) per day of normal stream
+        steps_per_day = 86400.0 / float(np.median(np.diff(np.sort(g.time_seconds.unique()))))
+        ep = [int(np.sum(np.diff(np.r_[0, (x >= thr[cov]).astype(int)]) == 1)) for cov, arrs in normals.items() for x in arrs]
+        days = [len(x) / steps_per_day for arrs in normals.values() for x in arrs]
+        out["fa_episodes_per_day"] = float(np.sum(ep) / np.sum(days))
     return out
 
 
@@ -182,7 +199,8 @@ def aggregate(per: dict, nets: list[str], arms: list[str], seeds: list[int]) -> 
                                                 float(np.nanstd([v.get(k, np.nan) for v in vals]))) for k in keys}
     for arm in arms:
         res["macro_eqwt"][arm] = {k: float(np.nanmean([res["per_network"][n][arm][k][0] for n in nets if arm in res["per_network"][n]]))
-                                  for k in ("row_auprc", "scen_auprc_max", "scen_auprc_mean", "wstl_auprc", "first3h_leaks", "detected_in_window_leaks", "row_prior", "scen_prior")}
+                                  for k in ("row_auprc", "scen_auprc_max", "scen_auprc_mean", "wstl_auprc", "first3h_leaks", "detected_in_window_leaks", "row_prior", "scen_prior",
+                                            "scen_leak_auprc_max", "scen_leak_auprc_onset", "scen_leak_prior", "smax_top_tie_frac", "fa_episodes_per_day")}
     base = np.array([res["per_network"][n]["rf_baseline"]["row_auprc"][0] for n in nets])
     prior = np.array([res["per_network"][n]["rf_baseline"]["row_prior"][0] for n in nets])
     res["baseline_vs_prior"] = {"lift_mean": float((base - prior).mean()), "wilcoxon_p": float(wilcoxon(base, prior).pvalue) if len(nets) >= 6 else None,

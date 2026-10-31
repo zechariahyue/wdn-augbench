@@ -268,3 +268,84 @@ def test_knn_graph_never_builds_the_dense_distance_matrix():
 
     # O(N*k) symmetric edges, not O(N^2).
     assert ei.shape == (2, n * 10 * 2)
+
+
+# ---------------------------------------------------------------------------
+# Defect 6: disturbances that never happened.  (a) wntr's EpanetSimulator
+# silently ignores Junction.add_leak, and the simulator fell back to EPANET on
+# every D-Town (variable-speed pumps) and Kentucky ky3/ky5 (truncated horizon)
+# scenario: leak rows were labelled positive but hydraulically normal.  (b) A
+# pump "outage" set initial_status=Closed but left the INP controls in place, so
+# the first scheduled switch turned the pump back on.  Both ran without error.
+# ---------------------------------------------------------------------------
+
+def _tiny_network(tmp_path):
+    import wntr
+    from wntr.network.controls import Control, ControlAction
+    wn = wntr.network.WaterNetworkModel()
+    wn.add_pattern("pat", [1.0, 1.2, 0.8, 1.0])
+    wn.add_reservoir("R", base_head=10.0)
+    wn.add_junction("J0", base_demand=0.0, elevation=0.0)
+    for i in range(1, 5):
+        wn.add_junction(f"J{i}", base_demand=0.002, demand_pattern="pat", elevation=0.0)
+    wn.add_tank("T", elevation=30.0, init_level=5.0, min_level=0.0, max_level=10.0, diameter=10.0)
+    wn.add_curve("pc", "HEAD", [(0.02, 40.0)])
+    wn.add_pump("PU", "R", "J0", pump_type="HEAD", pump_parameter="pc")
+    for i, (a, b) in enumerate([("J0", "J1"), ("J1", "J2"), ("J2", "J3"), ("J3", "J4"), ("J4", "T"), ("J1", "J3")]):
+        wn.add_pipe(f"P{i}", a, b, length=200.0, diameter=0.2, roughness=100.0)
+    act = ControlAction(wn.get_link("PU"), "status", wntr.network.base.LinkStatus.Open)
+    wn.add_control("pump_on", Control._time_control(wn, 3600, "SIM_TIME", False, act))
+    wn.options.time.duration = 12 * 3600
+    wn.options.time.hydraulic_timestep = 3600
+    wn.options.time.report_timestep = 3600
+    path = tmp_path / "tiny.inp"
+    wntr.network.write_inpfile(wn, str(path))
+    return str(path)
+
+
+def _spec(path, **kw):
+    from watergen.data.simulation import LeakScenarioSpec
+    return LeakScenarioSpec(scenario_id="s", benchmark_id="tiny", benchmark_path=path,
+                            split="test", stage="t", **kw)
+
+
+def _pressures(spec):
+    from watergen.data.simulation import simulate_scenario
+    f = simulate_scenario(spec, sensor_coverage_levels=[1.0], return_raw=True)
+    return f.set_index("time_seconds")[[c for c in f.columns if c.startswith("pressure__")]]
+
+
+def test_leak_changes_pressure_only_inside_its_window(tmp_path):
+    path = _tiny_network(tmp_path)
+    leak = _spec(path, kind="leak", leak_node="J3", leak_area=0.005, start_time=4 * 3600, end_time=8 * 3600)
+    d = (_pressures(leak) - _pressures(_spec(path, kind="baseline"))).abs().max(axis=1)
+    assert (d.loc[4 * 3600:8 * 3600] > 0.01).all(), "leak had no hydraulic effect in its window"
+    assert (d.loc[:3 * 3600] < 1e-3).all(), "leak changed pressures before onset"  # solver tolerance only
+
+
+def test_leak_dummy_node_is_not_a_sensor(tmp_path):
+    path = _tiny_network(tmp_path)
+    p = _pressures(_spec(path, kind="leak", leak_node="J3", leak_area=0.005, start_time=3600, end_time=7200))
+    assert not any("__leak" in c for c in p.columns)
+
+
+def test_pump_outage_is_not_undone_by_inp_controls(tmp_path):
+    path = _tiny_network(tmp_path)
+    d = (_pressures(_spec(path, kind="pump_outage", disturbance_target="PU"))
+         - _pressures(_spec(path, kind="baseline"))).abs().max(axis=1)
+    assert (d.loc[2 * 3600:] > 0.01).all(), "pump came back on: outage was a no-op"
+
+
+def test_emitter_leak_matches_wntr_leak_flow(tmp_path):
+    import wntr
+    from watergen.data.simulation import _add_emitter_leak
+    path = _tiny_network(tmp_path)
+    spec = _spec(path, kind="leak", leak_node="J3", leak_area=0.002, start_time=4 * 3600, end_time=8 * 3600)
+    wn = wntr.network.WaterNetworkModel(path)
+    wn.get_node("J3").add_leak(wn, area=0.002, start_time=spec.start_time, end_time=spec.end_time)
+    q_wntr = wntr.sim.WNTRSimulator(wn).run_sim().node["leak_demand"]["J3"].loc[5 * 3600:7 * 3600]
+    wn2 = wntr.network.WaterNetworkModel(path)
+    _add_emitter_leak(wn2, spec)
+    q_epa = wntr.sim.EpanetSimulator(wn2).run_sim().node["demand"]["__leak_J3"].loc[5 * 3600:7 * 3600]
+    assert q_wntr.min() > 0
+    np.testing.assert_allclose(q_epa.to_numpy(), q_wntr.to_numpy(), rtol=0.02)
