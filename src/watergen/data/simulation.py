@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Any, Iterable
 
 import functools
+import tempfile
 
 import numpy as np
 import zlib
@@ -139,7 +140,8 @@ def _max_abs_pressure(inp_path: str, closed_link: str | None = None) -> float:
     if closed_link is not None:
         wn.get_link(closed_link).initial_status = wntr.network.base.LinkStatus.Closed
         _remove_link_controls(wn, closed_link)
-    p = wntr.sim.EpanetSimulator(wn).run_sim().node["pressure"][wn.junction_name_list]
+    with tempfile.TemporaryDirectory() as td:
+        p = wntr.sim.EpanetSimulator(wn).run_sim(file_prefix=str(Path(td) / "wn")).node["pressure"][wn.junction_name_list]
     return float(np.nanmax(np.abs(p.to_numpy())))
 
 
@@ -823,7 +825,19 @@ def simulate_scenario(
     # (D-Town) and silently truncates the Kentucky horizons, and a per-scenario
     # fallback mixed solvers within a network; EpanetSimulator in turn ignores
     # Junction.add_leak, hence the emitter leak above (same orifice law).
-    results = wntr.sim.EpanetSimulator(wn).run_sim()
+    # private temp dir: EPANET's default "temp.inp/.rpt/.bin" in the cwd collide
+    # when scenarios are simulated in parallel worker processes
+    # EPANET can return a silently truncated horizon (seen under parallel load);
+    # a short run would drop rows and mislabel nothing loudly, so retry once, then fail.
+    horizon = effective_duration_seconds(wn) - effective_report_step_seconds(wn)
+    for attempt in range(2):
+        with tempfile.TemporaryDirectory() as td:
+            results = wntr.sim.EpanetSimulator(wn).run_sim(file_prefix=str(Path(td) / "wn"))
+        idx = results.node["pressure"].index
+        if len(idx) and int(idx[-1]) >= horizon:
+            break
+    else:
+        raise RuntimeError(f"{spec.scenario_id}: EPANET stopped at {int(idx[-1]) if len(idx) else 0}s of {horizon}s")
 
     # dummy leak node/pipe (EPANET path) are not sensors: keep original names only
     junctions = [j for j in wn.junction_name_list if not j.startswith("__leak")]

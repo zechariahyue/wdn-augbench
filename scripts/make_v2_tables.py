@@ -162,7 +162,7 @@ def main() -> int:
                     + " & ".join(pm(pn[n][x]["scen_auprc_max"], bold=(round(v, 3) == round(best(vals), 3))) if x in pn[n] else "---" for x, v in zip(sel, vals)))
     vals = [macro[x]["scen_auprc_max"] for x in sel]
     rows.append(r"\midrule Macro (eq.) & $" + f(macro["rf_baseline"]["scen_prior"]) + "$ & " + " & ".join(cell(v, bold=(round(v, 3) == round(best(vals), 3))) for v in vals))
-    (OUT / "tab_scen_auprc.tex").write_text(wrap("l" + "c" * (len(sel) + 1), "Network & Prior & " + " & ".join(ARM_SHORT[x] for x in sel), rows, size=r"\scriptsize", sep="1.5pt"), encoding="utf-8")
+    (OUT / "tab_scen_auprc.tex").write_text(wrap("l" + "c" * (len(sel) + 1), "Network & Prior & " + " & ".join(ARM_SHORT[x] for x in sel), rows, size=r"\scriptsize", sep="1pt"), encoding="utf-8")
 
     # T5: early warning rf_baseline vs resid
     rows = []
@@ -179,9 +179,21 @@ def main() -> int:
     for n in nets:
         r, s = pn[n]["rf_baseline"], pn[n]["resid"]
         for k in ("leak", "pipe_closure", "pump_outage"):
-            if f"slice_{k}_auprc" in r:
+            if f"slice_{k}_auprc" in r and r[f"n_pos_scen_{k}"][0] == r[f"n_pos_scen_{k}"][0]:  # NaN = kind absent
                 rows.append(f"{NET_LABEL[n]} & {KIND[k]} & {int(round(r[f'n_pos_scen_{k}'][0]))} & ${f(r[f'slice_{k}_prior'][0])}$ & {pm(r[f'slice_{k}_auprc'])} & {pm(s[f'slice_{k}_auprc'])}")
     (OUT / "tab_slices.tex").write_text(wrap("llcccc", r"Network & Disturbance & $n$ scen. & Prior & RF, no aug. & Resid.", rows), encoding="utf-8")
+
+    # S: leak-only scenario ranking (leak streams vs normal streams), full record and onset-aware,
+    # with the max-pool top-tie share and false-alarm episodes per normal-stream day
+    rows = []
+    for n in nets:
+        r, s = pn[n]["rf_baseline"], pn[n]["resid"]
+        rows.append(f"{NET_LABEL[n]} & ${f(r['scen_leak_prior'][0])}$ & ${f(r['scen_leak_auprc_max'][0])}$ & ${f(r['scen_leak_auprc_onset'][0])}$ & "
+                    f"${f(s['scen_leak_auprc_max'][0])}$ & ${f(s['scen_leak_auprc_onset'][0])}$ & ${f(r['smax_top_tie_frac'][0])}$ & "
+                    f"${f(r['fa_episodes_per_day'][0], 2)}$ & ${f(s['fa_episodes_per_day'][0], 2)}$")
+    (OUT / "tab_leakscen.tex").write_text(wrap("lcccccccc",
+        r" & & \multicolumn{2}{c}{RF, no aug.} & \multicolumn{2}{c}{Resid.} & & \multicolumn{2}{c}{FA episodes / day} \\ \cmidrule(lr){3-4}\cmidrule(lr){5-6}\cmidrule(lr){8-9} "
+        r"Network & Prior & Record & Onset & Record & Onset & RF top tie & RF & Resid.", rows, size=r"ootnotesize", sep="3pt"), encoding="utf-8")
 
     # S: max-pool vs mean-pool (rf_baseline, resid)
     rows = [f"{NET_LABEL[n]} & {pm(pn[n]['rf_baseline']['scen_auprc_max'])} & {pm(pn[n]['rf_baseline']['scen_auprc_mean'])} & "

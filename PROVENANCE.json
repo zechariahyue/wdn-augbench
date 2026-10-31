@@ -4,10 +4,10 @@
     "aug_fix": "2026-07-13T15:25:00"
   },
   "summary": {
-    "current": 14,
+    "current": 15,
     "stale": 0,
     "missing": 0,
-    "total": 16
+    "total": 17
   },
   "records": [
     {
@@ -19,8 +19,8 @@
         "make_v2_tables.py"
       ],
       "artifact": "v2_benchmark/analysis/v2_summary.json",
-      "sha256": "15e82d8f22843a9ed622a0aeff0b20c8d223a034f52cddba8fdc77e97d316e9b",
-      "mtime": "2026-10-04T04:24:32",
+      "sha256": "8ee3f6d40bdcf5a1f345c784c786c1d30d31129df107c453f6b4fac7e347b0c4",
+      "mtime": "2026-10-31T02:46:05",
       "status": "CURRENT",
       "augmenter_dependent": true,
       "note": ""
@@ -34,8 +34,8 @@
         "make_v2_tables.py"
       ],
       "artifact": "v2_benchmark/analysis/v2_summary.json",
-      "sha256": "15e82d8f22843a9ed622a0aeff0b20c8d223a034f52cddba8fdc77e97d316e9b",
-      "mtime": "2026-10-04T04:24:32",
+      "sha256": "8ee3f6d40bdcf5a1f345c784c786c1d30d31129df107c453f6b4fac7e347b0c4",
+      "mtime": "2026-10-31T02:46:05",
       "status": "CURRENT",
       "augmenter_dependent": true,
       "note": ""
@@ -49,8 +49,8 @@
         "make_v2_tables.py"
       ],
       "artifact": "v2_benchmark/analysis/v2_summary.json",
-      "sha256": "15e82d8f22843a9ed622a0aeff0b20c8d223a034f52cddba8fdc77e97d316e9b",
-      "mtime": "2026-10-04T04:24:32",
+      "sha256": "8ee3f6d40bdcf5a1f345c784c786c1d30d31129df107c453f6b4fac7e347b0c4",
+      "mtime": "2026-10-31T02:46:05",
       "status": "CURRENT",
       "augmenter_dependent": true,
       "note": ""
@@ -64,8 +64,8 @@
         "make_v2_tables.py"
       ],
       "artifact": "v2_benchmark/analysis/v2_summary.json",
-      "sha256": "15e82d8f22843a9ed622a0aeff0b20c8d223a034f52cddba8fdc77e97d316e9b",
-      "mtime": "2026-10-04T04:24:32",
+      "sha256": "8ee3f6d40bdcf5a1f345c784c786c1d30d31129df107c453f6b4fac7e347b0c4",
+      "mtime": "2026-10-31T02:46:05",
       "status": "CURRENT",
       "augmenter_dependent": false,
       "note": "no augmenter arm; residual comparator built in analyze_v2.py from recorded residual proxies"
@@ -79,8 +79,8 @@
         "make_v2_tables.py"
       ],
       "artifact": "v2_benchmark/analysis/v2_summary.json",
-      "sha256": "15e82d8f22843a9ed622a0aeff0b20c8d223a034f52cddba8fdc77e97d316e9b",
-      "mtime": "2026-10-04T04:24:32",
+      "sha256": "8ee3f6d40bdcf5a1f345c784c786c1d30d31129df107c453f6b4fac7e347b0c4",
+      "mtime": "2026-10-31T02:46:05",
       "status": "CURRENT",
       "augmenter_dependent": false,
       "note": ""
@@ -94,82 +94,97 @@
         "make_v2_tables.py"
       ],
       "artifact": "v2_benchmark/analysis/v2_summary.json",
-      "sha256": "15e82d8f22843a9ed622a0aeff0b20c8d223a034f52cddba8fdc77e97d316e9b",
-      "mtime": "2026-10-04T04:24:32",
+      "sha256": "8ee3f6d40bdcf5a1f345c784c786c1d30d31129df107c453f6b4fac7e347b0c4",
+      "mtime": "2026-10-31T02:46:05",
+      "status": "CURRENT",
+      "augmenter_dependent": false,
+      "note": ""
+    },
+    {
+      "label": "tab:leakscen",
+      "description": "Leak-only scenario AUPRC (full record and onset-aware), max-pool top-tie share, FA episodes/day (S3)",
+      "scripts": [
+        "run_v2_benchmark.py",
+        "analyze_v2.py",
+        "make_v2_tables.py"
+      ],
+      "artifact": "v2_benchmark/analysis/v2_summary.json",
+      "sha256": "8ee3f6d40bdcf5a1f345c784c786c1d30d31129df107c453f6b4fac7e347b0c4",
+      "mtime": "2026-10-31T02:46:05",
       "status": "CURRENT",
       "augmenter_dependent": false,
       "note": ""
     },
     {
       "label": "tab:rsi",
-      "description": "RSI per network/pair with pooled scenario bootstrap (S3)",
+      "description": "RSI per network/pair with pooled scenario bootstrap (S4)",
       "scripts": [
         "run_v2_benchmark.py",
         "analyze_v2.py",
         "make_v2_tables.py"
       ],
       "artifact": "v2_benchmark/analysis/v2_summary.json",
-      "sha256": "15e82d8f22843a9ed622a0aeff0b20c8d223a034f52cddba8fdc77e97d316e9b",
-      "mtime": "2026-10-04T04:24:32",
+      "sha256": "8ee3f6d40bdcf5a1f345c784c786c1d30d31129df107c453f6b4fac7e347b0c4",
+      "mtime": "2026-10-31T02:46:05",
       "status": "CURRENT",
       "augmenter_dependent": true,
       "note": ""
     },
     {
       "label": "tab:prior-sweep",
-      "description": "Scenario-prior sweep by subsampling normals 20/40/100 (S4)",
+      "description": "Scenario-prior sweep by subsampling normals 20/40/100 (S5)",
       "scripts": [
         "run_v2_benchmark.py",
         "analyze_v2.py",
         "make_v2_tables.py"
       ],
       "artifact": "v2_benchmark/analysis/v2_summary.json",
-      "sha256": "15e82d8f22843a9ed622a0aeff0b20c8d223a034f52cddba8fdc77e97d316e9b",
-      "mtime": "2026-10-04T04:24:32",
+      "sha256": "8ee3f6d40bdcf5a1f345c784c786c1d30d31129df107c453f6b4fac7e347b0c4",
+      "mtime": "2026-10-31T02:46:05",
       "status": "CURRENT",
       "augmenter_dependent": false,
       "note": ""
     },
     {
       "label": "tab:seed-level",
-      "description": "Per-seed row AUPRC, rf_baseline and rf_raw_baseline (S5)",
+      "description": "Per-seed row AUPRC, rf_baseline and rf_raw_baseline (S6)",
       "scripts": [
         "run_v2_benchmark.py",
         "analyze_v2.py",
         "make_v2_tables.py"
       ],
       "artifact": "v2_benchmark/analysis/v2_summary.json",
-      "sha256": "15e82d8f22843a9ed622a0aeff0b20c8d223a034f52cddba8fdc77e97d316e9b",
-      "mtime": "2026-10-04T04:24:32",
+      "sha256": "8ee3f6d40bdcf5a1f345c784c786c1d30d31129df107c453f6b4fac7e347b0c4",
+      "mtime": "2026-10-31T02:46:05",
       "status": "CURRENT",
       "augmenter_dependent": false,
       "note": ""
     },
     {
       "label": "tab:family",
-      "description": "Family-level paired deltas vs rf_baseline: Net3, D-Town, L-TOWN, Kentucky mean (S6)",
+      "description": "Family-level paired deltas vs rf_baseline: Net3, D-Town, L-TOWN, Kentucky mean (S7)",
       "scripts": [
         "run_v2_benchmark.py",
         "analyze_v2.py",
         "make_v2_tables.py"
       ],
       "artifact": "v2_benchmark/analysis/v2_summary.json",
-      "sha256": "15e82d8f22843a9ed622a0aeff0b20c8d223a034f52cddba8fdc77e97d316e9b",
-      "mtime": "2026-10-04T04:24:32",
+      "sha256": "8ee3f6d40bdcf5a1f345c784c786c1d30d31129df107c453f6b4fac7e347b0c4",
+      "mtime": "2026-10-31T02:46:05",
       "status": "CURRENT",
       "augmenter_dependent": false,
       "note": ""
     },
     {
       "label": "tab:splitcal",
-      "description": "Split-calibration check: full vs disjoint normal reference, same evaluation rows (S7)",
+      "description": "Split-calibration check: full vs disjoint normal reference, same evaluation rows (S8)",
       "scripts": [
         "run_v2_splitcal.py",
         "make_v2_tables.py"
       ],
       "artifact": "v2_splitcal/splitcal_summary.json",
-      "sha256": "4535f7834daaff9e5a00af82956f7a0ebe7453b96fb92c4583f12ac9eb022f13",
-      "mtime": "2026-10-10T04:56:23",
+      "sha256": "bd6505353a2d0655ceebfebddebd56117d833c213eee1fe962d87774db1089bf",
+      "mtime": "2026-10-31T03:04:43",
       "status": "CURRENT",
       "augmenter_dependent": false,
       "note": ""
@@ -183,8 +198,8 @@
         "make_v2_tables.py"
       ],
       "artifact": "v2_benchmark/analysis/v2_summary.json",
-      "sha256": "15e82d8f22843a9ed622a0aeff0b20c8d223a034f52cddba8fdc77e97d316e9b",
-      "mtime": "2026-10-04T04:24:32",
+      "sha256": "8ee3f6d40bdcf5a1f345c784c786c1d30d31129df107c453f6b4fac7e347b0c4",
+      "mtime": "2026-10-31T02:46:05",
       "status": "CURRENT",
       "augmenter_dependent": true,
       "note": ""
@@ -198,8 +213,8 @@
         "make_v2_tables.py"
       ],
       "artifact": "v2_benchmark/analysis/v2_summary.json",
-      "sha256": "15e82d8f22843a9ed622a0aeff0b20c8d223a034f52cddba8fdc77e97d316e9b",
-      "mtime": "2026-10-04T04:24:32",
+      "sha256": "8ee3f6d40bdcf5a1f345c784c786c1d30d31129df107c453f6b4fac7e347b0c4",
+      "mtime": "2026-10-31T02:46:05",
       "status": "CURRENT",
       "augmenter_dependent": true,
       "note": ""

@@ -43,9 +43,15 @@ their original names for the record and are not used by any v2 result.
   per normal scenario; RSI with a pooled scenario bootstrap; paired Wilcoxon over the 8 networks,
   Kentucky-family check, network bootstrap, MDE; scenario-prior sweep (20/40/100 normals).
 
-Headline (5 seeds, equal-weight macro over 8 networks, row prior 0.091): normalised RF 0.235;
-RF on raw features 0.131; RF + noise 0.256, + GMM 0.234, + SMOTE 0.233 (all nulls); LR 0.226;
-GCN 0.225; residual comparator 0.092.
+- **Simulation.** Every scenario is solved with EPANET through WNTR's `EpanetSimulator`.
+  A leak is an emitter on a dummy junction behind a pipe that is open only in the leak window
+  (`EpanetSimulator` ignores `Junction.add_leak`); a closed pipe or pump loses its INP controls;
+  closure/outage candidates are kept only if pressures stay bounded. Regression tests in
+  `tests/test_regressions.py` (defect 6) check that every disturbance changes the hydraulics.
+
+Headline (5 seeds, equal-weight macro over 8 networks, row prior 0.088): normalised RF 0.273;
+RF on raw features 0.152; RF + noise 0.202, + GMM 0.226, + SMOTE 0.267; LR 0.236; GCN 0.244;
+residual comparator 0.095.
 
 ## Repository layout
 

@@ -69,6 +69,9 @@ OUT_JSON = _OUTDIR / "PROVENANCE.json"
 # which change on copy; these are the semantic fix times documented in HANDOFF_STATE.
 SIM_FIX = dt.datetime(2026, 7, 10, 22, 32)
 AUG_FIX = dt.datetime(2026, 7, 13, 15, 25)
+# S39: EpanetSimulator ignored WNTR leaks on D-Town/ky3/ky5 and pump outages were
+# undone by INP controls; every v2 artifact must postdate the fix.
+EPANET_FIX = dt.datetime(2026, 10, 31, 2, 0)
 
 # (label, description, scripts, primary_artifact, extra_artifacts, augmenter_dependent, note)
 # `augmenter_dependent` picks the boundary. A None artifact means "no computed
@@ -94,19 +97,22 @@ ROWS = [
     ('tab:pooling', 'Max-pool vs mean-pool scenario AUPRC (S2)',
      ['run_v2_benchmark.py', 'analyze_v2.py', 'make_v2_tables.py'], 'v2_benchmark/analysis/v2_summary.json',
      PARQUET, False, ''),
-    ('tab:rsi', 'RSI per network/pair with pooled scenario bootstrap (S3)',
+    ('tab:leakscen', 'Leak-only scenario AUPRC (full record and onset-aware), max-pool top-tie share, FA episodes/day (S3)',
+     ['run_v2_benchmark.py', 'analyze_v2.py', 'make_v2_tables.py'], 'v2_benchmark/analysis/v2_summary.json',
+     PARQUET, False, ''),
+    ('tab:rsi', 'RSI per network/pair with pooled scenario bootstrap (S4)',
      ['run_v2_benchmark.py', 'analyze_v2.py', 'make_v2_tables.py'], 'v2_benchmark/analysis/v2_summary.json',
      PARQUET, True, ''),
-    ('tab:prior-sweep', 'Scenario-prior sweep by subsampling normals 20/40/100 (S4)',
+    ('tab:prior-sweep', 'Scenario-prior sweep by subsampling normals 20/40/100 (S5)',
      ['run_v2_benchmark.py', 'analyze_v2.py', 'make_v2_tables.py'], 'v2_benchmark/analysis/v2_summary.json',
      PARQUET, False, ''),
-    ('tab:seed-level', 'Per-seed row AUPRC, rf_baseline and rf_raw_baseline (S5)',
+    ('tab:seed-level', 'Per-seed row AUPRC, rf_baseline and rf_raw_baseline (S6)',
      ['run_v2_benchmark.py', 'analyze_v2.py', 'make_v2_tables.py'], 'v2_benchmark/analysis/v2_summary.json',
      PARQUET, False, ''),
-    ('tab:family', 'Family-level paired deltas vs rf_baseline: Net3, D-Town, L-TOWN, Kentucky mean (S6)',
+    ('tab:family', 'Family-level paired deltas vs rf_baseline: Net3, D-Town, L-TOWN, Kentucky mean (S7)',
      ['run_v2_benchmark.py', 'analyze_v2.py', 'make_v2_tables.py'], 'v2_benchmark/analysis/v2_summary.json',
      PARQUET, False, ''),
-    ('tab:splitcal', 'Split-calibration check: full vs disjoint normal reference, same evaluation rows (S7)',
+    ('tab:splitcal', 'Split-calibration check: full vs disjoint normal reference, same evaluation rows (S8)',
      ['run_v2_splitcal.py', 'make_v2_tables.py'], 'v2_splitcal/splitcal_summary.json',
      [], False, ''),
     ('fig:forest', 'Per-network paired deltas vs rf_baseline, forest plot (main Fig. 1)',
@@ -135,10 +141,12 @@ def _sha_mtime(rel: str):
     return h, m
 
 
-def _classify(mtime, aug_dep):
+def _classify(mtime, aug_dep, artifact=""):
     if mtime is None:
         return "MISSING"
     boundary = AUG_FIX if aug_dep else SIM_FIX
+    if artifact.startswith("v2_"):
+        boundary = max(boundary, EPANET_FIX)
     return "CURRENT" if mtime >= boundary else "STALE"
 
 
@@ -152,11 +160,11 @@ def main() -> int:
                 note=note))
             continue
         sha, mtime = _sha_mtime(primary)
-        status = _classify(mtime, aug_dep)
+        status = _classify(mtime, aug_dep, primary)
         # A row is only as current as its stalest artifact.
         for e in extra:
             _, em = _sha_mtime(e)
-            if _classify(em, aug_dep) == "STALE" and status == "CURRENT":
+            if _classify(em, aug_dep, e) == "STALE" and status == "CURRENT":
                 status = "STALE"
             if em is None:
                 status = "MISSING" if status != "STALE" else status
