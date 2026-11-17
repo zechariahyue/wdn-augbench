@@ -129,9 +129,9 @@ def main() -> int:
     (OUT / "tab_deltas.tex").write_text(wrap("lcccccc", r"Arm & $\Delta$ row AUPRC & Wins & Wilcoxon $p$ & Holm $p$ & Network bootstrap 95\% & $2.5\,\mathrm{SE}_\Delta$", rows), encoding="utf-8")
 
     # S: family-level deltas vs rf_baseline: [Net3, D-Town, L-TOWN, mean of the five Kentucky networks]
-    rows = [f"{ARM_LABEL[x]} & " + " & ".join(f"${f(v, plus=True)}$" for v in d[x]["family_level_deltas"]) + f" & ${f(d[x]['delta_mean'], plus=True)}$"
+    rows = [f"{ARM_LABEL[x]} & " + " & ".join(f"${f(v, plus=True)}$" for v in d[x]["family_level_deltas"]) + f" & ${f(sum(d[x]['family_level_deltas']) / 4, plus=True)}$ & ${f(d[x]['delta_mean'], plus=True)}$"
             for x in d if x in ARM_LABEL]
-    (OUT / "tab_family.tex").write_text(wrap("lccccc", r"Arm & Net3 & D-Town & L-TOWN & Kentucky (mean of 5) & All 8 (mean)", rows), encoding="utf-8")
+    (OUT / "tab_family.tex").write_text(wrap("lcccccc", r"Arm & Net3 & D-Town & L-TOWN & Kentucky (mean of 5) & Family mean & All 8 (mean)", rows), encoding="utf-8")
     forest_plot(d, nets)
 
     # S: split-calibration check (run_v2_splitcal.py): full vs disjoint normal reference, same evaluation rows
@@ -193,7 +193,21 @@ def main() -> int:
                     f"${f(r['fa_episodes_per_day'][0], 2)}$ & ${f(s['fa_episodes_per_day'][0], 2)}$")
     (OUT / "tab_leakscen.tex").write_text(wrap("lcccccccc",
         r" & & \multicolumn{2}{c}{RF, no aug.} & \multicolumn{2}{c}{Resid.} & & \multicolumn{2}{c}{FA episodes / day} \\ \cmidrule(lr){3-4}\cmidrule(lr){5-6}\cmidrule(lr){8-9} "
-        r"Network & Prior & Record & Onset & Record & Onset & RF top tie & RF & Resid.", rows, size=r"ootnotesize", sep="3pt"), encoding="utf-8")
+        r"Network & Prior & Record & Onset & Record & Onset & RF top tie & RF & Resid.", rows, size=r"\footnotesize", sep="3pt"), encoding="utf-8")
+
+    # S: leak early warning at a common false-alarm budget (analyze_v2_alarm_budget.py)
+    bp = ACTIVE / "artifacts" / a.tag / "analysis" / "v2_alarm_budget.json"
+    if bp.exists():
+        B = json.loads(bp.read_text())["per_network"]
+        rows = []
+        for n in nets:
+            r, s = B[n]["rf_baseline"], B[n]["resid"]
+            rows.append(f"{NET_LABEL[n]} & {round(r['step_h'] * 60)} & {r['opportunities_3h']} & "
+                        + " & ".join(f"{pm(r[b]['first3h_leaks'], 2) if b == '1.0' else '$' + f(r[b]['first3h_leaks'][0], 2) + '$'} & ${f(s[b]['first3h_leaks'][0], 2)}$" for b in ("0.5", "1.0", "2.0"))
+                        + f" & ${f(r['1.0']['detected_in_window_leaks'][0], 2)}$ & ${f(r['1.0']['pre_onset_alarm_leaks'][0], 2)}$")
+        (OUT / "tab_alarm_budget.tex").write_text(wrap("lcccccccccc",
+            r" & & & \multicolumn{2}{c}{0.5 / day} & \multicolumn{2}{c}{1 / day} & \multicolumn{2}{c}{2 / day} & \multicolumn{2}{c}{RF, 1 / day} \\ \cmidrule(lr){4-5}\cmidrule(lr){6-7}\cmidrule(lr){8-9}\cmidrule(lr){10-11} "
+            r"Network & Step (min) & Steps in 3~h & RF & Res. & RF & Res. & RF & Res. & In-win. & Pre-onset", rows, size=r"\scriptsize", sep="2pt"), encoding="utf-8")
 
     # S: max-pool vs mean-pool (rf_baseline, resid)
     rows = [f"{NET_LABEL[n]} & {pm(pn[n]['rf_baseline']['scen_auprc_max'])} & {pm(pn[n]['rf_baseline']['scen_auprc_mean'])} & "

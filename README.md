@@ -40,7 +40,8 @@ their original names for the record and are not used by any v2 result.
   4-step warm-up, 3-step persistence) built in `analyze_v2.py`.
 - **Metrics.** Row AUPRC and scenario AUPRC (max-pool; mean-pool as a check) with their priors;
   per-disturbance slices with slice priors; WSTL and first-3h/TTD on leak scenarios at ≤ 1 alarm
-  per normal scenario; RSI with a pooled scenario bootstrap; paired Wilcoxon over the 8 networks,
+  per normal scenario, and first-3h at common budgets of 0.5/1/2 false-alarm episodes per day
+  (`analyze_v2_alarm_budget.py`); RSI with a pooled scenario bootstrap; paired Wilcoxon over the 8 networks,
   Kentucky-family check, network bootstrap, MDE; scenario-prior sweep (20/40/100 normals).
 
 - **Simulation.** Every scenario is solved with EPANET through WNTR's `EpanetSimulator`.

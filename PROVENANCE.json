@@ -4,10 +4,10 @@
     "aug_fix": "2026-07-13T15:25:00"
   },
   "summary": {
-    "current": 15,
+    "current": 16,
     "stale": 0,
     "missing": 0,
-    "total": 17
+    "total": 18
   },
   "records": [
     {
@@ -116,8 +116,23 @@
       "note": ""
     },
     {
+      "label": "tab:alarm-budget",
+      "description": "Leak first-3h at common false-alarm budgets 0.5/1/2 episodes/day; pre-onset alarms (S4)",
+      "scripts": [
+        "run_v2_benchmark.py",
+        "analyze_v2_alarm_budget.py",
+        "make_v2_tables.py"
+      ],
+      "artifact": "v2_benchmark/analysis/v2_alarm_budget.json",
+      "sha256": "1d95d33df8e9d615f7585f21bac3e688799fa3f239386184973612db00524452",
+      "mtime": "2026-11-17T13:05:15",
+      "status": "CURRENT",
+      "augmenter_dependent": false,
+      "note": "residual comparator rebuilt from recorded residual proxies"
+    },
+    {
       "label": "tab:rsi",
-      "description": "RSI per network/pair with pooled scenario bootstrap (S4)",
+      "description": "RSI per network/pair with pooled scenario bootstrap (S5)",
       "scripts": [
         "run_v2_benchmark.py",
         "analyze_v2.py",
@@ -132,7 +147,7 @@
     },
     {
       "label": "tab:prior-sweep",
-      "description": "Scenario-prior sweep by subsampling normals 20/40/100 (S5)",
+      "description": "Scenario-prior sweep by subsampling normals 20/40/100 (S6)",
       "scripts": [
         "run_v2_benchmark.py",
         "analyze_v2.py",
@@ -147,7 +162,7 @@
     },
     {
       "label": "tab:seed-level",
-      "description": "Per-seed row AUPRC, rf_baseline and rf_raw_baseline (S6)",
+      "description": "Per-seed row AUPRC, rf_baseline and rf_raw_baseline (S7)",
       "scripts": [
         "run_v2_benchmark.py",
         "analyze_v2.py",
@@ -162,7 +177,7 @@
     },
     {
       "label": "tab:family",
-      "description": "Family-level paired deltas vs rf_baseline: Net3, D-Town, L-TOWN, Kentucky mean (S7)",
+      "description": "Family-level paired deltas vs rf_baseline: Net3, D-Town, L-TOWN, Kentucky mean (S8)",
       "scripts": [
         "run_v2_benchmark.py",
         "analyze_v2.py",
@@ -177,7 +192,7 @@
     },
     {
       "label": "tab:splitcal",
-      "description": "Split-calibration check: full vs disjoint normal reference, same evaluation rows (S8)",
+      "description": "Split-calibration check: full vs disjoint normal reference, same evaluation rows (S9)",
       "scripts": [
         "run_v2_splitcal.py",
         "make_v2_tables.py"
